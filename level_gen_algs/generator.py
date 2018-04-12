@@ -72,6 +72,21 @@ class Map():
             return (0, 1)
         return None
 
+    def count_adjacent(self, x, y, typlist, diag):
+        # diag: 0 for either, -1 for orthogonal only, 1 for diagonal only
+        c = 0
+        for xx in range(x-1, x+2):
+            for yy in range(y-1, y+2):
+                if not (isok(xx, yy) and self._map[xx][yy] in typlist):
+                    continue
+                if diag > -1 and xx != x and yy != y:
+                    # diagonals
+                    c += 1
+                if diag < 1 and ((xx == x) != (yy == y)): # XOR
+                    # orthogonals
+                    c += 1
+        return c
+
     # Can we place something in the given rectangle?
     # If the entire rectangle is STONE, return True.
     def footprintok(self, lx, ly, hx, hy):
@@ -95,7 +110,8 @@ class Map():
                     # vwalls only appear when a wall has more vertical neighbors than horizontal
                     vn = (1 if self.iswallordoor(x, y-1) else 0) + (1 if self.iswallordoor(x, y+1) else 0)
                     hn = (1 if self.iswallordoor(x-1, y) else 0) + (1 if self.iswallordoor(x+1, y) else 0)
-                    if (vn > hn):
+                    if vn > hn and (self.count_adjacent(x, y, [terrain.ROOM, terrain.DOOR], 0) >= 2 or
+                                    self.count_adjacent(x, y, [terrain.ROOM, terrain.DOOR], -1) >= 1):
                         self._map[x][y] = terrain.VWALL
                     else:
                         self._map[x][y] = terrain.WALL

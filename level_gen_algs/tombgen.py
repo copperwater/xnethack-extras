@@ -130,7 +130,6 @@ def mkrandroom(doorx, doory):
             return True
     return False
 
-
 # Initial central-ish room, square.
 room_w = 5 + random.randint(0,3)
 sx = (COLNO - room_w) // 2
@@ -167,6 +166,7 @@ while ndoors < 25 and len(m.doorwalls) > 0:
             ndoors += 1
     print("ndoors", ndoors)
 
+# m[12][11] = terr.LAVA
 
 m.printmap()
 
