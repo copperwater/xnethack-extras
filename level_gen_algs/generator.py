@@ -25,6 +25,8 @@ class terrain(Enum):
     USTAIR = 9
     DSTAIR = 10
 
+WALKABLE = [terrain.ROOM, terrain.CORR, terrain.DOOR, terrain.USTAIR, terrain.DSTAIR]
+
 class dirs(Enum):
     NORTH = 0
     SOUTH = 1
@@ -110,7 +112,7 @@ class Map():
                     # vwalls only appear when a wall has more vertical neighbors than horizontal
                     vn = (1 if self.iswallordoor(x, y-1) else 0) + (1 if self.iswallordoor(x, y+1) else 0)
                     hn = (1 if self.iswallordoor(x-1, y) else 0) + (1 if self.iswallordoor(x+1, y) else 0)
-                    if vn > hn and (self.count_adjacent(x, y, [terrain.ROOM, terrain.DOOR], 0) >= 2 or
+                    if vn > hn and (self.count_adjacent(x, y, WALKABLE, 0) >= 2 or
                                     self.count_adjacent(x, y, [terrain.ROOM, terrain.DOOR], -1) >= 1):
                         self._map[x][y] = terrain.VWALL
                     else:
