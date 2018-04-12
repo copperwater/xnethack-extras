@@ -166,6 +166,21 @@ while ndoors < 25 and len(m.doorwalls) > 0:
             ndoors += 1
     print("ndoors", ndoors)
 
+# place upstairs in starting room
+ustairx = random.randint(sx, sx + room_w - 1)
+ustairy = random.randint(sy, sy + room_w - 1)
+m[ustairx][ustairy] = terr.USTAIR
+
+# place downstairs somewhere far away from upstairs
+xx = ustairx
+yy = ustairy
+LIMIT = 24
+while (xx-ustairx)**2 + (yy-ustairy)**2 < LIMIT ** 2 or m[xx][yy] != terr.ROOM:
+    xx = random.randint(0, generator.COLNO-1)
+    yy = random.randint(0, generator.ROWNO-1)
+print(ustairx, ustairy, xx, yy)
+m[xx][yy] = terr.DSTAIR
+
 # m[12][11] = terr.LAVA
 
 m.printmap()
