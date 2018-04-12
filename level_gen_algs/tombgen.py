@@ -5,6 +5,18 @@ from generator import dirs
 from generator import ROWNO, COLNO
 import random
 
+# "Tomb" generator algorithm.
+# Intended for the Archeologist quest lower filler levels.
+# Designed to make a complex series of rooms and corridors that, if some of the doors are secret,
+# is very hard to discover everything.
+#
+# Algorithm works by placing an initial, central room, then repeatedly selecting
+# a valid position to place a door and extend a corridor from its edge. If a position on a corridor
+# is selected, it must attempt to build a room; if a position on a room is selected, it must attempt
+# to build a corridor.
+# Corridors are walled in and contain floor tiles, rather than being dug-from-stone corridor tiles.
+# They currently do not branch.
+
 m = Map()
 
 # make room in the given rectangle; walls are 1 space around it
@@ -126,6 +138,9 @@ sy = (ROWNO - room_w) // 2
 placeroom(sx, sy, sx + room_w - 1, sy + room_w - 1)
 print("Init room:", sx, sy, sx + room_w - 1, sy + room_w - 1)
 
+def rn2(x):
+    return random.randint(0, x-1)
+
 ndoors = 0
 while ndoors < 25 and len(m.doorwalls) > 0:
     doorx, doory, isCorr = m.random_doorwall()[0]
@@ -136,10 +151,17 @@ while ndoors < 25 and len(m.doorwalls) > 0:
         continue
 
     if isCorr: #random.randint(0,9) < 5:
-        if mkrandroom(doorx, doory):
-            ndoors += 1
+        if rn2(2) == 0:
+            if mkrandroom(doorx, doory):
+                ndoors += 1
+        else:
+            if mkrandcorr(doorx, doory):
+                if rn2(3) > 0:
+                    # test: count as door for ndoors, but actually don't place a door...
+                    m[doorx][doory] = terr.ROOM
+                    ndoors += 1
     else:
-        if random.randint(0,3) == 0:
+        if rn2(3) == 0:
             continue
         if mkrandcorr(doorx, doory):
             ndoors += 1
