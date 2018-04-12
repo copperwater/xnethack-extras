@@ -68,7 +68,10 @@ def mkrandcorr(doorx, doory):
         # horizontal corridor
         # corrlen represents the amount of space this will go beyond the door,
         # counting the end wall (total width is corrlen)
-        corrlen = random.randint(2, 8)
+        # TODO: bias corrlen towards creating longer corridors
+        corrlen = random.randint(2, 10)
+        if (corrlen < 4):
+            corrlen = random.randint(2,10)
         endx = doorx + (-dx * corrlen)
         print("trying horiz corr:", cx, endx, doory)
         if m.footprintok(cx, doory-1, endx-dx, doory+1):
@@ -91,6 +94,8 @@ def mkrandroom(doorx, doory):
     area = random.randint(20, 60)
     h = random.randint(2, 6)
     w = area // h
+    if (w > 12):
+        w = random.randint(4, 12)
 
     dx, dy = m.adjacent_to(doorx, doory, terr.ROOM)
     cx = doorx - dx
@@ -122,7 +127,7 @@ placeroom(sx, sy, sx + room_w - 1, sy + room_w - 1)
 print("Init room:", sx, sy, sx + room_w - 1, sy + room_w - 1)
 
 ndoors = 0
-while ndoors < 15 and len(m.doorwalls) > 0:
+while ndoors < 25 and len(m.doorwalls) > 0:
     doorx, doory, isCorr = m.random_doorwall()[0]
 
     if not m.valid_door_pos(doorx, doory):
@@ -134,6 +139,8 @@ while ndoors < 15 and len(m.doorwalls) > 0:
         if mkrandroom(doorx, doory):
             ndoors += 1
     else:
+        if random.randint(0,3) == 0:
+            continue
         if mkrandcorr(doorx, doory):
             ndoors += 1
     print("ndoors", ndoors)
