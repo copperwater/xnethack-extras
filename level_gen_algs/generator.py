@@ -2,6 +2,7 @@ import colorama
 import random
 from enum import Enum
 from colorama import Fore
+import sys
 
 ROWNO = 20
 COLNO = 78  # actually 80 but there always seem to be buffers...
@@ -155,12 +156,24 @@ class Map():
         # assume it's going to be used
         return random.sample(self.doorwalls, 1)
 
+    def print_row(self, y, to=sys.stdout, border=''):
+        if border != '':
+            to.write(border)
+        for x in range(COLNO):
+            to.write(self.syms[self._map[x][y]])
 
-    def printmap(self):
-        self.fix_wall_spines()
-        for y in range(ROWNO):
+    def print_border_line(self, to, border):
+        if border != '':
             for x in range(COLNO):
-                print(self.syms[self._map[x][y]], end=('\n' if x == COLNO-1 else ''), sep='')
+                to.write(border)
+
+    def printmap(self, to=sys.stdout, border=''):
+        self.fix_wall_spines()
+        self.print_border_line(to, border)
+
+        for y in range(ROWNO):
+            self.print_row(y, to, border)
+            to.write('\n')
 
     def __getitem__(self, x):
         return self._map[x]
@@ -168,4 +181,171 @@ class Map():
     def __setitem__(self, x):
         return self._map[x]
 
+
+def get_line(start, end):
+    """Bresenham's Line Algorithm
+    Produces a list of tuples from start and end
+ 
+    >>> points1 = get_line((0, 0), (3, 4))
+    >>> points2 = get_line((3, 4), (0, 0))
+    >>> assert(set(points1) == set(points2))
+    >>> print points1
+    [(0, 0), (1, 1), (1, 2), (2, 3), (3, 4)]
+    >>> print points2
+    [(3, 4), (2, 3), (1, 2), (1, 1), (0, 0)]
+    """
+    # Setup initial conditions
+    x1, y1 = start.x, start.y
+    x2, y2 = end.x, end.y
+    dx = x2 - x1
+    dy = y2 - y1
+ 
+    # Determine how steep the line is
+    is_steep = abs(dy) > abs(dx)
+ 
+    # Rotate line
+    if is_steep:
+        x1, y1 = y1, x1
+        x2, y2 = y2, x2
+ 
+    # Swap start and end points if necessary and store swap state
+    swapped = False
+    if x1 > x2:
+        x1, x2 = x2, x1
+        y1, y2 = y2, y1
+        swapped = True
+ 
+    # Recalculate differentials
+    dx = x2 - x1
+    dy = y2 - y1
+ 
+    # Calculate error
+    error = int(dx / 2.0)
+    ystep = 1 if y1 < y2 else -1
+ 
+    # Iterate over bounding box generating points between start and end
+    y = y1
+    points = []
+    for x in range(x1, x2 + 1):
+        coord = (y, x) if is_steep else (x, y)
+        points.append(coord)
+        error -= abs(dy)
+        if error < 0:
+            y += ystep
+            error += dx
+ 
+    # Reverse the list if the coordinates were swapped
+    if swapped:
+        points.reverse()
+    return points
+
+def rn2(x):
+    return random.randint(0, x-1)
+def d(x):
+    return random.randint(1, x)
+def rz2(x):
+    return random.randint(0, x*2+1) - x
+
+class Coord(object):
+    __slots__ = 'x', 'y'
+
+    @classmethod
+    def of(cls, coord):
+        if isinstance(coord, Coord):
+            return Coord(coord.x, coord.y)
+        elif hasattr(coord, '__getitem__'):
+            return Coord(coord[0], coord[1])
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __getitem__(self, key):
+        return self.x if key == 0 else self.y
+
+    def distSq(self, o):
+        dx = self.x - o.x
+        dy = self.y - o.y
+        return dx*dx + dy*dy
+
+    def dist(self, o):
+        return math.sqrt(self.distSq(o))
+
+    def length(self):
+        return math.sqrt(self.x*self.x + self.y*self.y)
+
+    def __add__(self, o):
+        return Coord(self.x + o.x, self.y + o.y)
+
+    def __sub__(self, o):
+        return Coord(self.x - o.x, self.y - o.y)
+
+    def __mul__(self, by):
+        return Coord(self.x * by, self.y * by)
+
+    def __truediv__(self, by):
+        return Coord(self.x / by, self.y / by)
+
+    def __floordiv__(self, by):
+        return Coord(self.x // by, self.y // by)
+
+    def __str__(self):
+        return '(%.1f,%.1f)' % (self.x, self.y)
+
+    def __round__(self):
+        return Coord(round(self.x), round(self.y))
+
+    def normalized(self):
+        if self.length() == 0:
+            return Coord.of(self)
+        return Coord(self.x / self.length(), self.y / self.length())
+
+
+class Edge(object):
+    __slots = 'begin', 'end'
+
+    def mid_point(self):
+        length = self.end - self.begin
+        return self.begin + (length//2)
+
+    def __init__(self, begin, end):
+        self.begin = begin
+        self.end = end
+
+    def split(self, at = None):
+        if not at:
+            at = self.mid_point()
+        return (Edge(self.begin, at), Edge(at, self.end))
+
+    def perpendicular(self):
+        slope = self.end - self.begin
+        return Coord(slope.y, slope.x).normalized()
+
+    def length(self):
+        return self.begin.dist(self.end)
+
+
+class Path(object):
+    __slots__ = 'edges', 'last'
+
+    def __init__(self):
+        self.edges = []
+        self.last = None
+
+    def append(self, c):
+        if self.last:
+            self.edges.append(Edge(self.last, c))
+        self.last = c
+
+    def subdivide_and_perturb(self):
+        p = Path()
+        for e in self.edges:
+            cross = round(e.perpendicular() * rz2(e.length() // 8))
+            s = e.split()
+            s[0].end += cross
+            s[1].begin += cross
+            p.edges.append(s[0])
+            p.edges.append(s[1])
+#
+        return p
 
