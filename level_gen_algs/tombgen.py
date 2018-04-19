@@ -103,7 +103,7 @@ def mkrandcorr(doorx, doory):
 
 
 def mkrandroom(doorx, doory):
-    area = random.randint(20, 60)
+    area = random.randint(6, 60)
     h = random.randint(2, 6)
     w = area // h
     if (w > 12):
@@ -140,8 +140,9 @@ print("Init room:", sx, sy, sx + room_w - 1, sy + room_w - 1)
 def rn2(x):
     return random.randint(0, x-1)
 
+MAXGROWTH=50
 ndoors = 0
-while ndoors < 25 and len(m.doorwalls) > 0:
+while ndoors < MAXGROWTH and len(m.doorwalls) > 0:
     doorx, doory, isCorr = m.random_doorwall()[0]
 
     if not m.valid_door_pos(doorx, doory):
@@ -164,7 +165,6 @@ while ndoors < 25 and len(m.doorwalls) > 0:
             continue
         if mkrandcorr(doorx, doory):
             ndoors += 1
-    print("ndoors", ndoors)
 
 # place upstairs in starting room
 ustairx = random.randint(sx, sx + room_w - 1)
@@ -178,7 +178,6 @@ LIMIT = 24
 while (xx-ustairx)**2 + (yy-ustairy)**2 < LIMIT ** 2 or m[xx][yy] != terr.ROOM:
     xx = random.randint(0, generator.COLNO-1)
     yy = random.randint(0, generator.ROWNO-1)
-print(ustairx, ustairy, xx, yy)
 m[xx][yy] = terr.DSTAIR
 
 # m[12][11] = terr.LAVA
