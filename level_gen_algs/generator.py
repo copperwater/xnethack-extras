@@ -24,6 +24,7 @@ class terrain(Enum):
     DOOR = 8
     USTAIR = 9
     DSTAIR = 10
+    HILIGHT = 50
 
 WALKABLE = [terrain.ROOM, terrain.CORR, terrain.DOOR, terrain.USTAIR, terrain.DSTAIR]
 
@@ -35,17 +36,18 @@ class dirs(Enum):
 
 class Map():
     syms = {
-            terrain.STONE:  colorama.Style.RESET_ALL + ' ',
-            terrain.WALL:   colorama.Style.RESET_ALL + '-',
-            terrain.VWALL:  colorama.Style.RESET_ALL + '|',
-            terrain.WATER:  Fore.BLUE + '~',
-            terrain.TREE:   Fore.GREEN + '#',
-            terrain.LAVA:   Fore.RED + '}',
-            terrain.ROOM:   colorama.Style.RESET_ALL + '.',
-            terrain.CORR:   colorama.Style.RESET_ALL + '#',
-            terrain.DOOR:   Fore.YELLOW + '+',
-            terrain.USTAIR: colorama.Style.RESET_ALL + '<',
-            terrain.DSTAIR: colorama.Style.RESET_ALL + '>',
+            terrain.STONE:   colorama.Style.RESET_ALL + ' ',
+            terrain.WALL:    colorama.Style.RESET_ALL + '-',
+            terrain.VWALL:   colorama.Style.RESET_ALL + '|',
+            terrain.WATER:   Fore.BLUE + '~',
+            terrain.TREE:    Fore.GREEN + '#',
+            terrain.LAVA:    Fore.RED + '}',
+            terrain.ROOM:    colorama.Style.RESET_ALL + '.',
+            terrain.CORR:    colorama.Style.RESET_ALL + '#',
+            terrain.DOOR:    Fore.YELLOW + '+',
+            terrain.USTAIR:  colorama.Style.RESET_ALL + '<',
+            terrain.DSTAIR:  colorama.Style.RESET_ALL + '>',
+            terrain.HILIGHT: Fore.BLUE + colorama.Style.BRIGHT + '*',
             }
 
     def __init__(self):
@@ -149,6 +151,11 @@ class Map():
             for y in range(y1, y2+1):
                 if self.valid_door_pos(x, y):
                     self.doorwalls.add((x, y, isCorridor))
+
+
+    def farthestfrom(self, ix, iy):
+        visited = set()
+        # TODO: unfinished
 
 
     def random_doorwall(self):
