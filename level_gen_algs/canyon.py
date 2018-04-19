@@ -1,11 +1,11 @@
 import generator
 from generator import Map
+from generator import Path, Edge, Coord, d, rz2, rn2
 from generator import terrain as terr
 from generator import dirs
 from generator import ROWNO, COLNO
 import random
 import sys
-import math
 
 
 def generate_canyon(style):
