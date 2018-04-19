@@ -1,3 +1,4 @@
+import math
 import colorama
 import random
 from enum import Enum
