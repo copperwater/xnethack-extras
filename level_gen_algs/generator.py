@@ -107,6 +107,12 @@ class Map():
                     return False
         return True
 
+    def wallify(self):
+        for y in range(ROWNO):
+            for x in range(COLNO):
+                if self._map[x][y] == terrain.STONE and self.count_adjacent(x, y, [terrain.ROOM], 0):
+                    self._map[x][y] = terrain.WALL
+
     def fix_wall_spines(self):
         for y in range(ROWNO):
             for x in range(COLNO):
@@ -152,21 +158,40 @@ class Map():
                 if self.valid_door_pos(x, y):
                     self.doorwalls.add((x, y, isCorridor))
 
-
     def random_doorwall(self):
         # assume it's going to be used
         return random.sample(self.doorwalls, 1)
 
+    # Randomly convert the exact fraction of map squares into terr. Will not
+    # choose squares next to the edges. Identical to nethack's algorithm.
+    def nethack_init_map(self, terr, fraction):
+        nsquares = (ROWNO-2) * (COLNO-2) * fraction
+        count = 0
+        while count < nsquares:
+            x = rn2(COLNO-2)+1
+            y = rn2(ROWNO-2)+1
+            if self[x][y] != terr:
+                count += 1
+                self[x][y] = terr
+
     def print_row(self, y, to=sys.stdout, border=''):
-        if border != '':
+        if border == 'numeric':
+            to.write(str(y % 10))
+        elif border != '':
             to.write(border)
         for x in range(COLNO):
             to.write(self.syms[self._map[x][y]])
 
     def print_border_line(self, to, border):
-        if border != '':
+        if border == 'numeric':
+            to.write(' ')
+            for x in range(COLNO):
+                to.write(str(x % 10))
+            to.write('\n')
+        elif border != '':
             for x in range(COLNO):
                 to.write(border)
+            to.write('\n')
 
     def printmap(self, to=sys.stdout, border=''):
         self.fix_wall_spines()
@@ -186,7 +211,7 @@ class Map():
 def get_line(start, end):
     """Bresenham's Line Algorithm
     Produces a list of tuples from start and end
- 
+
     >>> points1 = get_line((0, 0), (3, 4))
     >>> points2 = get_line((3, 4), (0, 0))
     >>> assert(set(points1) == set(points2))
@@ -200,30 +225,30 @@ def get_line(start, end):
     x2, y2 = end.x, end.y
     dx = x2 - x1
     dy = y2 - y1
- 
+
     # Determine how steep the line is
     is_steep = abs(dy) > abs(dx)
- 
+
     # Rotate line
     if is_steep:
         x1, y1 = y1, x1
         x2, y2 = y2, x2
- 
+
     # Swap start and end points if necessary and store swap state
     swapped = False
     if x1 > x2:
         x1, x2 = x2, x1
         y1, y2 = y2, y1
         swapped = True
- 
+
     # Recalculate differentials
     dx = x2 - x1
     dy = y2 - y1
- 
+
     # Calculate error
     error = int(dx / 2.0)
     ystep = 1 if y1 < y2 else -1
- 
+
     # Iterate over bounding box generating points between start and end
     y = y1
     points = []
@@ -234,7 +259,7 @@ def get_line(start, end):
         if error < 0:
             y += ystep
             error += dx
- 
+
     # Reverse the list if the coordinates were swapped
     if swapped:
         points.reverse()
