@@ -78,7 +78,10 @@ class Map():
             return (0, 1)
         return None
 
-    def count_adjacent(self, x, y, typlist, diag):
+    def count_adjacent(self, x, y, func, diag):
+        return len(self.matching_adjacent(x, y, func, diag))
+
+    def matching_adjacent(self, x, y, func, diag):
         # diag: 0 for either, -1 for orthogonal only, 1 for diagonal only
         c = 0
         for xx in range(x-1, x+2):
@@ -92,6 +95,10 @@ class Map():
                     # orthogonals
                     c += 1
         return c
+
+    #
+    # TODO: diagonal support, whenever it's needed.
+
 
     # Can we place something in the given rectangle?
     # If the entire rectangle is STONE, return True.
@@ -167,6 +174,29 @@ class Map():
     def random_doorwall(self):
         # assume it's going to be used
         return random.sample(self.doorwalls, 1)
+
+    # Do a flood fill from a start point, using the function shouldAdd to
+    # determine what should be added. Return the final list of coordinates.
+    def floodfill(self, x0, y0, doDiag, shouldAdd):
+        upnext = [(x0, y0)]
+        out = []
+        while len(upnext) > 0:
+            x, y = upnext.pop()
+            out.append((x,y))
+            for xx in range(x-1, x+2):
+                for yy in range(y-1, y+2):
+                    if not isok(xx, yy):
+                        continue
+                    if xx == x and yy == y:
+                        continue
+                    if not doDiag and (abs(x - xx) + abs(y - yy)) != 1:
+                        continue
+                    if not shouldAdd(xx, yy):
+                        continue
+                    if (xx, yy) in out or (xx, yy) in upnext:
+                        continue
+                    upnext.append((xx, yy))
+        return out
 
     # Randomly convert the exact fraction of map squares into terr. Will not
     # choose squares next to the edges. Identical to nethack's algorithm.

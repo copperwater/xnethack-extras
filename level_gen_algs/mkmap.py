@@ -35,6 +35,10 @@ class IrregularRoom():
     def hy(self):
         return max([y for x, y in self.coords])
 
+# small function for passing to count_adjacent
+def isroom(t):
+    return t = terr.ROOM
+
 # identical to nethack's pass_one, except it uses a backup buffer:
 # cells with < 3 neighbors die, with > 4 come to life, 3 or 4 stay the same
 def nethack_pass_one(m):
@@ -46,7 +50,7 @@ def nethack_pass_one(m):
     # backup_buffer = copy.deepcopy(m._map)
     for x in range(1,COLNO-1):
         for y in range(1,ROWNO-1):
-            count = m.count_adjacent(x, y, [terr.ROOM], 0)
+            count = m.count_adjacent(x, y, isroom, 0)
             if count < 3:
                 backup_buffer[x][y] = terr.STONE
             elif count > 4:
@@ -59,7 +63,7 @@ def nethack_pass_two(m):
     backup_buffer = copy.deepcopy(m._map)
     for x in range(1,COLNO-1):
         for y in range(1,ROWNO-1):
-            count = m.count_adjacent(x, y, [terr.ROOM], 0)
+            count = m.count_adjacent(x, y, isroom, 0)
             if count == 5:
                 backup_buffer[x][y] = terr.STONE
 
@@ -70,7 +74,7 @@ def nethack_pass_three(m):
     backup_buffer = copy.deepcopy(m._map)
     for x in range(1,COLNO-1):
         for y in range(1,ROWNO-1):
-            count = m.count_adjacent(x, y, [terr.ROOM], 0)
+            count = m.count_adjacent(x, y, isroom, 0)
             if count < 3:
                 backup_buffer[x][y] = terr.STONE
 
