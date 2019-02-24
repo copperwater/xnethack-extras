@@ -22,13 +22,19 @@
  * The rules of thumb for whether a current variant should be included on this
  * graph are generally: it should be playable on a server, it should have had
  * at least one release, and it should not be a self-proclaimed joke variant.
+ * It's up for some debate what happens if a variant is abandoned, then picked
+ * back up by someone else and development and releases resume. Currently these
+ * are rendered with a border of their fill color (i.e. no border).
  *
  * Original for UnNetHack by Patric Mueller (bhaak).
  * Updated to reflect changes since 2009 and all other variants by aosdict.
  */
 
 digraph unix {
-ratio=1.41;
+/* experimental */
+/* splines="ortho"; */
+
+ratio=1.50;
 
         node [shape=rect, style=filled, fillcolor=white];
 
@@ -64,10 +70,12 @@ ratio=1.41;
 	2016 [shape=rect];
 	2017 [shape=rect];
 	2018 [shape=rect];
+	2019 [shape=rect];
 
         /* Arrows in this section are for formatting only and should all be
          * marked invisible, conveying no semantic information about the
-         * variants.
+         * variants. Beware of cascading effects from GraphViz subsequently
+         * messing up the graph in other places after applying a constraint here.
          * If there *is* already a real relationship between two of the nodes
          * on the same level, be sure to omit any invisible arrows here, since
          * they will mess up the actually rendering arrows, and the relationship
@@ -79,12 +87,12 @@ ratio=1.41;
         {rank=same; 1991 "NetHack 3.0.10" ;}
         {rank=same; 1992 "NetHack-- 3.0.10" ;}
         {rank=same; 1993 "NetHack 3.1.x" "NetHack-- 3.1.x" ;}
-        {rank=same; 1994 "NetHack Plus" "NetHack:TNG" ;}
+        {rank=same; 1994 "NetHack Plus" "NetHack: The Next Generation" ;}
         {rank=same; 1995 ;}
         {rank=same; 1996 "NetHack 3.2.x" "SLASH" "Wizard Patch" ;}
-        {rank=same; 1997 "NetHack Extended 3.1.4" -> "SLASH'EM 0.1 and 0.0.2" [style=invis] ;}
+        {rank=same; 1997 "NetHack Extended 3.1.4" "SLASH'EM 0.1 and 0.0.2" ;}
         {rank=same; 1998 "JNetHack" "SLASH'EM 0.0.3 and 0.0.4" ;}
-        {rank=same; 1999 "NetHack 3.2.3" -> "NetHack 3.3.0" -> "JNetHack:TNG" -> "SLASH'EM 0.0.5" [style=invis] ;}
+        {rank=same; 1999 "NetHack 3.2.3" "NetHack 3.3.0" "JNetHack: The Next Generation" "SLASH'EM 0.0.5" ;}
         {rank=same; 2000 "NetHack 3.3.1" "SLASH'EM 0.0.6E0" ;}
         {rank=same; 2001 "Lethe Patch 1.2.01" ;}
         {rank=same; 2002 "NetHack 3.4.0" "SLASH'EM 0.0.6E6"  ;}
@@ -95,17 +103,20 @@ ratio=1.41;
         {rank=same; 2007 "SporkHack 0.1.0" "GruntHack 0.1.1" ;}
         {rank=same; 2008 "NetHack brass 081221" "3.4.3-nao";}
         {rank=same; 2009 "UnNetHack 3.5.x" "SporkHack 0.6.0";}
-        {rank=same; 2011 "AceHack" "NitroHack 4.0" "UnNetHack 3.6.x" "Bard Patch 0.9" ;}
-        {rank=same; 2012 "NetHack4 4.2" "GruntHack 0.2.x" "UnNetHack 4.x" -> "dNetHack 3.5 and 3.6" [style=invis] ;}
-        {rank=same; 2013 "NetHack4 4.3" "UnNetHack 5.x" "UnNetHackPlus" "DynaHack 0.5.x" ;}
-        {rank=same; 2014 "dNetHack 3.7" ;}
-        {rank=same; 2015 "NetHack 3.6.0" -> "FIQHack" -> "Fourk 4.3.0.4" [style=invis] "dNetHack 3.8 to 3.11" "SLEX 1.00 to 1.52" "SLASHTHEM" ;}
+        {rank=same; 2011 "UnNetHack 3.6.x" "AceHack" "NitroHack 4.0" "Bard Patch 0.9" ;}
+        {rank=same; 2012 "NetHack4 4.2" "GruntHack 0.2.0" "UnNetHack 4.x" "dNetHack 3.5 and 3.6" ;}
+        {rank=same; 2013 "NetHack4 4.3" "DynaHack 0.5.x" "UnNetHack 5.x" "UnNetHackPlus" ;}
+        {rank=same; 2014 "Leaked 3.5 code" "dNetHack 3.7" ;}
+        {rank=same; 2015 "NetHack 3.6.0" "FIQHack" "Fourk 4.3.0.2" "dNetHack 3.8 to 3.11" "SLEX 1.00 to 1.52" "SLASHTHEM" ;}
         {rank=same; 2016 "dNetHack 3.12 to 3.14" "DynaHack 0.6" "SLEX 1.53 to 1.86" ;}
-        {rank=same; 2017 "dNetHack 3.15" "SLEX 1.87 to 2.12" ;}
-        {rank=same; 2018 "NetHack 3.6.1" "3.6.1-hdf" "xNetHack" -> "SpliceHack" -> "dNetHack 3.16" -> "SLEX 2.13 to 2.30" [style=invis] "dnhslex" "NotdNetHack" ;}
+        {rank=same; 2017 "SporkHack 0.6.5" "GruntHack 0.2.2" "Fourk 4.3.0.4" "dNetHack 3.15" "SLEX 1.87 to 2.12" "/dev/null tribute";}
+        {rank=same; 2018 "NetHack 3.6.1" "3.4.3-hdf" "xNetHack 0.1 to 0.3" "SpliceHack 0.1 to 0.5" "3.6.2-hdf" "TNNT" "SliceHack" "NotdNetHack" "dNetHack 3.16" "SLEX 2.13 to 2.44" "dnhslex" "BIGslex"  ;}
+        {rank=same; 2019 "xNetHack 0.4" "SpliceHack 0.6.x" "EvilHack" "UnNetHack 5.2.0" "SLEX 2.45" ;}
 
 	/* NetHack */
 	"NetHack 1.3d" -> "NetHack 1.4f" -> "NetHack 2.2a" -> "NetHack 2.3e" -> "NetHack 3.0.0" -> "NetHack 3.0.10" -> "NetHack 3.1.x" -> "NetHack 3.2.x" -> "NetHack 3.2.3" -> "NetHack 3.3.0" -> "NetHack 3.3.1" -> "NetHack 3.4.0" -> "NetHack 3.4.3" -> "NetHack 3.6.0" -> "NetHack 3.6.1" [weight=10];
+        "NetHack 3.4.3" -> "Leaked 3.5 code"
+        "Leaked 3.5 code" -> "NetHack 3.6.0" [color=gray60];
 	"NetHack 1.3d" [fillcolor="yellow"];
 	"NetHack 1.4f" [fillcolor="yellow"];
 	"NetHack 2.2a" [fillcolor="yellow"];
@@ -118,27 +129,25 @@ ratio=1.41;
 	"NetHack 3.3.0" [fillcolor="yellow"];
 	"NetHack 3.3.1" [fillcolor="yellow"];
 	"NetHack 3.4.0" [fillcolor="yellow"];
-	"NetHack 3.4.3" [fillcolor="yellow"];
-	"NetHack 3.6.0" [fillcolor="yellow"];
-	"NetHack 3.6.1" [fillcolor="yellow"];
+	"NetHack 3.4.3" [group=vanilla, fillcolor="yellow"];
+	"NetHack 3.6.0" [group=vanilla, fillcolor="yellow"];
+	"NetHack 3.6.1" [group=vanilla, fillcolor="yellow"];
 
-	/* NetHack TNG */
-	"NetHack 3.1.x" -> "NetHack:TNG";
+	/* NetHack: The Next Generation */
+	"NetHack 3.1.x" -> "NetHack: The Next Generation";
 
         /* NetHack Extended */
         "NetHack 3.1.x" -> "NetHack Extended 3.1.4";
 
         /* JNetHack */
         "NetHack 3.2.x" -> "JNetHack";
-        "JNetHack" -> "JNetHack:TNG";
-        "NetHack:TNG" -> "JNetHack:TNG";
+        "JNetHack" -> "JNetHack: The Next Generation";
+        "NetHack: The Next Generation" -> "JNetHack: The Next Generation";
 
-	/* nethack.wikia.com/wiki/NetHack-- */
+	/* nethackwiki.com/wiki/NetHack-- */
 	"NetHack 3.0.10" -> "NetHack-- 3.0.10";
-	"NetHack 3.1.x" -> "NetHack-- 3.1.x" [style=dashed];
-	/* "NetHack 3.1.3" -> "NetHack-- 3.1.3" [style=dashed]; */
-	/* "NetHack-- 3.0.10" -> "NetHack-- 3.1.2" -> "NetHack-- 3.1.3"; */
 	"NetHack-- 3.0.10" -> "NetHack-- 3.1.x";
+	"NetHack 3.1.x" -> "NetHack-- 3.1.x" [color=gray60];
 
 	/* nethack.wikia.com/wiki/NetHack_Plus */
 	"NetHack 3.1.x" -> "NetHack Plus";
@@ -149,49 +158,70 @@ ratio=1.41;
         "SLASH" [group=slash];
 
 	/* Wizard Patch */
+	"NetHack 3.2.x" -> "Wizard Patch";
 	"Wizard Patch" -> "NetHack 3.3.0";
+	"Wizard Patch" -> "SLASH'EM 0.1 and 0.0.2";
 
 	/* SLASH EM */
 	"SLASH" -> "SLASH'EM 0.1 and 0.0.2";
-	"Wizard Patch" -> "SLASH'EM 0.1 and 0.0.2";
-	"NetHack 3.2.x" -> "Wizard Patch";
-	"NetHack 3.3.0" -> "SLASH'EM 0.0.6E0" [style=dashed];
-	"NetHack 3.4.0" -> "SLASH'EM 0.0.6E6" [style=dashed];
-	"NetHack 3.4.3" -> "SLASH'EM 0.0.6E8 and 0.0.7E0" [style=dashed];
-	"NetHack 3.4.3" -> "SLASH'EM 0.0.7E5" [style=dashed];
+	"NetHack 3.3.0" -> "SLASH'EM 0.0.6E0" [color=gray60];
+	"NetHack 3.4.0" -> "SLASH'EM 0.0.6E6" [color=gray60];
+	"NetHack 3.4.3" -> "SLASH'EM 0.0.6E8 and 0.0.7E0" [color=gray60];
+	"NetHack 3.4.3" -> "SLASH'EM 0.0.7E5" [color=gray60];
+        "SLASH'EM 0.0.3 and 0.0.4" -> "NetHack 3.3.0" [color=gray60];
 	"SLASH'EM 0.1 and 0.0.2" -> "SLASH'EM 0.0.3 and 0.0.4" -> "SLASH'EM 0.0.5" -> "SLASH'EM 0.0.6E0" -> "SLASH'EM 0.0.6E6" ->  "SLASH'EM 0.0.6E8 and 0.0.7E0" -> "SLASH'EM 0.0.7E5" -> "SLASH'EM 0.0.7E7" -> "SLASH'EM 0.0.8E0F1";
-	"SLASH'EM 0.1 and 0.0.2"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.3 and 0.0.4"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.5"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.6E0"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.6E6"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.6E8 and 0.0.7E0"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.7E5"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.7E7"  [group=slash, fillcolor=lightslategray];
-	"SLASH'EM 0.0.8E0F1" [group=slash, fillcolor=lightslategray];
+	"SLASH'EM 0.1 and 0.0.2"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.3 and 0.0.4"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.5"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.6E0"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.6E6"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.6E8 and 0.0.7E0"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.7E5"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.7E7"  [group=slash, fillcolor=gray64];
+	"SLASH'EM 0.0.8E0F1" [group=slash, fillcolor=gray64];
 
         /* NAO - alt.org/nethack */
         "NetHack 3.4.3" -> "3.4.3-nao";
-        "3.4.3-nao" -> "NetHack 3.6.1" [style=dashed];
+        "3.4.3-nao" -> "NetHack 3.6.1" [color=gray60];
         "3.4.3-nao" [fillcolor="gray92"];
+
+        /* HDF - hardfought.org server builds */
+        "NetHack 3.6.1" -> "3.6.2-hdf";
+        "3.4.3-nao" -> "3.4.3-hdf";
+        "3.6.2-hdf" [fillcolor="gray92"]
+        "3.4.3-hdf" [fillcolor="gray92"]
 
         /* devnull tournament */
         "NetHack 3.4.3" -> "/dev/null";
-        "3.4.3-nao" -> "/dev/null" [style=dashed];
+        "3.4.3-nao" -> "/dev/null" [color=gray60];
+        "/dev/null" -> "/dev/null tribute";
+        "NetHack 3.6.0" -> "/dev/null tribute";
+        "/dev/null" [fillcolor="white:coral1", gradientangle=270]
+        "/dev/null tribute" [fillcolor="white:coral1", gradientangle=270]
+
+        /* The November NetHack Tournament */
+        "3.6.2-hdf" -> "TNNT";
+        "TNNT" [fillcolor="white:coral1", gradientangle=270]
 
 	/* GruntHack */
 	"NetHack 3.4.3" -> "GruntHack 0.1.0";
+        "SLASH'EM 0.0.7E7" -> "GruntHack 0.1.0" [color=gray60];
+        "NetHack brass 040923" -> "GruntHack 0.1.0" [color=gray60];
 	"GruntHack 0.1.0" -> "GruntHack 0.1.1";
-        "GruntHack 0.1.1" -> "GruntHack 0.2.x";
+        "GruntHack 0.1.1" -> "GruntHack 0.2.0";
+        "GruntHack 0.2.0" -> "GruntHack 0.2.2";
 	"GruntHack 0.1.0" [group=gh, fillcolor=orange];
 	"GruntHack 0.1.1" [group=gh, fillcolor=orange];
-        "GruntHack 0.2.x" [group=gh, fillcolor=orange];
+        "GruntHack 0.2.0" [group=gh, fillcolor=orange];
+        "GruntHack 0.2.2" [group=gh, fillcolor=orange, color=orange];
 
 	/* SporkHack */
 	"NetHack 3.4.3" -> "SporkHack 0.1.0";
 	"SporkHack 0.1.0" -> "SporkHack 0.6.0";
+	"SporkHack 0.6.0" -> "SporkHack 0.6.5";
         "SporkHack 0.1.0" [group=spork, fillcolor=lightgray];
         "SporkHack 0.6.0" [group=spork, fillcolor=lightgray];
+        "SporkHack 0.6.5" [group=spork, fillcolor=lightgray, color=lightgray];
 
 	/* NetHack brass www.maroon.dti.ne.jp/youkan/nethack/index_e.html */
 	"NetHack 3.4.3" -> "NetHack brass 040923";
@@ -203,26 +233,27 @@ ratio=1.41;
 	/* Lethe Patch */
 	"NetHack 3.3.1" -> "Lethe Patch 1.2.01";
 	"Lethe Patch 1.2.01" -> "SLethe 1.1" -> "SLethe 1.5";
-	"Lethe Patch 1.2.01" -> "SLASH'EM 0.0.7E5" [style=dashed];
-        "SLASH'EM 0.0.7E5" -> "SLethe 1.1" [style=dashed];
-        "SLASH'EM 0.0.7E7" -> "SLethe 1.5" [style=dashed];
+	"Lethe Patch 1.2.01" -> "SLASH'EM 0.0.7E5" [color=gray60];
+        "SLASH'EM 0.0.7E5" -> "SLethe 1.1" [color=gray60];
+        "SLASH'EM 0.0.7E7" -> "SLethe 1.5" [color=gray60];
         "Lethe Patch 1.2.01" [group=slethe]
         "SLethe 1.1" [group=slethe]
         "SLethe 1.5" [group=slethe]
 
 	/* UnNetHack */
 	"NetHack 3.4.3" -> "UnNetHack 3.5.x";
-	"SLASH'EM 0.0.8E0F1" -> "UnNetHack 3.5.x" [style=dashed];
-	"NetHack brass 081221" -> "UnNetHack 3.5.x" [style=dashed];
-	"GruntHack 0.1.1" -> "UnNetHack 3.5.x" [style=dashed];
-	"SporkHack 0.6.0" -> "UnNetHack 3.5.x" [style=dashed];
-	"SLethe 1.5" -> "UnNetHack 3.5.x" [style=dashed];
-        "UnNetHack 3.5.x" -> "UnNetHack 3.6.x" -> "UnNetHack 4.x" -> "UnNetHack 5.x";
-        "UnNetHack 5.x" -> "NetHack 3.6.0" [style=dashed];
+	"SLASH'EM 0.0.8E0F1" -> "UnNetHack 3.5.x" [color=gray60];
+	"NetHack brass 081221" -> "UnNetHack 3.5.x" [color=gray60];
+	"GruntHack 0.1.1" -> "UnNetHack 3.5.x" [color=gray60];
+	"SporkHack 0.6.0" -> "UnNetHack 3.5.x" [color=gray60];
+	"SLethe 1.5" -> "UnNetHack 3.5.x" [color=gray60];
+        "UnNetHack 3.5.x" -> "UnNetHack 3.6.x" -> "UnNetHack 4.x" -> "UnNetHack 5.x" -> "UnNetHack 5.2.0";
+        "UnNetHack 5.x" -> "NetHack 3.6.0" [color=gray60];
 	"UnNetHack 3.5.x" [group=un, fillcolor=yellow3];
 	"UnNetHack 3.6.x" [group=un, fillcolor=yellow3];
 	"UnNetHack 4.x" [group=un, fillcolor=yellow3];
 	"UnNetHack 5.x" [group=un, fillcolor=yellow3];
+	"UnNetHack 5.2.0" [group=un, fillcolor=yellow3];
 
         /* UnNetHackPlus */
         "UnNetHack 4.x" -> "UnNetHackPlus"
@@ -232,10 +263,10 @@ ratio=1.41;
 
         /* dNetHack */
         "3.4.3-nao" -> "dNetHack 3.5 and 3.6" -> "dNetHack 3.7" -> "dNetHack 3.8 to 3.11" -> "dNetHack 3.12 to 3.14" -> "dNetHack 3.15" -> "dNetHack 3.16"
-        "Bard Patch 0.9" -> "dNetHack 3.5 and 3.6" [style=dashed];
-        "Lethe Patch 1.2.01" -> "dNetHack 3.5 and 3.6" [style=dashed];
-        "SLASH'EM 0.0.7E7" -> "dNetHack 3.8 to 3.11" [style=dashed];
-        "SporkHack 0.6.0" -> "dNetHack 3.5 and 3.6" [style=dashed];
+        "Bard Patch 0.9" -> "dNetHack 3.5 and 3.6" [color=gray60];
+        "Lethe Patch 1.2.01" -> "dNetHack 3.5 and 3.6" [color=gray60];
+        "SLASH'EM 0.0.7E7" -> "dNetHack 3.8 to 3.11" [color=gray60];
+        "SporkHack 0.6.0" -> "dNetHack 3.5 and 3.6" [color=gray60];
         "dNetHack 3.5 and 3.6" [group=dnh, fillcolor=violet];
         "dNetHack 3.7" [group=dnh, fillcolor=violet];
         "dNetHack 3.8 to 3.11" [group=dnh, fillcolor=violet];
@@ -258,11 +289,16 @@ ratio=1.41;
         "NetHack4 4.3" [group=nh4, fillcolor=plum1];
 
         /* Fourk */
-        "NetHack4 4.3" -> "Fourk 4.3.0.4"
-        "Fourk 4.3.0.4" [fillcolor=cyan];
+        "NetHack4 4.3" -> "Fourk 4.3.0.2"
+        "Fourk 4.3.0.2" -> "Fourk 4.3.0.4"
+        "UnNetHack 5.x" -> "Fourk 4.3.0.2" [color=gray60];
+        "Fourk 4.3.0.2" [group=fourk, fillcolor=cyan];
+        "Fourk 4.3.0.4" [group=fourk, fillcolor=cyan];
 
         /* FIQHack */
         "NetHack4 4.3" -> "FIQHack"
+        "GruntHack 0.2.0" -> "FIQHack" [color=gray60];
+        "DynaHack 0.5.x" -> "FIQHack" [color=gray60];
         "FIQHack" [fillcolor=cyan3];
 
         /* DynaHack */
@@ -274,37 +310,61 @@ ratio=1.41;
 
         /* SLEX and SLASHTHEM */
         "SLASH'EM 0.0.7E7" -> "SLEX 1.00 to 1.52"
-        "SLASH'EM 0.0.8E0F1" -> "SLEX 1.00 to 1.52" [style=dashed];
+        "SLASH'EM 0.0.8E0F1" -> "SLEX 1.00 to 1.52" [color=gray60];
         "SLEX 1.00 to 1.52" -> "SLEX 1.53 to 1.86"
         "SLEX 1.53 to 1.86" -> "SLEX 1.87 to 2.12"
-        "SLEX 1.87 to 2.12" -> "SLEX 2.13 to 2.30"
+        "SLEX 1.87 to 2.12" -> "SLEX 2.13 to 2.44"
+        "SLEX 2.13 to 2.44" -> "SLEX 2.45"
         "SLEX 1.00 to 1.52" -> "SLASHTHEM"
         "SLEX 1.00 to 1.52" [group=slex, fillcolor=lightskyblue];
         "SLEX 1.53 to 1.86" [group=slex, fillcolor=lightskyblue];
         "SLEX 1.87 to 2.12" [group=slex, fillcolor=lightskyblue];
-        "SLEX 2.13 to 2.30" [group=slex, fillcolor=lightskyblue];
+        "SLEX 2.13 to 2.44" [group=slex, fillcolor=lightskyblue];
+        "SLEX 2.45" [group=slex, fillcolor=lightskyblue];
 
         /* Amy, why */
-        "SLEX 2.13 to 2.30" -> "dnhslex" [style=dashed];
+        "SLEX 2.13 to 2.44" -> "dnhslex" [color=gray60];
         "dNetHack 3.15" -> "dnhslex";
-
-        /* Hardfought patches on 3.6.1 */
-        "NetHack 3.6.1" -> "3.6.1-hdf";
-        "3.6.1-hdf" [fillcolor="gray92"];
+        "SLEX 2.13 to 2.44" -> "BIGslex"
+        "BIGslex" [fillcolor=lightskyblue];
 
         /* xNetHack */
-        "NetHack 3.6.1" -> "xNetHack";
-        "3.6.1-hdf" -> "xNetHack";
-        "GruntHack 0.2.x" -> "xNetHack" [style=dashed];
-        "xNetHack" [fillcolor=lawngreen];
+        "NetHack 3.6.1" -> "xNetHack 0.1 to 0.3";
+        "GruntHack 0.2.0" -> "xNetHack 0.1 to 0.3" [color=gray60];
+        "Fourk 4.3.0.4" -> "xNetHack 0.1 to 0.3" [color=gray60];
+        "FIQHack" -> "xNetHack 0.1 to 0.3" [color=gray60];
+        "SLASH'EM 0.0.7E7" -> "xNetHack 0.4" [color=gray60];
+        "SpliceHack 0.1 to 0.5" -> "xNetHack 0.4" [color=gray60];
+        "SliceHack" -> "xNetHack 0.4" [color=gray60];
+        "xNetHack 0.1 to 0.3" -> "xNetHack 0.4";
+        "xNetHack 0.1 to 0.3" [group=xnh, fillcolor=lawngreen];
+        "xNetHack 0.4" [group=xnh, fillcolor=lawngreen];
 
         /* SpliceHack */
-        "NetHack 3.6.1" -> "SpliceHack";
-        "3.6.1-hdf" -> "SpliceHack";
-        "xNetHack" -> "SpliceHack" [style=dashed];
-        "SLASH'EM 0.0.7E7" -> "SpliceHack" [style=dashed];
-        "SpliceHack" [fillcolor=chartreuse3];
+        "NetHack 3.6.1" -> "SpliceHack 0.1 to 0.5";
+        "xNetHack 0.1 to 0.3" -> "SpliceHack 0.1 to 0.5" [color=gray60];
+        "SLASH'EM 0.0.7E7" -> "SpliceHack 0.1 to 0.5" [color=gray60];
+        "Fourk 4.3.0.4" -> "SpliceHack 0.1 to 0.5" [color=gray60];
+        "xNetHack 0.1 to 0.3" -> "SpliceHack 0.6.x" [color=gray60];
+        "SliceHack" -> "SpliceHack 0.6.x" [color=gray60];
+        "SpliceHack 0.1 to 0.5" -> "SpliceHack 0.6.x";
+        "SpliceHack 0.1 to 0.5" [group=spl, fillcolor=chartreuse3];
+        "SpliceHack 0.6.x" [group=spl, fillcolor=chartreuse3];
 
-	"1987" -> "1988" -> "1989" -> "1990" -> "1991" -> "1992" -> "1993" -> "1994" -> "1995" -> "1996" -> "1997" -> "1998" -> "1999" -> "2000" -> "2001" -> "2002" -> "2003" -> "2004" -> "2005" -> "2006" -> "2007" -> "2008" -> "2009" -> "2010" -> "2011" -> "2012" -> "2013" -> "2014" -> "2015" -> "2016" -> "2017" -> "2018" [shape=rect, style=invis];
+        /* Michael Searle's SliceHack */
+        "SpliceHack 0.1 to 0.5" -> "SliceHack" [weight=10];
+
+        /* K2's EvilHack */
+        "NetHack 3.6.1" -> "EvilHack";
+        "GruntHack 0.2.2" -> "EvilHack";
+        "SporkHack 0.6.5" -> "EvilHack";
+        "xNetHack 0.1 to 0.3" -> "EvilHack" [color=gray60];
+        "SpliceHack 0.1 to 0.5" -> "EvilHack" [color=gray60];
+        "SliceHack" -> "EvilHack" [color=gray60];
+        "SLASH'EM 0.0.8E0F1" -> "EvilHack" [color=gray60];
+        "EvilHack" [group=evil];
+
+
+	"1987" -> "1988" -> "1989" -> "1990" -> "1991" -> "1992" -> "1993" -> "1994" -> "1995" -> "1996" -> "1997" -> "1998" -> "1999" -> "2000" -> "2001" -> "2002" -> "2003" -> "2004" -> "2005" -> "2006" -> "2007" -> "2008" -> "2009" -> "2010" -> "2011" -> "2012" -> "2013" -> "2014" -> "2015" -> "2016" -> "2017" -> "2018" -> "2019" [shape=rect, style=invis];
 
 }
