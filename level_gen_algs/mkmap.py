@@ -37,7 +37,7 @@ class IrregularRoom():
 
 # small function for passing to count_adjacent
 def isroom(t):
-    return t = terr.ROOM
+    return t == terr.ROOM
 
 # identical to nethack's pass_one, except it uses a backup buffer:
 # cells with < 3 neighbors die, with > 4 come to life, 3 or 4 stay the same
