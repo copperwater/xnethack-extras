@@ -14,6 +14,12 @@ def isok(x, y):
 def onedge(x, y):
     return not (isok(x-1,y) and isok(x+1,y) and isok(x,y-1) and isok(x,y+1))
 
+def rndx():
+    return random.randint(0, COLNO-1)
+
+def rndy():
+    return random.randint(0, ROWNO-1)
+
 class terrain(Enum):
     STONE = 0
     WALL = 1
@@ -83,18 +89,18 @@ class Map():
 
     def matching_adjacent(self, x, y, func, diag):
         # diag: 0 for either, -1 for orthogonal only, 1 for diagonal only
-        c = 0
+        res = []
         for xx in range(x-1, x+2):
             for yy in range(y-1, y+2):
-                if not (isok(xx, yy) and self._map[xx][yy] in typlist):
+                if not (isok(xx, yy) and func(self._map[xx][yy]) == True):
                     continue
                 if diag > -1 and xx != x and yy != y:
                     # diagonals
-                    c += 1
+                    res.append((xx, yy))
                 if diag < 1 and ((xx == x) != (yy == y)): # XOR
                     # orthogonals
-                    c += 1
-        return c
+                    res.append((xx, yy))
+        return res
 
     #
     # TODO: diagonal support, whenever it's needed.
@@ -119,7 +125,7 @@ class Map():
     def wallify(self):
         for y in range(ROWNO):
             for x in range(COLNO):
-                if self._map[x][y] == terrain.STONE and self.count_adjacent(x, y, [terrain.ROOM], 0):
+                if self._map[x][y] == terrain.STONE and self.count_adjacent(x, y, (lambda t: t == terrain.ROOM), 0):
                     self._map[x][y] = terrain.WALL
 
     def fix_wall_spines(self):
@@ -129,8 +135,8 @@ class Map():
                     # vwalls only appear when a wall has more vertical neighbors than horizontal
                     vn = (1 if self.iswallordoor(x, y-1) else 0) + (1 if self.iswallordoor(x, y+1) else 0)
                     hn = (1 if self.iswallordoor(x-1, y) else 0) + (1 if self.iswallordoor(x+1, y) else 0)
-                    if vn > hn and (self.count_adjacent(x, y, WALKABLE, 0) >= 2 or
-                                    self.count_adjacent(x, y, [terrain.ROOM, terrain.DOOR], -1) >= 1):
+                    if vn > hn and (self.count_adjacent(x, y, (lambda t: t in WALKABLE), 0) >= 2 or
+                                    self.count_adjacent(x, y, (lambda t: t in [terrain.ROOM, terrain.DOOR]), -1) >= 1):
                         self._map[x][y] = terrain.VWALL
                     else:
                         self._map[x][y] = terrain.WALL
