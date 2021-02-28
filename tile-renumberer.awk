@@ -1,3 +1,5 @@
+# usage: awk -f tile-renumberer.awk [monsters|objects|other].txt > new[monsters|objects|other].txt
+
 BEGIN {
   x = 0;
 }
