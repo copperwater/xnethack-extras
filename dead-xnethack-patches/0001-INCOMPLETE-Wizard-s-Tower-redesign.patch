@@ -1,0 +1,163 @@
+From 0ec031649aef932197aa606a8ca35bcbbba99521 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Fri, 1 Jun 2018 08:06:42 -0400
+Subject: [PATCH] INCOMPLETE Wizard's Tower redesign
+
+---
+ dat/yendor.des | 118 +++++++++++++++++++++++++++++--------------------
+ src/mkmaze.c   |   4 --
+ 2 files changed, 70 insertions(+), 52 deletions(-)
+
+diff --git a/dat/yendor.des b/dat/yendor.des
+index 34b780988..95025ea22 100644
+--- a/dat/yendor.des
++++ b/dat/yendor.des
+@@ -8,60 +8,82 @@
+ MAZE:"wizard1",random
+ FLAGS:noteleport,hardfloor
+ GEOMETRY:center,center
++# The top line on the map is necessary to make the level core align
++# properly on the maze, which doesn't normally use y=1.
++# The map contains an extra left line so that it aligns properly with the maze grid.
++# 2345678901234567890123456789012
+ MAP
+-----------------------------.
+-|.......|..|.........|.....|.
+-|.......S..|.}}}}}}}.|.....|.
+-|..--S--|..|.}}---}}.|---S-|.
+-|..|....|..|.}--.--}.|..|..|.
+-|..|....|..|.}|...|}.|..|..|.
+-|..--------|.}--.--}.|..|..|.
+-|..|.......|.}}---}}.|..|..|.
+-|..S.......|.}}}}}}}.|..|..|.
+-|..|.......|.........|..|..|.
+-|..|.......|-----------S-S-|.
+-|..|.......S...............|.
+-----------------------------.
++          LLLLLLLLLLLLL          
++-------LLLL-----------LLLL-------
++ ....LLL----LL..\..LL----LLL.... 
++---LLL---LLLL.......LLLL---LLL---
++.LLL---.---...........---.---LLL 
++-L---.....------+------.....---L-
++LL|...---..}.|.....|..|.---...|LL
++L---....--.}.+.....+..|.|.---.--L
++L|.--+-----}.|.....|..|.|...|..|L
++L|........---|.....|---.|...|-.|L
++L|...........|------....+...|..|L
++L--..........|........-------.--L
++LL|.--+--..---.---+----.......|LL
++.L---...----...|...|........---L.
++ LLL---........|...|......---LLL 
++---LLL---..---------....---LLL---
++ - - LLL----.........----LLL - - 
++-------LLLL-----------LLLL-------
++ - - - ................... - - -.
+ ENDMAP
+-STAIR:levregion(01,00,79,20),(0,0,28,12),up
+-STAIR:levregion(01,00,79,20),(0,0,28,12),down
+-BRANCH:levregion(01,00,79,20),(0,0,28,12)
+-TELEPORT_REGION:levregion(01,00,79,20),(0,0,27,12)
+-# Make it a morgue for rm id in mkmaze.c
+-# for the purpose of random sdoor placement
+-REGION:(12,01,20,09),unlit,"morgue",unfilled
++
++# The various regions can get a bit annoying with a circular tower because they
++# will hit squares outside the tower. In most cases this won't be noticed much.
++# The TELEPORT_REGION is the most problematic, as it could otherwise allow
++# people around the corners of the map to teleport into the tower, but
++# thankfully the level is non-teleport so that doesn't matter.
++STAIR:levregion(01,00,79,20),(02,02,30,16),up
++STAIR:levregion(01,00,79,20),(02,02,30,16),down
++BRANCH:levregion(01,00,79,20),(02,02,30,16)
++TELEPORT_REGION:levregion(01,00,79,20),(02,02,30,16)
+ # another region to constrain monster arrival
+-REGION:(01,01,10,11),unlit,"ordinary",unfilled
+-MAZEWALK:(28,05),east
+-LADDER:(06,05),down
+-# Non diggable walls
+-# Walls inside the moat stay diggable
+-NON_DIGGABLE:(00,00,11,12)
+-NON_DIGGABLE:(11,00,21,00)
+-NON_DIGGABLE:(11,10,27,12)
+-NON_DIGGABLE:(21,00,27,10)
+-# Non passable walls
+-NON_PASSWALL:(00,00,11,12)
+-NON_PASSWALL:(11,00,21,00)
+-NON_PASSWALL:(11,10,27,12)
+-NON_PASSWALL:(21,00,27,10)
++REGION:(02,02,30,16),unlit,"ordinary",unfilled
++# These rectangles overlap, but it's better than having random undiggable
++# unphaseable walls outside the tower itself
++NON_DIGGABLE:(07,01,25,17)
++NON_DIGGABLE:(03,03,29,15)
++NON_DIGGABLE:(01,04,31,14)
++NON_PASSWALL:(07,01,25,17)
++NON_PASSWALL:(03,03,29,15)
++NON_PASSWALL:(01,04,31,14)
++MAZEWALK:(00,04),west
++MAZEWALK:(32,18),east
++LADDER:(12,16),down
++DOOR:locked&irondoor,(16,05)
++DOOR:locked,(19,07)
++DOOR:closed,(13,07)
++DOOR:locked,(05,08)
++DOOR:locked&irondoor,(06,12)
++DOOR:closed,(18,12)
++DOOR:closed,(24,10)
+ # The wizard and his guards
+-MONSTER:('@',"Wizard of Yendor"),(16,05),asleep
+-MONSTER:('d',"hell hound"),(15,05)
+-MONSTER:('V',"vampire lord"),(17,05)
++MONSTER:('@',"Wizard of Yendor"),(16,02),asleep
++MONSTER:('d',"hell hound"),(15,02)
++MONSTER:('V',"vampire lord"),(17,02)
+ # The local treasure
+-OBJECT:('+',"Book of the Dead"),(16,05)
++OBJECT:('+',"Book of the Dead"),(16,02)
+ # Surrounding terror
+-MONSTER:(';',"kraken"),(14,02)
+-MONSTER:(';',"giant eel"),(17,02)
+-MONSTER:(';',"kraken"),(13,04)
+-MONSTER:(';',"giant eel"),(13,06)
+-MONSTER:(';',"kraken"),(19,04)
+-MONSTER:(';',"giant eel"),(19,06)
+-MONSTER:(';',"kraken"),(15,08)
+-MONSTER:(';',"giant eel"),(17,08)
+-MONSTER:(';',"piranha"),(15,02)
+-MONSTER:(';',"piranha"),(19,08)
++MONSTER:(';',"kraken"),(11,06)
++MONSTER:(';',"giant eel"),(11,08)
++# Guard room
++# soldiers might be extinct at this point, don't create a barracks...
++MONSTER:('@',"sergeant"),(04,09)
++MONSTER:('@',"captain"),(05,09)
++MONSTER:('@',"captain"),(07,09)
++MONSTER:('@',"sergeant"),(08,09)
++MONSTER:('@',"lieutenant"),(05,10)
++MONSTER:('@',"captain"),(07,10)
++MONSTER:('@',"lieutenant"),(09,10)
++MONSTER:('@',"lieutenant"),(06,11)
++MONSTER:('@',"sergeant"),(07,11)
++MONSTER:('@',"lieutenant"),(08,11)
+ # Random monsters
+ MONSTER:'D',random
+ MONSTER:'H',random
+diff --git a/src/mkmaze.c b/src/mkmaze.c
+index 7500047e5..f61965e73 100644
+--- a/src/mkmaze.c
++++ b/src/mkmaze.c
+@@ -601,10 +601,6 @@ fixup_special()
+                 set_corpsenm(otmp, rndmonnum());
+             }
+         }
+-    } else if (Is_wiz1_level(&u.uz)) {
+-        croom = search_special(MORGUE);
+-
+-        create_secret_door(croom, W_SOUTH | W_EAST | W_WEST);
+     } else if (Is_knox(&u.uz)) {
+         /* using an unfilled morgue for rm id */
+         croom = search_special(MORGUE);
+-- 
+2.48.1
+

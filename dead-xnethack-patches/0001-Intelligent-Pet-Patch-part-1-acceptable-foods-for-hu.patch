@@ -1,0 +1,44 @@
+From f1e68ad331602c3e99e374b8ac1a11b8d34c2cf9 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Wed, 15 Jan 2020 20:00:19 -0500
+Subject: [PATCH] Intelligent Pet Patch part 1: acceptable foods for humanoid
+ pets
+
+The Intelligent Pet Patch, originally by SGrunt, is a large and
+confusing piece of code. Rather than trying to pull it all in at once
+and hope nothing breaks, I'm going to try my best to break it into
+logical commits. I'm drawing on SpliceHack's implementation of the
+patch.
+
+This commit starts small, adding some extra detail to foods humanoid
+pets will eat. (A divergence from SpliceHack in that orcs won't go
+anywhere near lembas wafers).
+---
+ src/dog.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/dog.c b/src/dog.c
+index c2a0d588e..133b29ebc 100644
+--- a/src/dog.c
++++ b/src/dog.c
+@@ -853,6 +853,17 @@ register struct obj *obj;
+                       : (herbi || starving)
+                          ? ACCFOOD
+                          : MANFOOD;
++        case LEMBAS_WAFER:
++            if (is_orc(mptr))
++                return POISON; /* !#?&* elf kibble! */
++            /* FALLTHRU */
++        case K_RATION:
++        case C_RATION:
++        case CRAM_RATION:
++        case FOOD_RATION:
++            if (humanoid(ptr))
++                return ACCFOOD;
++            /* FALLTHRU */
+         default:
+             if (starving)
+                 return ACCFOOD;
+-- 
+2.48.1
+

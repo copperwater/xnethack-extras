@@ -1,0 +1,99 @@
+From f7ad3830f364e789f4cef51e2966851fcae81e22 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Mon, 21 May 2018 20:12:48 -0400
+Subject: [PATCH] Begin implementing monster encyclopedia entries
+
+Only a and b so far, nothing else.
+---
+ dat/data.base | 57 ++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 43 insertions(+), 14 deletions(-)
+
+diff --git a/dat/data.base b/dat/data.base
+index 807309efb..625136a85 100644
+--- a/dat/data.base
++++ b/dat/data.base
+@@ -237,12 +237,6 @@ anshar
+ 	pair of offspring (with Kishar) of Lahmu and Lahamu.  Anshar
+ 	is linked with heaven while Kishar is identified with earth.
+ 	    [ Encyclopedia of Gods, by Michael Jordan ]
+-ant
+-* ant
+-	This giant variety of the ordinary ant will fight just as
+-	fiercely as its small, distant cousin.  Various varieties
+-	exist, and they are known and feared for their relentless
+-	persecution of their victims.
+ anu
+ 	Anu was the Babylonian god of the heavens, the monarch of
+ 	the north star.  He was the oldest of the Babylonian gods,
+@@ -539,13 +533,6 @@ bear*trap
+ 	sure the animal cannot pull out but does not destroy the leg.
+ 	This also allows the trapper to release unwanted catches.
+ 		[ Wikipedia, the free encyclopedia ]
+-*bee
+-	This giant variety of its useful normal cousin normally
+-	appears in small groups, looking for raw material to produce
+-	the royal jelly needed to feed their queen.  On rare
+-	occasions, one may stumble upon a bee-hive, in which the
+-	queen bee is being well provided for, and guarded against
+-	intruders.
+ *beetle
+ 	[ The Creator ] has an inordinate fondness for beetles.
+ 		[ attributed to biologist J.B.S. Haldane ]
+@@ -606,7 +593,6 @@ blind io
+ 	large number, led a semi-independent life of their
+ 	own.  Several were currently hovering above the table.
+ 	    [ The Colour of Magic, by Terry Pratchett ]
+-* blob
+ ooze
+ * ooze
+ *pudding
+@@ -7129,3 +7115,46 @@ long bow
+ zruty
+ 	The zruty are wild and gigantic beings, living in the
+ 	wildernesses of the Tatra mountains.
++#
++# Monsters begin here, in general order of monster class.
++#
++# a - ants/insects
++giant ant
++        It is said that in the Dungeons of Doom, even the ants are large
++        enough to kill a man with their bite.
++killer bee
++        Bees, like ants, are surprisingly fast for their size. It is
++        said that they sometimes make hives, deep in the dungeon, where
++        they keep their precious royal jelly.
++soldier ant
++        Groups of these deadly insects have been responsible for the
++        deaths of many adventurers.
++fire ant
++        No one is quite sure whethere the fire ant is native to the
++        dungeon, or an invasive species.  Either way, they are just as
++        fast as their non-firey brethren, congregate in groups just as
++        large, and supplement their bite with a strange venom that burns
++        just like fire.
++giant beetle
++        One of the slower insects in the dungeon, the giant beetle is
++        tough to kill, but relatively easy to outrun.  Like many things
++        in these depths, its corpse is poisonous to eat.
++queen bee
++        Killer bees form colonies centered around a queen.  Faster and
++        more dangerous than her workers, the queen is often found in the
++        hive, guarding the precious royal jelly.
++# b - blobs
++acid blob
++        It is not known how a blob of acid can move around on its own.
++        Perhaps it is the result of some wizard's arcane experiments.
++quivering blob
++        A strange animated blob of protoplasm, this amoeba-like creature
++        is slow and not very dangerous.
++gelatinous cube
++        The strange gelatinous substance of which this creature is
++        composed can paralyze the unwary adventurer who touches, or is
++        touched by, the cube.  However, this only happens if the cube is
++        still alive.  Once killed, its corpse can be safely touched,
++        although it is acidic to eat.  Gelatinous cubes absorb objects
++        that they find in the dungeon.  Durable objects may be recovered
++        if the cube is killed, but organic materials are dissolved.
+-- 
+2.48.1
+

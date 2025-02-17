@@ -1,0 +1,321 @@
+From 487088a80583a785dfd6871c87d5cdc8ba6b16e3 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Wed, 12 Jan 2022 12:58:30 -0500
+Subject: [PATCH] Incomplete implementation of join points
+
+Intended system is the ability for rooms to manually specify points
+which are the only points that can be connected via corridor. However,
+the implementation is incomplete and hasn't been worked on for months.
+---
+ dat/themerms.lua |  16 ++++++++
+ include/mkroom.h |   4 ++
+ src/allmain.c    |   1 +
+ src/mklev.c      | 101 +++++++++++++++++++++++++++++++----------------
+ src/sp_lev.c     |  34 +++++++++++++++-
+ 5 files changed, 121 insertions(+), 35 deletions(-)
+
+diff --git a/dat/themerms.lua b/dat/themerms.lua
+index d94b7d335..b30c3f7ff 100644
+--- a/dat/themerms.lua
++++ b/dat/themerms.lua
+@@ -1689,6 +1689,20 @@ x------------xx]], contents = function()
+       end
+    },
+ 
++   -- COOL TEST 
++   function()
++      des.map({ map = [[
++-----xxxx
++|...-----
++|.......|
++|...-----
++-----xxxx]], contents = function()
++         des.region({ region={07,02,07,02}, type="ordinary", filled = 0,
++                      joined = true, irregular = false })
++         des.region({ region={01,01,06,03}, type="ordinary", filled = 1,
++                      joined = false, irregular = false })
++      end })
++   end,
+ };
+ 
+ function is_eligible(room)
+@@ -1727,6 +1741,8 @@ function themerooms_generate()
+       end
+    end
+ 
++   pick = percent(10) and #themerooms or 1
++
+    local t = type(themerooms[pick]);
+    if (t == "table") then
+       themerooms[pick].contents();
+diff --git a/include/mkroom.h b/include/mkroom.h
+index 0bbc28cf5..1a53828f2 100644
+--- a/include/mkroom.h
++++ b/include/mkroom.h
+@@ -22,6 +22,10 @@ struct mkroom {
+     schar roomnoidx;
+     struct mkroom *sbrooms[MAX_SUBROOMS]; /* Subrooms pointers */
+     struct monst *resident; /* priest/shopkeeper/guard for this room */
++#define MAXJOINPTS 6
++    coord joinpts[MAXJOINPTS]; /* doors can only be created on walls adjacent to
++                                  these locations */
++    xchar numjoinpts; /* tracks # of joinpts in use */
+ };
+ 
+ struct shclass {
+diff --git a/src/allmain.c b/src/allmain.c
+index 2d9999bad..9cf4eed54 100644
+--- a/src/allmain.c
++++ b/src/allmain.c
+@@ -773,6 +773,7 @@ newgame(void)
+ 
+     /* Success! */
+     welcome(TRUE);
++    /* iflags.debug_fuzzer = 1; */
+     return;
+ }
+ 
+diff --git a/src/mklev.c b/src/mklev.c
+index 3fab6755a..327fd70f7 100644
+--- a/src/mklev.c
++++ b/src/mklev.c
+@@ -115,10 +115,6 @@ finddpos(coord *cc, xchar xl, xchar yl, xchar xh, xchar yh)
+             if (IS_DOOR(levl[x][y].typ) || levl[x][y].typ == SDOOR)
+                 goto gotit;
+     /* cannot find something reasonable -- strange. */
+-    impossible("couldn't find an okdoor pos within (%d, %d, %d, %d)!",
+-               xl, yl, xh, yh);
+-    x = xl;
+-    y = yh;
+     return FALSE;
+  gotit:
+     cc->x = x;
+@@ -364,6 +360,23 @@ makerooms(void)
+     }
+ }
+ 
++/* return spot on side of okdoor() location that is rock that should be dug out
++ */
++void
++find_door_dig(int x, int y, coord *cc)
++{
++    cc->x = x;
++    cc->y = y;
++    if (IS_ROCK(levl[x+1][y].typ) || levl[x+1][y].typ == CORR)
++        cc->x++;
++    else if (IS_ROCK(levl[x-1][y].typ) || levl[x-1][y].typ == CORR)
++        cc->x--;
++    else if (IS_ROCK(levl[x][y+1].typ) || levl[x][y+1].typ == CORR)
++        cc->y++;
++    else if (IS_ROCK(levl[x][y-1].typ) || levl[x][y-1].typ == CORR)
++        cc->y--;
++}
++
+ /* Join rooms a and b together by drawing a corridor and placing doors.
+  * If nxcor is TRUE, it will be pickier about whether to draw the corridor at
+  * all, and will not create doors in !okdoor() locations.
+@@ -401,67 +414,87 @@ join(register int a, register int b, boolean nxcor)
+      * always place the doors on croom's right wall and troom's left wall.
+      * This may be intentional, since the playing field is much wider than it
+      * is tall. */
++    boolean gotdoorc = FALSE;
++    boolean gotdoort = FALSE;
+     if (troom->lx > croom->hx) {
+         /* troom to the right of croom */
+         dx = 1;
+         dy = 0;
+         xx = croom->hx + 1;
+         tx = troom->lx - 1;
+-        if (!finddpos(&cc, xx, croom->ly, xx, croom->hy))
+-            return;
+-        if (!finddpos(&tt, tx, troom->ly, tx, troom->hy))
+-            return;
++        if (finddpos(&cc, xx, croom->ly, xx, croom->hy))
++            gotdoorc = TRUE;
++        if (finddpos(&tt, tx, troom->ly, tx, troom->hy))
++            gotdoort = TRUE;
+     } else if (troom->hy < croom->ly) {
+-        /* troom below croom */
++        /* troom above croom */
+         dy = -1;
+         dx = 0;
+         yy = croom->ly - 1;
+         ty = troom->hy + 1;
+-        if (!finddpos(&cc, croom->lx, yy, croom->hx, yy))
+-            return;
+-        if (!finddpos(&tt, troom->lx, ty, troom->hx, ty))
+-            return;
++        if (finddpos(&cc, croom->lx, yy, croom->hx, yy))
++            gotdoorc = TRUE;
++        if (finddpos(&tt, troom->lx, ty, troom->hx, ty))
++            gotdoort = TRUE;
+     } else if (troom->hx < croom->lx) {
+         /* troom to the left of croom */
+         dx = -1;
+         dy = 0;
+         xx = croom->lx - 1;
+         tx = troom->hx + 1;
+-        if (!finddpos(&cc, xx, croom->ly, xx, croom->hy))
+-            return;
+-        if (!finddpos(&tt, tx, troom->ly, tx, troom->hy))
+-            return;
++        if (finddpos(&cc, xx, croom->ly, xx, croom->hy))
++            gotdoorc = TRUE;
++        if (finddpos(&tt, tx, troom->ly, tx, troom->hy))
++            gotdoort = TRUE;
+     } else {
+         /* otherwise troom must be below croom */
+         dy = 1;
+         dx = 0;
+         yy = croom->hy + 1;
+         ty = troom->ly - 1;
+-        if (!finddpos(&cc, croom->lx, yy, croom->hx, yy))
+-            return;
+-        if (!finddpos(&tt, troom->lx, ty, troom->hx, ty))
+-            return;
++        if (finddpos(&cc, croom->lx, yy, croom->hx, yy))
++            gotdoorc = TRUE;
++        if (finddpos(&tt, troom->lx, ty, troom->hx, ty))
++            gotdoort = TRUE;
++    }
++
++    if (croom->njoinpts > 0) {
++        cc = croom->joinpts[rn2(croom->njoinpts)];
++        gotdoorc = TRUE;
++    }
++    if (troom->njoinpts > 0) {
++        tt = troom->joinpts[rn2(troom->njoinpts)];
++        gotdoort = TRUE;
++    }
++
++    if (!gotdoorc)
++        pline("failed to join room %d normally", a);
++    if (!gotdoort)
++        pline("failed to join room %d normally", b);
++
++    // TODO: fix finddpos bias towards left, then top
++    if (!gotdoorc && !finddpos(&cc, croom->lx - 1, croom->ly - 1, croom->hx + 1, croom ->hy + 1)) {
++        impossible("no okdoor pos found for joining croom!");
++        // TODO: coords
++        return;
+     }
+-    xx = cc.x;
+-    yy = cc.y;
+-    tx = tt.x - dx;
+-    ty = tt.y - dy;
++    if (!gotdoort && !finddpos(&tt, troom->lx - 1, troom->ly - 1, troom->hx + 1, troom ->hy + 1)) {
++        impossible("no okdoor pos found for joining croom!");
++        return;
++    }
++    find_door_dig(cc.x, cc.y, &org);
++    find_door_dig(tt.x, tt.y, &dest);
+ 
+     /* If nxcor is TRUE and the space outside croom's door isn't stone (maybe
+      * some previous corridor has already been drawn here?), abort. */
+-    if (nxcor && levl[xx + dx][yy + dy].typ != STONE)
++    if (nxcor && levl[org.x][org.y].typ != STONE)
+         return;
+ 
+     /* If we can put a door in croom's wall or nxcor is FALSE, do so. */
+-    if (okdoor(xx, yy) || !nxcor)
+-        dodoor(xx, yy, croom);
++    if (okdoor(cc.x, cc.y) || !nxcor)
++        dodoor(cc.x, cc.y, croom);
+ 
+     /* Attempt to dig the corridor. If it fails for some reason, abort. */
+-    org.x = xx + dx;
+-    org.y = yy + dy;
+-    dest.x = tx;
+-    dest.y = ty;
+-
+     if (!dig_corridor(&org, &dest, nxcor,
+                       g.level.flags.arboreal ? ROOM : CORR, STONE))
+         return;
+@@ -530,7 +563,7 @@ makecorridors(void)
+     /* Attempt to draw a few more corridors between rooms, but don't draw the
+      * corridor if it starts on an already carved out corridor space. Possibly
+      * also don't create the doors.*/
+-    if (g.nroom > 2)
++    if (0 && g.nroom > 2)
+         for (i = rn2(g.nroom) + 4; i; i--) {
+             a = rn2(g.nroom);
+             b = rn2(g.nroom - 2);
+diff --git a/src/sp_lev.c b/src/sp_lev.c
+index bb436750b..75d67903c 100755
+--- a/src/sp_lev.c
++++ b/src/sp_lev.c
+@@ -9,6 +9,12 @@
+  * It contains also the special level loader.
+  */
+ 
++// TODO: investigate idea of "join points" on a room.
++// Up to 6, stored as coords in struct mkroom (plus a counter to track how many).
++// des.join_point() adds one. (Error out if more than 6 try to be added.)
++// join() will check for join points, and only attempt joins to those
++// coordinates.
++
+ #define IN_SP_LEV_C
+ 
+ #include "hack.h"
+@@ -117,6 +123,7 @@ static int get_table_intarray_entry(lua_State *, int, int);
+ static struct sp_coder *sp_level_coder_init(void);
+ 
+ /* lua_CFunction prototypes */
++int lspo_add_join_point(lua_State *);
+ int lspo_altar(lua_State *);
+ int lspo_branch(lua_State *);
+ int lspo_corridor(lua_State *);
+@@ -5798,10 +5805,10 @@ lspo_region(lua_State *L)
+ 
+     troom->needjoining = joined;
+ 
++    g.smeq[g.nroom] = g.nroom;
+     if (irregular) {
+         g.min_rx = g.max_rx = dx1;
+         g.min_ry = g.max_ry = dy1;
+-        g.smeq[g.nroom] = g.nroom;
+         flood_fill_rm(dx1, dy1, g.nroom + ROOMOFFSET, rlit, TRUE);
+         add_room(g.min_rx, g.min_ry, g.max_rx, g.max_ry, FALSE, rtype, TRUE);
+         troom->rlit = rlit;
+@@ -6434,6 +6441,30 @@ TODO: g.coder->croom needs to be updated
+     return 0;
+ }
+ 
++/* add_join_point(x, y)
++ * marks that coordinate on the wall of a joined area as a spot where it can be
++ * connected */
++int
++lspo_add_join_point(lua_State *L)
++{
++    int argc = lua_gettop(L);
++    int ptx, pty;
++
++    if (argc != 2) {
++        nhl_error(L, "add_join_point not provided with x,y coords");
++    }
++    ptx = luaL_checkinteger(L, 1);
++    pty = luaL_checkinteger(L, 2);
++
++    // needed? if (!g.coder->croom) test with adding join points on open map
++    struct mkroom *croom = g.coder->croom;
++    if (croom->numjoinpts >= MAXJOINPTS) {
++        nhl_error(L, "Can't add more join points to this room");
++    }
++    croom->joinpts[croom->numjoinpts] = SP_COORD_PACK(ptx, pty);
++    croom->numjoinpts++;
++}
++
+ void
+ update_croom(void)
+ {
+@@ -6523,6 +6554,7 @@ static const struct luaL_Reg nhl_functions[] = {
+     { "teleport_region", lspo_teleport_region },
+     { "reset_level", lspo_reset_level },
+     { "finalize_level", lspo_finalize_level },
++    { "add_join_point", lspo_add_join_point },
+     /* TODO: { "branch", lspo_branch }, */
+     /* TODO: { "portal", lspo_portal }, */
+     { NULL, NULL }
+-- 
+2.48.1
+

@@ -1,0 +1,106 @@
+From 4b60a08b4f4fd666631efba04416627abc3b50b1 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Sat, 15 May 2021 18:03:19 -0400
+Subject: [PATCH] Explosion animations with radius > 1
+
+This is cosmetic only and not a finished feature of any sort. When the .
+command is entered, it will make a radius 7 explosion animation centered
+on the player.
+---
+ include/extern.h |  1 +
+ src/do.c         |  7 +++++++
+ src/explode.c    | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 58 insertions(+)
+
+diff --git a/include/extern.h b/include/extern.h
+index 7105e7d97..fa6db8dbf 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -766,6 +766,7 @@ extern void splatter_burning_oil(int, int, boolean);
+ extern void explode_oil(struct obj *, int, int);
+ extern int adtyp_to_expltype(int);
+ extern void mon_explodes(struct monst *, struct attack *);
++extern void explode_animation(int, xchar);
+ 
+ /* ### files.c ### */
+ 
+diff --git a/src/do.c b/src/do.c
+index db0f36a0c..ae15404e4 100644
+--- a/src/do.c
++++ b/src/do.c
+@@ -2104,6 +2104,13 @@ donull(void)
+                           "Are you waiting to get hit?",
+                           &g.did_nothing_flag))
+         return 0;
++    explode_animation(EXPL_FROSTY, 1);
++    explode_animation(EXPL_FROSTY, 2);
++    explode_animation(EXPL_FROSTY, 3);
++    explode_animation(EXPL_FROSTY, 4);
++    explode_animation(EXPL_FROSTY, 5);
++    explode_animation(EXPL_FROSTY, 6);
++    explode_animation(EXPL_FROSTY, 7);
+     return 1; /* Do nothing, but let other things happen */
+ }
+ 
+diff --git a/src/explode.c b/src/explode.c
+index 50374e851..6b96c6765 100644
+--- a/src/explode.c
++++ b/src/explode.c
+@@ -936,4 +936,54 @@ mon_explodes(struct monst *mon, struct attack *mattk)
+     g.killer.name[0] = '\0';
+ }
+ 
++void
++explode_animation(int expltype, xchar radius) {
++    int x, y;
++    int mindist = radius * radius;
++    int maxdist = (radius + 1) * (radius + 1);
++    boolean first = TRUE;
++    boolean shown = FALSE;
++
++    if (Blind)
++        return;
++    for (y = u.uy - radius; y <= u.uy + radius; ++y) {
++        for (x = u.ux - radius; x <= u.ux + radius; ++x) {
++            int sym, dx, dy;
++            if (!isok(x, y))
++                continue;
++            if (!cansee(x, y))
++                continue;
++            if (distu(x, y) < mindist || distu(x, y) >= maxdist)
++                continue;
++
++            shown = TRUE;
++            dx = sgn(x - u.ux), dy = sgn(y - u.uy);
++            boolean xout = (distu(x + dx, y) >= maxdist),
++                    yout = (distu(x, y + dy) >= maxdist);
++            /* for most cases the symbol is straightforward; pick based on dx
++             * and dy respective to the player, but if the "flat" edge of the
++             * explosion is big enough it should also use the orthogonal
++             * explosion symbols.
++             * If one of these other two "outward facing" points is also covered
++             * by the explosion, then use one of these symbols. */
++            if (dx && dy && (xout ^ yout)) {
++                if (abs(x - u.ux) < abs(y - u.uy))
++                    dx = 0;
++                else
++                    dy = 0;
++            }
++            sym = explosion[1 + dx][1 + dy];
++            tmp_at(first ? DISP_BEAM : DISP_CHANGE,
++                   explosion_to_glyph(expltype, sym));
++            tmp_at(x, y);
++            first = FALSE;
++        }
++    }
++    if (shown) {
++        delay_output();
++        delay_output();
++        tmp_at(DISP_END, 0);
++    }
++}
++
+ /*explode.c*/
+-- 
+2.48.1
+

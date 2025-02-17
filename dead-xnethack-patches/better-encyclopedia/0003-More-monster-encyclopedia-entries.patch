@@ -1,0 +1,655 @@
+From e9910884a35fc46c577b2c89c0bd69c96f8d6382 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Sun, 3 Jun 2018 06:49:05 -0400
+Subject: [PATCH] More monster encyclopedia entries
+
+Continuing monster classes, up through g this time.
+---
+ dat/data.base | 515 ++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 313 insertions(+), 202 deletions(-)
+
+diff --git a/dat/data.base b/dat/data.base
+index 83355d54a..4f08a87dd 100644
+--- a/dat/data.base
++++ b/dat/data.base
+@@ -874,21 +874,6 @@ s*d*g*r* cat
+ 	would have collapsed much earlier, and the outside observer's
+ 	linear combination has no relevance.
+ 		[ The Emperor's New Mind, by Roger Penrose ]
+-# takes "cat or other feline" when specifying 'f'
+-*cat
+-*feline
+-kitten
+-	Well-known quadruped domestic animal from the family of
+-	predatory felines (_Felis ochreata domestica_), with a thick,
+-	soft pelt; often kept as a pet.  Various folklores have the
+-	cat associated with magic and the gods of ancient Egypt.
+-
+-	So Ulthar went to sleep in vain anger; and when the people
+-	awakened at dawn - behold!  Every cat was back at his
+-	accustomed hearth!  Large and small, black, grey, striped,
+-	yellow and white, none was missing.  Very sleek and fat did
+-	the cats appear, and sonorous with purring content.
+-		[ The Cats of Ulthar, by H.P. Lovecraft ]
+ # this one doesn't work very well for dwarven and gnomish cavemen
+ cave*man
+ human cave*man
+@@ -1086,7 +1071,8 @@ cloud*
+ 	Fluttering and dancing in the breeze.
+ 		[ I Wandered Lonely as a Cloud, by William Wordsworth ]
+ club
+-	A short heavy piece of wood designed for bludgeoning enemies in melee.
++        A short heavy piece of wood designed for bludgeoning enemies in
++        melee.
+ cobra
+ 	Darzee and his wife only cowered down in the nest without
+ 	answering, for from the thick grass at the foot of the bush
+@@ -1104,30 +1090,6 @@ cobra
+ 	hood to keep the sun off Brahm as he slept.  Look, and be
+ 	afraid!'
+ 		[ Rikki-tikki-tavi, by Rudyard Kipling ]
+-c*ckatrice
+-	Once in a great while, when the positions of the stars are
+-	just right, a seven-year-old rooster will lay an egg.  Then,
+-	along will come a snake, to coil around the egg, or a toad,
+-	to squat upon the egg, keeping it warm and helping it to
+-	hatch.  When it hatches, out comes a creature called basilisk,
+-	or cockatrice, the most deadly of all creatures.  A single
+-	glance from its yellow, piercing toad's eyes will kill both
+-	man and beast.  Its power of destruction is said to be so
+-	great that sometimes simply to hear its hiss can prove fatal.
+-	Its breath is so venomous that it causes all vegetation
+-	to wither.
+-
+-	There is, however, one creature which can withstand the
+-	basilisk's deadly gaze, and this is the weasel.  No one knows
+-	why this is so, but although the fierce weasel can slay the
+-	basilisk, it will itself be killed in the struggle.  Perhaps
+-	the weasel knows the basilisk's fatal weakness:  if it ever
+-	sees its own reflection in a mirror it will perish instantly.
+-	But even a dead basilisk is dangerous, for it is said that
+-	merely touching its lifeless body can cause a person to
+-	sicken and die.
+-	  [ Mythical Beasts by Deirdre Headon (The Leprechaun Library)
+-	      and other sources ]
+ *coin
+ ~creeping coins
+ *coins
+@@ -1483,12 +1445,6 @@ dilithium*
+ 	although it is doubtful that it would possess the more fantastic
+ 	properties ascribed to dilithium.
+ 		[ The Mineralogy of Star Trek, by Jeffrey de Fourestier ]
+-dingo
+-	A wolflike wild dog, Canis dingo, of Australia, having a
+-	reddish- or yellowish-brown coat, believed to have been
+-	introduced by the aborigines.
+-		[ Webster's Encyclopedic Unabridged Dictionary
+-		    of the English Language ]
+ disenchanter
+ 	Ask not, what your magic can do to it.  Ask what it can do
+ 	to your magic.
+@@ -2183,21 +2139,6 @@ fruit
+ 	fermentation, e.g., in bread and alcoholic beverage
+ 	production.
+ 		[ The Concise Columbia Encyclopedia ]
+-*gargoyle
+-	And so it came to pass that while Man ruled on Earth, the
+-	gargoyles waited, lurking, hidden from the light.  Reborn
+-	every 600 years in Man's reckoning of time, the gargoyles
+-	joined battle against Man to gain dominion over the Earth.
+-
+-	In each coming, the gargoyles were nearly destroyed by Men
+-	who flourished in greater numbers.  Now it has been so many
+-	hundreds of years that it seems the ancient statues and
+-	paintings of gargoyles are just products of Man's
+-	imagination.  In this year, with Man's thoughts turned toward
+-	the many ills he has brought among himself, Man has forgotten
+-	his most ancient adversary, the gargoyles.
+-		[ Excerpt from the opening narration to the movie
+-		    _Gargoyles_, written by Stephen and Elinor Karpf ]
+ *garlic
+         A herb mostly used for giving flavour to food; vampires are
+         rumoured to be particularly afraid of its scent.
+@@ -2237,7 +2178,6 @@ fruit
+         the hands, they are enchanted to provide an enormous boost to
+         strength, making the wearer much stronger than can be achieved
+         without magical aid.
+-# gas spore -- see *spore
+ gehenn*
+ *h?nnom
+ hell
+@@ -2250,17 +2190,6 @@ hell
+ 	perpetual fires were maintained there to prevent pestilence.
+ 	Thus, in the New Testament, Gehenna became synonymous with hell.
+ 		[ Encyclopedia Mythica, ed. M.F. Lindemans ]
+-gelatinous cube
+-	Despite its popularity (or perhaps because of it), the
+-	gelatinous cube is also widely known as one of the sillier
+-	role-playing monsters.  It is something of a commentary on the
+-	ubiquity of treasure-laden dungeons in the Dungeons & Dragons
+-	universe, as the cube is a creature specifically adapted to a
+-	dungeon ecosystem.  10 feet to the side, it travels through
+-	standard 10-foot by 10-foot dungeon corridors, cleaning up
+-	debris and redistributing treasure by excreting indigestible
+-	metal items.
+-		[ Wikipedia, the free encyclopedia ]
+ *gem
+         An object, possibly cut into facets, looking like a gemstone. In
+         general, magical identification or abilities as a jeweller are
+@@ -2454,21 +2383,6 @@ grayswandir
+ 	ANOINT, v.t.  To grease a king or other great functionary
+ 	already sufficiently slippery.
+ 		[ The Devil's Dictionary, by Ambrose Bierce ]
+-gremlin
+-	The gremlin is a highly intelligent and completely evil
+-	creature.  It lives to torment other creatures and will go
+-	to great lengths to inflict pain or cause injury.
+-		[]
+-
+-	Suddenly, Wilson thought about war, about the newspaper
+-	stories which recounted the alleged existence of creatures in
+-	the sky who plagued the Allied pilots in their duties.  They
+-	called them gremlins, he remembered.  Were there, actually,
+-	such beings?  Did they, truly, exist up here, never falling,
+-	riding on the wind, apparently of bulk and weight, yet
+-	impervious to gravity?
+-	He was thinking that when the man appeared again.
+-		[ Nightmare at 20,000 Feet, by Richard Matheson ]
+ grid bug
+ 	These electronically based creatures are not native to this
+ 	universe.  They appear to come from a world whose laws of
+@@ -2582,22 +2496,6 @@ heart of ahriman
+ 	stood on the right, with a short, sardonic laugh.  "It is
+ 	ready to crumble at a touch.  We are fools ---"
+ 		[ Conan The Conqueror, by Robert E. Howard ]
+-hell hound*
+-	But suddenly they started forward in a rigid, fixed stare,
+-	and his lips parted in amazement.  At the same instant Lestrade
+-	gave a yell of terror and threw himself face downward upon the
+-	ground.  I sprang to my feet, my inert hand grasping my pistol,
+-	my mind paralyzed by the dreadful shape which had sprung out
+-	upon us from the shadows of the fog.  A hound it was, an
+-	enormous coal-black hound, but not such a hound as mortal eyes
+-	have ever seen.  Fire burst from its open mouth, its eyes
+-	glowed with a smouldering glare, its muzzle and hackles and
+-	dewlap were outlined in flickering flame.  Never in the
+-	delirious dream of a disordered brain could anything more
+-	savage, more appalling, more hellish be conceived than that
+-	dark form and savage face which broke upon us out of the wall
+-	of fog.
+-	  [ The Hound of the Baskervilles, by Sir Arthur Conan Doyle. ]
+ hermes
+ 	Messenger and herald of the Olympians.  Being required to do
+ 	a great deal of travelling and speaking in public, he became
+@@ -3009,20 +2907,6 @@ jacinth*
+ 	  As the apple-tree among trees of the grove
+ 	Is He among the sons.'
+ 		[ The Beloved, by May Probyn ]
+-jackal
+-	In Asiatic folktale, jackal provides for the lion; he scares
+-	up game, which the lion kills and eats, and receives what is
+-	left as reward.  In stories from northern India he is
+-	sometimes termed "minister to the king," i.e. to the lion.
+-	From the legend that he does not kill his own food has arisen
+-	the legend of his cowardice.  Jackal's heart must never be
+-	eaten, for instance, in the belief of peoples indigenous to
+-	the regions where the jackal abounds. ... In Hausa Negro
+-	folktale Jackal plays the role of sagacious judge and is
+-	called "O Learned One of the Forest."  The Bushmen say that
+-	Jackal goes around behaving the way he does "because he is
+-	Jackal".
+-		[ Funk & Wagnalls Standard Dictionary of Folklore ]
+ *jack*boot*
+         Knee-high boots that cover the entire lower leg, and thus offer
+         somewhat more protection than other types of boots.
+@@ -3051,11 +2935,6 @@ jade*
+ javelin
+ throwing spear
+         A lighter variant of a standard spear designed for throwing.
+-jaguar
+-	Large, flesh-eating animal of the cat family, of Central and
+-	South America.  This feline predator (_Panthera onca_) is
+-	sometimes incorrectly called a panther.
+-	    [ Van Dale's Groot Woordenboek der Nederlandse Taal ]
+ jellyfish
+ 	I do not care to share the seas
+ 	With jellyfishes such as these;
+@@ -3624,34 +3503,6 @@ lurker*
+ 	These dungeon scavengers are very adept at blending into the
+ 	surrounding walls and ceilings of the dungeon due to the
+ 	stone-like coloring of their skin.
+-lycanthrope
+-were*
+-human were*
+-*were
+-	In 1573, the Parliament of Dole published a decree, permitting
+-	the inhabitants of the Franche-Comte to pursue and kill a
+-	were-wolf or loup-garou, which infested that province,
+-	"notwithstanding the existing laws concerning the chase."
+-	The people were empowered to "assemble with javelins,
+-	halberds, pikes, arquebuses and clubs, to hunt and pursue the
+-	said were-wolf in all places where they could find it, and to
+-	take, burn, and kill it, without incurring any fine or other
+-	penalty."  The hunt seems to have been successful, if we may
+-	judge from the fact that the same tribunal in the following
+-	year condemned to be burned a man named Giles Garnier, who
+-	ran on all fours in the forest and fields and devoured little
+-	children, "even on Friday."  The poor lycanthrope, it appears,
+-	had as slight respect for ecclesiastical feasts as the French
+-	pig, which was not restrained by any feeling of piety from
+-	eating infants on a fast day.
+-		[ The History of Vampires, by Dudley Wright ]
+-lynx
+-	To dream of seeing a lynx, enemies are undermining your
+-	business and disrupting your home affairs.  For a woman,
+-	this dream indicates that she has a wary woman rivaling her
+-	in the affections of her lover. If she kills the lynx, she
+-	will overcome her rival.
+-		[ 10,000 Dreams Interpreted, by Gustavus Hindman Miller ]
+ ~*sceptre of might
+ mace
+ sceptre
+@@ -4502,16 +4353,6 @@ page
+ pancake
+         A thin but tasty food made from eggs and flour, often flavoured
+         using sugar and lemon juice.
+-panther
+-	And lo! almost where the ascent began,
+-	A panther light and swift exceedingly,
+-	Which with a spotted skin was covered o'er!
+-
+-	And never moved she from before my face,
+-	Nay, rather did impede so much my way,
+-	That many times I to return had turned.
+-		[ Dante's Inferno, as translated
+-		    by Henry Wadsworth Longfellow ]
+ papyrus spellbook
+         A worryingly intricate book made from compressed reeds, giving
+         off a strong and palpable magical aura.
+@@ -4919,20 +4760,6 @@ ptah
+ 	few minutes.  These worms are always on guard, sensitive
+ 	to the most minute vibrations in the earth, but may also
+ 	be awakened by a remote shriek.
+-pyrolisk
+-	At first glance around the corner, I thought it was another
+-	cockatrice. I had encountered the wretched creatures two or
+-	three times since leaving the open area. I quickly ducked my
+-	head back and considered what to do next. My heart had begun
+-	to thump audibly as I patted my pack to make sure I still had
+-	the dead lizards at close reach. A check of my attire showed
+-	no obvious holes or damage. I had to keep moving. One deep
+-	breath, and a count of three, two, one, and around the corner
+-	I bolted. But it was no cockatrice! I felt a sudden intense
+-	searing of the skin around my face, and flames began to leap
+-	from my pack. I tossed it to the ground, and quickly retreated
+-	back, around that corner, desperately striving to get out of
+-	its sight.
+ python
+ 	A monstrous serpent in Greek mythology, and the child of Gaia,
+ 	the goddess earth.  It was produced from the slime and mud
+@@ -6083,12 +5910,6 @@ sprig of wolfsbane
+ 	don't I?"
+ 	"Why, yes, of course," said Wilbur.
+ 		[ Charlotte's Web, by E.B. White ]
+-*spore
+-*sphere
+-	The attack by those who want to die -- this is the attack
+-	against which you cannot prepare a perfect defense.
+-					--Human aphorism
+-		[ The Dosadi Experiment, by Frank Herbert ]
+ squeaky board
+ 	A floorboard creaked.  Galder had spent many hours tuning them,
+ 	always a wise precaution with an ambitious assistant who walked
+@@ -6327,19 +6148,6 @@ thug
+ 	for another 50 years or so.
+ 	In common parlance the word is used for any violent "tough".
+ 		[ Brewer's Concise Dictionary of Phrase and Fable ]
+-tiger
+-	1.  A well-known tropical predator (_Felis tigris_): a
+-	feline.  It has a yellowish skin with darker spots or
+-	stripes.  2.  Figurative: _a paper tiger_, something that is
+-	meant to scare, but has no really scaring effect whatsoever,
+-	(after a statement by Mao Ze Dong, August 1946).
+-		[ Van Dale's Groot Woordenboek der Nederlandse Taal ]
+-
+-	Tyger! Tyger! burning bright
+-	In the forests of the night,
+-	What immortal hand or eye
+-	Could frame thy fearful symmetry?
+-		[ The Tyger, by William Blake ]
+ tin
+ tin of *
+         A metal container designed to stop the food inside it spoiling.
+@@ -6977,14 +6785,6 @@ wizard of yendor
+ 	wizard and his treasure, but none have found him and lived to
+ 	tell the tale.  Woe be to the incautious adventurer who
+ 	disturbs this mighty sorcerer!
+-wolf
+-*wolf
+-*wolf cub
+-	The ancestors of the modern day domestic dog, wolves are
+-	powerful muscular animals with bushy tails.  Intelligent,
+-	social animals, wolves live in family groups or packs made
+-	up of multiple family units.  These packs cooperate in hunting
+-	down prey.
+ *wolfsbane
+ 	1.  Any of various, usually poisonous perennial herbs of the
+ 	genus Aconitum, having tuberous roots, palmately lobed leaves,
+@@ -7289,3 +7089,314 @@ gelatinous cube
+         although it is acidic to eat.  Gelatinous cubes absorb objects
+         that they find in the dungeon.  Durable objects may be recovered
+         if the cube is killed, but organic materials are dissolved.
++
++	Despite its popularity (or perhaps because of it), the
++	gelatinous cube is also widely known as one of the sillier
++	role-playing monsters.  It is something of a commentary on the
++	ubiquity of treasure-laden dungeons in the Dungeons & Dragons
++	universe, as the cube is a creature specifically adapted to a
++	dungeon ecosystem.  10 feet to the side, it travels through
++	standard 10-foot by 10-foot dungeon corridors, cleaning up
++	debris and redistributing treasure by excreting indigestible
++	metal items.
++		[ Wikipedia, the free encyclopedia ]
++# c - chimerae
++c*ckatrice
++        A strange magical chimera, said to be hatched from an egg laid
++        by a rooster and incubated by a snake, if one can believe such
++        legends, the cockatrice is not only dangerous when alive, but
++        even when dead, for merely touching its corpse causes
++        petrification.
++
++	Once in a great while, when the positions of the stars are
++	just right, a seven-year-old rooster will lay an egg.  Then,
++	along will come a snake, to coil around the egg, or a toad,
++	to squat upon the egg, keeping it warm and helping it to
++	hatch.  When it hatches, out comes a creature called basilisk,
++	or cockatrice, the most deadly of all creatures.  A single
++	glance from its yellow, piercing toad's eyes will kill both
++	man and beast.  Its power of destruction is said to be so
++	great that sometimes simply to hear its hiss can prove fatal.
++	Its breath is so venomous that it causes all vegetation
++	to wither.
++
++	There is, however, one creature which can withstand the
++	basilisk's deadly gaze, and this is the weasel.  No one knows
++	why this is so, but although the fierce weasel can slay the
++	basilisk, it will itself be killed in the struggle.  Perhaps
++	the weasel knows the basilisk's fatal weakness:  if it ever
++	sees its own reflection in a mirror it will perish instantly.
++	But even a dead basilisk is dangerous, for it is said that
++	merely touching its lifeless body can cause a person to
++	sicken and die.
++	  [ Mythical Beasts by Deirdre Headon (The Leprechaun Library)
++	      and other sources ]
++pyrolisk
++        This reptilian rooster sets its enemies on fire just by looking
++        at them.
++
++	At first glance around the corner, I thought it was another
++	cockatrice. I had encountered the wretched creatures two or
++	three times since leaving the open area. I quickly ducked my
++	head back and considered what to do next. My heart had begun
++	to thump audibly as I patted my pack to make sure I still had
++	the dead lizards at close reach. A check of my attire showed
++	no obvious holes or damage. I had to keep moving. One deep
++	breath, and a count of three, two, one, and around the corner
++	I bolted. But it was no cockatrice! I felt a sudden intense
++	searing of the skin around my face, and flames began to leap
++	from my pack. I tossed it to the ground, and quickly retreated
++	back, around that corner, desperately striving to get out of
++	its sight.
++# d - canines
++fox
++	One hot summer's day a Fox was strolling through an orchard
++	till he came to a bunch of Grapes just ripening on a vine
++	which had been trained over a lofty branch. "Just the thing
++	to quench my thirst," quoth he. Drawing back a few paces, he
++	took a run and a jump, and just missed the bunch. Turning
++	round again with a One, Two, Three, he jumped up, but with
++	no greater success. Again and again he tried after the
++	tempting morsel, but at last had to give it up, and walked
++	away with his nose in the air, saying: "I am sure they are
++	sour."
++		[ Aesop's Fables ]
++jackal
++	These wild dogs tend to run in packs.
++
++	In Asiatic folktale, jackal provides for the lion; he scares
++	up game, which the lion kills and eats, and receives what is
++	left as reward.  In stories from northern India he is
++	sometimes termed "minister to the king," i.e. to the lion.
++	From the legend that he does not kill his own food has arisen
++	the legend of his cowardice.  Jackal's heart must never be
++	eaten, for instance, in the belief of peoples indigenous to
++	the regions where the jackal abounds. ... In Hausa Negro
++	folktale Jackal plays the role of sagacious judge and is
++	called "O Learned One of the Forest."  The Bushmen say that
++	Jackal goes around behaving the way he does "because he is
++	Jackal".
++		[ Funk & Wagnalls Standard Dictionary of Folklore ]
++coyote
++	These wild dogs tend to run in packs.
++# takes "dog or other canine" when specifying 'd'
++~hachi
++~slasher
++~sirius
++*dog
++pup*
++*canine
++	A domestic animal, the _tame dog_ (_Canis familiaris_), of
++	which numerous breeds exist.  The male is called a dog,
++	while the female is called a bitch.  Because of its known
++	loyalty to man and gentleness with children, it is the
++	world's most popular domestic animal.  It can easily be
++	trained to perform various tasks.
++dingo
++	A wolflike wild dog, Canis dingo, of Australia, having a
++	reddish- or yellowish-brown coat, believed to have been
++	introduced by the aborigines.
++		[ Webster's Encyclopedic Unabridged Dictionary
++		    of the English Language ]
++warg
++        Larger and more dangerous than ordinary wolves, it is said that
++        packs of wargs have been known to keep company with bands of
++        orcs.
++
++	Suddenly Aragorn leapt to his feet.  "How the wind howls!"
++	he cried.  "It is howling with wolf-voices.  The Wargs have
++	come west of the Mountains!"
++	"Need we wait until morning then?" said Gandalf.  "It is as I
++	said.  The hunt is up!  Even if we live to see the dawn, who
++	now will wish to journey south by night with the wild wolves
++	on his trail?"
++	"How far is Moria?" asked Boromir.
++	"There was a door south-west of Caradhras, some fifteen miles
++	as the crow flies, and maybe twenty as the wolf runs,"
++	answered Gandalf grimly.
++	"Then let us start as soon as it is light tomorrow, if we can,"
++	said Boromir.  "The wolf that one hears is worse than the orc
++	that one fears."
++	"True!" said Aragorn, loosening his sword in its sheath.  "But
++	where the warg howls, there also the orc prowls."
++		[ The Fellowship of the Ring, by J.R.R. Tolkien ]
++wolf
++wolf cub
++	The ancestors of the modern day domestic dog, wolves are
++	powerful muscular animals with bushy tails.  Intelligent,
++	social animals, wolves live in family groups or packs made
++	up of multiple family units.  These packs cooperate in hunting
++	down prey.
++lycanthrop*
++were*
++human were*
++*were
++        Of the many creatures of the night who sometimes make their way
++        into the dungeon, lycanthropes are one of the more interesting,
++        if sometimes dangerous.  Infected with some kind of strange
++        contagion, they are periodically compelled to change their form,
++        switching back and forth between living as a human and as an
++        animal.  However, their condition gives them an affinity that
++        allows them to call for help from their animal brethren.  Eating
++        the corpse of an infected creature, or being bitten by one, can
++        cause an adventurer to contract the same fever.  This may be
++        cured by eating a sprig of wolfsbane.  Lycanthropes are
++        particularly vulnerable to silver weapons.
++
++	In 1573, the Parliament of Dole published a decree, permitting
++	the inhabitants of the Franche-Comte to pursue and kill a
++	were-wolf or loup-garou, which infested that province,
++	"notwithstanding the existing laws concerning the chase."
++	The people were empowered to "assemble with javelins,
++	halberds, pikes, arquebuses and clubs, to hunt and pursue the
++	said were-wolf in all places where they could find it, and to
++	take, burn, and kill it, without incurring any fine or other
++	penalty."  The hunt seems to have been successful, if we may
++	judge from the fact that the same tribunal in the following
++	year condemned to be burned a man named Giles Garnier, who
++	ran on all fours in the forest and fields and devoured little
++	children, "even on Friday."  The poor lycanthrope, it appears,
++	had as slight respect for ecclesiastical feasts as the French
++	pig, which was not restrained by any feeling of piety from
++	eating infants on a fast day.
++		[ The History of Vampires, by Dudley Wright ]
++winter wolf cub
++winter wolf
++        Raised in the frozen north where perpetual winter reigns
++        supreme, these wolves are noted for their freezing cold breath,
++        which blows quickly across the dungeon and can chill the unwary
++        even from a distance.
++hell hound pup
++hell hound
++        These canine denizens of the infernal depths beneath the dungeon
++        are known to breathe fire and hunt in packs.
++
++	But suddenly they started forward in a rigid, fixed stare,
++	and his lips parted in amazement.  At the same instant Lestrade
++	gave a yell of terror and threw himself face downward upon the
++	ground.  I sprang to my feet, my inert hand grasping my pistol,
++	my mind paralyzed by the dreadful shape which had sprung out
++	upon us from the shadows of the fog.  A hound it was, an
++	enormous coal-black hound, but not such a hound as mortal eyes
++	have ever seen.  Fire burst from its open mouth, its eyes
++	glowed with a smouldering glare, its muzzle and hackles and
++	dewlap were outlined in flickering flame.  Never in the
++	delirious dream of a disordered brain could anything more
++	savage, more appalling, more hellish be conceived than that
++	dark form and savage face which broke upon us out of the wall
++	of fog.
++	  [ The Hound of the Baskervilles, by Sir Arthur Conan Doyle. ]
++# e - eyes and spheres
++gas spore
++        No one has ever identified the species of subterranean plant
++        that produces these inflated pods.  Perhaps it lives within the
++        rocks themselves.  Nor is anyone quite certain whether the
++        spores are indeed a method of reproduction for the plant, or
++        merely a defense mechanism, for the pods are pressurized and
++        explode violently when popped, damaging nearby monsters,
++        including any hapless adventurer who may be nearby.
++floating eye
++        By some magic, a giant eyeball floats through the dungeon.
++        Beware its gaze.
++freezing sphere
++flaming sphere
++shocking sphere
++        A magical kamikaze that attacks by exploding, damaging nearby
++        creatures, including any hapless adventurer who manages to get
++        in the way.
++
++	The attack by those who want to die -- this is the attack
++	against which you cannot prepare a perfect defense.
++					--Human aphorism
++		[ The Dosadi Experiment, by Frank Herbert ]
++# f - felines
++*cat
++*feline
++kitten
++	Well-known quadruped domestic animal from the family of
++	predatory felines (_Felis ochreata domestica_), with a thick,
++	soft pelt; often kept as a pet.  Various folklores have the
++	cat associated with magic and the gods of ancient Egypt.
++
++	So Ulthar went to sleep in vain anger; and when the people
++	awakened at dawn - behold!  Every cat was back at his
++	accustomed hearth!  Large and small, black, grey, striped,
++	yellow and white, none was missing.  Very sleek and fat did
++	the cats appear, and sonorous with purring content.
++		[ The Cats of Ulthar, by H.P. Lovecraft ]
++jaguar
++	Large, flesh-eating animal of the cat family, of Central and
++	South America.  This feline predator (_Panthera onca_) is
++	sometimes incorrectly called a panther.
++	    [ Van Dale's Groot Woordenboek der Nederlandse Taal ]
++lynx
++	To dream of seeing a lynx, enemies are undermining your
++	business and disrupting your home affairs.  For a woman,
++	this dream indicates that she has a wary woman rivaling her
++	in the affections of her lover. If she kills the lynx, she
++	will overcome her rival.
++		[ 10,000 Dreams Interpreted, by Gustavus Hindman Miller ]
++panther
++	And lo! almost where the ascent began,
++	A panther light and swift exceedingly,
++	Which with a spotted skin was covered o'er!
++
++	And never moved she from before my face,
++	Nay, rather did impede so much my way,
++	That many times I to return had turned.
++		[ Dante's Inferno, as translated
++		    by Henry Wadsworth Longfellow ]
++~tiger eye*
++tiger
++        This jungle predator is widely believed to be the largest and
++        most dangerous feline creature in the dungeon.
++
++	1.  A well-known tropical predator (_Felis tigris_): a
++	feline.  It has a yellowish skin with darker spots or
++	stripes.  2.  Figurative: _a paper tiger_, something that is
++	meant to scare, but has no really scaring effect whatsoever,
++	(after a statement by Mao Ze Dong, August 1946).
++		[ Van Dale's Groot Woordenboek der Nederlandse Taal ]
++
++	Tyger! Tyger! burning bright
++	In the forests of the night,
++	What immortal hand or eye
++	Could frame thy fearful symmetry?
++		[ The Tyger, by William Blake ]
++# g - gargoyles
++gremlin
++        This hideous green gargoyle-like creature multiplies in water
++        and strips away your innate magical defenses when it attacks.
++
++	Suddenly, Wilson thought about war, about the newspaper
++	stories which recounted the alleged existence of creatures in
++	the sky who plagued the Allied pilots in their duties.  They
++	called them gremlins, he remembered.  Were there, actually,
++	such beings?  Did they, truly, exist up here, never falling,
++	riding on the wind, apparently of bulk and weight, yet
++	impervious to gravity?
++	He was thinking that when the man appeared again.
++		[ Nightmare at 20,000 Feet, by Richard Matheson ]
++~wing
++gargoyle
++	Made of stone carved into hideous features, the gargoyle is inherently
++	immune to petrification, but it is just a little slower than a human.
++winged gargoyle
++	Made of stone carved into hideous features, one would think this creature
++	too heavy to fly, despite the wings.  Perhaps it flies by some magical means.
++	It is significantly faster than its wingless brethren.
++*gargoyle
++	And so it came to pass that while Man ruled on Earth, the
++	gargoyles waited, lurking, hidden from the light.  Reborn
++	every 600 years in Man's reckoning of time, the gargoyles
++	joined battle against Man to gain dominion over the Earth.
++
++	In each coming, the gargoyles were nearly destroyed by Men
++	who flourished in greater numbers.  Now it has been so many
++	hundreds of years that it seems the ancient statues and
++	paintings of gargoyles are just products of Man's
++	imagination.  In this year, with Man's thoughts turned toward
++	the many ills he has brought among himself, Man has forgotten
++	his most ancient adversary, the gargoyles.
++		[ Excerpt from the opening narration to the movie
++		    _Gargoyles_, written by Stephen and Elinor Karpf ]
+-- 
+2.48.1
+

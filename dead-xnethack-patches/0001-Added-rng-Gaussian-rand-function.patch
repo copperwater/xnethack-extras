@@ -1,0 +1,726 @@
+From b8d45bb84fb06b3464fe158ca9e097be27048fb3 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Sat, 12 Aug 2017 23:42:49 -0400
+Subject: [PATCH] Added rng() Gaussian rand function
+
+---
+ include/extern.h      |  1 +
+ include/hack.h        |  2 +-
+ src/apply.c           |  4 ++--
+ src/bones.c           |  6 +++---
+ src/cmd.c             |  4 ++--
+ src/do.c              |  5 +++--
+ src/eat.c             |  4 ++--
+ src/fountain.c        |  2 +-
+ src/lock.c            |  4 ++--
+ src/mhitu.c           |  6 +++---
+ src/pager.c           |  6 +++---
+ src/polyself.c        |  4 ++--
+ src/potion.c          | 10 +++++-----
+ src/pray.c            |  4 ++--
+ src/read.c            |  4 ++--
+ src/rnd.c             | 36 ++++++++++++++++++++++++++++++++++++
+ src/rumors.c          |  2 +-
+ src/save.c            |  4 ++--
+ src/shk.c             |  4 ++--
+ src/spell.c           |  2 +-
+ src/steed.c           |  4 ++--
+ src/teleport.c        |  6 +++---
+ src/weapon.c          |  2 +-
+ sys/be/bemain.c       |  2 +-
+ sys/mac/macmain.c     |  2 +-
+ sys/share/pcmain.c    |  2 +-
+ sys/share/pcunix.c    |  8 ++++----
+ sys/unix/Makefile.src |  2 +-
+ sys/unix/unixmain.c   |  2 +-
+ sys/unix/unixunix.c   |  2 +-
+ sys/vms/vmsmain.c     |  2 +-
+ 31 files changed, 93 insertions(+), 55 deletions(-)
+
+diff --git a/include/extern.h b/include/extern.h
+index de7c35999..54b088432 100644
+--- a/include/extern.h
++++ b/include/extern.h
+@@ -2074,6 +2074,7 @@ E int FDECL(rnd, (int));
+ E int FDECL(d, (int, int));
+ E int FDECL(rne, (int));
+ E int FDECL(rnz, (int));
++E float FDECL(rng, (float, float));
+ 
+ /* ### role.c ### */
+ 
+diff --git a/include/hack.h b/include/hack.h
+index 9bc2fc403..0deb1fd05 100644
+--- a/include/hack.h
++++ b/include/hack.h
+@@ -323,7 +323,7 @@ enum hmon_atkmode_types {
+ #define TEST_TRAP 3 /* check if a future travel loc is a trap */
+ 
+ /*** some utility macros ***/
+-#define yn(query) yn_function(query, ynchars, 'n')
++#define ynn(query) yn_function(query, ynchars, 'n')
+ #define ynq(query) yn_function(query, ynqchars, 'q')
+ #define ynaq(query) yn_function(query, ynaqchars, 'y')
+ #define nyaq(query) yn_function(query, ynaqchars, 'n')
+diff --git a/src/apply.c b/src/apply.c
+index ca72cc466..86876d1fa 100644
+--- a/src/apply.c
++++ b/src/apply.c
+@@ -1181,7 +1181,7 @@ struct obj **optr;
+     if ((q = strstri(qbuf, " to\033")) != 0)
+         Strcpy(q, " to ");
+     /* last, format final "attach candles to candelabrum?" query */
+-    if (yn(safe_qbuf(qbuf, qbuf, "?", otmp, yname, thesimpleoname, "it"))
++    if (ynn(safe_qbuf(qbuf, qbuf, "?", otmp, yname, thesimpleoname, "it"))
+         == 'n') {
+         use_lamp(obj);
+         return;
+@@ -2511,7 +2511,7 @@ struct obj *otmp;
+         You("aren't very skilled at reaching from %s.", mon_nam(u.usteed));
+         Sprintf(buf, "Continue your attempt to set %s?",
+                 the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
+-        if (yn(buf) == 'y') {
++        if (ynn(buf) == 'y') {
+             if (chance) {
+                 switch (ttyp) {
+                 case LANDMINE: /* set it off */
+diff --git a/src/bones.c b/src/bones.c
+index 66efd480b..f2e8b3dc5 100644
+--- a/src/bones.c
++++ b/src/bones.c
+@@ -351,7 +351,7 @@ struct obj *corpse;
+     if (fd >= 0) {
+         (void) nhclose(fd);
+         if (wizard) {
+-            if (yn("Bones file already exists.  Replace it?") == 'y') {
++            if (ynn("Bones file already exists.  Replace it?") == 'y') {
+                 if (delete_bonesfile(&u.uz))
+                     goto make_bones;
+                 else
+@@ -579,7 +579,7 @@ getbones()
+     } else {
+         ok = TRUE;
+         if (wizard) {
+-            if (yn("Get bones?") == 'n') {
++            if (ynn("Get bones?") == 'n') {
+                 (void) nhclose(fd);
+                 compress_bonesfile();
+                 return 0;
+@@ -639,7 +639,7 @@ getbones()
+     u.uroleplay.numbones++;
+ 
+     if (wizard) {
+-        if (yn("Unlink bones?") == 'n') {
++        if (ynn("Unlink bones?") == 'n') {
+             compress_bonesfile();
+             return ok;
+         }
+diff --git a/src/cmd.c b/src/cmd.c
+index 0272ec0b9..a4f71ec98 100644
+--- a/src/cmd.c
++++ b/src/cmd.c
+@@ -794,7 +794,7 @@ wiz_level_change(VOID_ARGS)
+ STATIC_PTR int
+ wiz_panic(VOID_ARGS)
+ {
+-    if (yn("Do you want to call panic() and end your game?") == 'y')
++    if (ynn("Do you want to call panic() and end your game?") == 'y')
+         panic("Crash test.");
+     return 0;
+ }
+@@ -5462,7 +5462,7 @@ const char *prompt;
+             promptprefix = "\"Yes\" or \"No\": ";
+         } while (ParanoidConfirm && strcmpi(ans, "no") && --trylimit);
+     } else
+-        confirmed_ok = (yn(prompt) == 'y');
++        confirmed_ok = (ynn(prompt) == 'y');
+ 
+     return confirmed_ok;
+ }
+diff --git a/src/do.c b/src/do.c
+index 352d26e99..4c5243b33 100644
+--- a/src/do.c
++++ b/src/do.c
+@@ -975,7 +975,7 @@ dodown()
+     if (on_level(&valley_level, &u.uz) && !u.uevent.gehennom_entered) {
+         You("are standing at the gate to Gehennom.");
+         pline("Unspeakable cruelty and harm lurk down there.");
+-        if (yn("Are you sure you want to enter?") != 'y')
++        if (ynn("Are you sure you want to enter?") != 'y')
+             return 0;
+         else
+             pline("So be it.");
+@@ -1038,7 +1038,7 @@ doup()
+         return 1;
+     }
+     if (ledger_no(&u.uz) == 1) {
+-        if (yn("Beware, there will be no return! Still climb?") != 'y')
++        if (ynn("Beware, there will be no return! Still climb?") != 'y')
+             return 0;
+     }
+     if (!next_to_u()) {
+@@ -1788,6 +1788,7 @@ long timeout UNUSED;
+ int
+ donull()
+ {
++    rng(3.0, 4.0);
+     return 1; /* Do nothing, but let other things happen */
+ }
+ 
+diff --git a/src/eat.c b/src/eat.c
+index a1b4bc33d..d49c81c7e 100644
+--- a/src/eat.c
++++ b/src/eat.c
+@@ -1333,7 +1333,7 @@ const char *mesg;
+             what = the(what);
+ 
+         pline("It smells like %s.", what);
+-        if (yn("Eat it?") == 'n') {
++        if (ynn("Eat it?") == 'n') {
+             if (flags.verbose)
+                 You("discard the open tin.");
+             if (!Hallucination)
+@@ -1380,7 +1380,7 @@ const char *mesg;
+             tin->dknown = tin->known = 1;
+         }
+ 
+-        if (yn("Eat it?") == 'n') {
++        if (ynn("Eat it?") == 'n') {
+             if (flags.verbose)
+                 You("discard the open tin.");
+             tin = costly_tin(COST_OPEN);
+diff --git a/src/fountain.c b/src/fountain.c
+index c020c394b..512044ca4 100644
+--- a/src/fountain.c
++++ b/src/fountain.c
+@@ -201,7 +201,7 @@ boolean isyou;
+             return;
+         }
+         if (isyou && wizard) {
+-            if (yn("Dry up fountain?") == 'n')
++            if (ynn("Dry up fountain?") == 'n')
+                 return;
+         }
+         /* replace the fountain with ordinary floor */
+diff --git a/src/lock.c b/src/lock.c
+index 426e8a35f..a0671cdf2 100644
+--- a/src/lock.c
++++ b/src/lock.c
+@@ -117,7 +117,7 @@ picklock(VOID_ARGS)
+         /* unfortunately we don't have a 'tknown' flag to record
+            "known to be trapped" so declining to disarm and then
+            retrying lock manipulation will find it all over again */
+-        if (yn("You find a trap!  Do you want to try to disarm it?") == 'y') {
++        if (ynn("You find a trap!  Do you want to try to disarm it?") == 'y') {
+             const char *what;
+             boolean alreadyunlocked;
+ 
+@@ -477,7 +477,7 @@ struct obj *pick;
+             Sprintf(qbuf, "%s it?",
+                     (door->doormask & D_LOCKED) ? "Unlock" : "Lock");
+ 
+-            c = yn(qbuf);
++            c = ynn(qbuf);
+             if (c == 'n')
+                 return 0;
+ 
+diff --git a/src/mhitu.c b/src/mhitu.c
+index 50399899a..c93400f72 100644
+--- a/src/mhitu.c
++++ b/src/mhitu.c
+@@ -2386,7 +2386,7 @@ struct monst *mon;
+                                  " looks pretty.  May I have it?\"", ring,
+                                  xname, simpleonames, "ring");
+                 makeknown(RIN_ADORNMENT);
+-                if (yn(qbuf) == 'n')
++                if (ynn(qbuf) == 'n')
+                     continue;
+             } else
+                 pline("%s decides she'd like %s, and takes it.",
+@@ -2420,7 +2420,7 @@ struct monst *mon;
+                                 " looks pretty.  Would you wear it for me?\"",
+                                  ring, xname, simpleonames, "ring");
+                 makeknown(RIN_ADORNMENT);
+-                if (yn(qbuf) == 'n')
++                if (ynn(qbuf) == 'n')
+                     continue;
+             } else {
+                 pline("%s decides you'd look prettier wearing %s,",
+@@ -2624,7 +2624,7 @@ const char *str;
+     if (rn2(20) < ACURR(A_CHA)) {
+         Sprintf(qbuf, "\"Shall I remove your %s, %s?\"", str,
+                 (!rn2(2) ? "lover" : !rn2(2) ? "dear" : "sweetheart"));
+-        if (yn(qbuf) == 'n')
++        if (ynn(qbuf) == 'n')
+             return;
+     } else {
+         char hairbuf[BUFSZ];
+diff --git a/src/pager.c b/src/pager.c
+index 5d9f4ddc1..47c77d2cd 100644
+--- a/src/pager.c
++++ b/src/pager.c
+@@ -665,7 +665,7 @@ boolean user_typed_name, without_asking;
+                         Strcat(question, entrytext);
+                         Strcat(question, "\"?");
+                     }
+-                    if (yn(question) == 'y')
++                    if (ynn(question) == 'y')
+                         yes_to_moreinfo = TRUE;
+                 }
+ 
+@@ -1335,7 +1335,7 @@ doidtrap()
+     commands:  basic letters vs digits, 'g' vs 'G' for '5', phone
+     keypad vs normal layout of digits, and QWERTZ keyboard swap between
+     y/Y/^Y/M-y/M-Y/M-^Y and z/Z/^Z/M-z/M-Z/M-^Z.)
+-    
++
+     The interpretor understands
+      '&#' for comment,
+      '&? option' for 'if' (also '&? !option'
+@@ -1346,7 +1346,7 @@ doidtrap()
+      '&:' for 'else' (also '&: #comment';
+                       0 or 1 instance for a given 'if'), and
+      '&.' for 'endif' (also '&. #comment'; required for each 'if').
+-    
++
+     The option handling is a bit of a mess, with no generality for
+     which options to deal with and only a comma separated list of
+     integer values for the '=value' part.  number_pad is the only
+diff --git a/src/polyself.c b/src/polyself.c
+index a7febb3b1..dfed0928d 100644
+--- a/src/polyself.c
++++ b/src/polyself.c
+@@ -539,7 +539,7 @@ int psflags;
+                             : !rn2(4) ? PM_FOG_CLOUD : PM_VAMPIRE_BAT;
+             if (controllable_poly) {
+                 Sprintf(buf, "Become %s?", an(mons[mntmp].mname));
+-                if (yn(buf) != 'y')
++                if (ynn(buf) != 'y')
+                     return;
+             }
+         }
+@@ -1310,7 +1310,7 @@ dogaze()
+                     Sprintf(qbuf, "Really %s %s?",
+                             (adtyp == AD_CONF) ? "confuse" : "attack",
+                             mon_nam(mtmp));
+-                    if (yn(qbuf) != 'y')
++                    if (ynn(qbuf) != 'y')
+                         continue;
+                 }
+                 setmangry(mtmp, TRUE);
+diff --git a/src/potion.c b/src/potion.c
+index 4925b27b0..15dd40037 100644
+--- a/src/potion.c
++++ b/src/potion.c
+@@ -455,7 +455,7 @@ dodrink()
+     if (IS_FOUNTAIN(levl[u.ux][u.uy].typ)
+         /* not as low as floor level but similar restrictions apply */
+         && can_reach_floor(FALSE)) {
+-        if (yn("Drink from the fountain?") == 'y') {
++        if (ynn("Drink from the fountain?") == 'y') {
+             drinkfountain();
+             return 1;
+         }
+@@ -464,14 +464,14 @@ dodrink()
+     if (IS_SINK(levl[u.ux][u.uy].typ)
+         /* not as low as floor level but similar restrictions apply */
+         && can_reach_floor(FALSE)) {
+-        if (yn("Drink from the sink?") == 'y') {
++        if (ynn("Drink from the sink?") == 'y') {
+             drinksink();
+             return 1;
+         }
+     }
+     /* Or are you surrounded by water? */
+     if (Underwater && !u.uswallow) {
+-        if (yn("Drink the water around you?") == 'y') {
++        if (ynn("Drink the water around you?") == 'y') {
+             pline("Do you know what lives in this water?");
+             return 1;
+         }
+@@ -1851,7 +1851,7 @@ dodip()
+         Sprintf(qbuf, "%s%s into the fountain?", Dip_,
+                 flags.verbose ? obuf : shortestname);
+         /* "Dip <the object> into the fountain?" */
+-        if (yn(qbuf) == 'y') {
++        if (ynn(qbuf) == 'y') {
+             dipfountain(obj);
+             return 1;
+         }
+@@ -1861,7 +1861,7 @@ dodip()
+         Sprintf(qbuf, "%s%s into the %s?", Dip_,
+                 flags.verbose ? obuf : shortestname, pooltype);
+         /* "Dip <the object> into the {pool, moat, &c}?" */
+-        if (yn(qbuf) == 'y') {
++        if (ynn(qbuf) == 'y') {
+             if (Levitation) {
+                 floating_above(pooltype);
+             } else if (u.usteed && !is_swimmer(u.usteed->data)
+diff --git a/src/pray.c b/src/pray.c
+index 51dfbb5bb..b86e594d3 100644
+--- a/src/pray.c
++++ b/src/pray.c
+@@ -1782,7 +1782,7 @@ int
+ dopray()
+ {
+     /* Confirm accidental slips of Alt-P */
+-    if (ParanoidPray && yn("Are you sure you want to pray?") != 'y')
++    if (ParanoidPray && ynn("Are you sure you want to pray?") != 'y')
+         return 0;
+ 
+     u.uconduct.gnostic++;
+@@ -1792,7 +1792,7 @@ dopray()
+         return 0;
+ 
+     if (wizard && p_type >= 0) {
+-        if (yn("Force the gods to be pleased?") == 'y') {
++        if (ynn("Force the gods to be pleased?") == 'y') {
+             u.ublesscnt = 0;
+             if (u.uluck < 0)
+                 u.uluck = 0;
+diff --git a/src/read.c b/src/read.c
+index 69d588427..79e74f82d 100644
+--- a/src/read.c
++++ b/src/read.c
+@@ -323,7 +323,7 @@ doread()
+            maintained illiterate conduct so far, and this mail
+            scroll didn't come from bones, ask for confirmation */
+         if (!u.uconduct.literate) {
+-            if (!scroll->spe && yn(
++            if (!scroll->spe && ynn(
+              "Reading mail will violate \"illiterate\" conduct.  Read anyway?"
+                                    ) != 'y')
+                 return 0;
+@@ -2486,7 +2486,7 @@ create_particular()
+                 /* wizard mode can override handling of special monsters */
+                 Sprintf(buf, "Creating %s instead; force %s?",
+                         mons[which].mname, mons[firstchoice].mname);
+-                if (yn(buf) == 'y')
++                if (ynn(buf) == 'y')
+                     which = firstchoice;
+             }
+             whichpm = &mons[which];
+diff --git a/src/rnd.c b/src/rnd.c
+index 8c15f22d4..b59249288 100644
+--- a/src/rnd.c
++++ b/src/rnd.c
+@@ -2,17 +2,21 @@
+ /* NetHack may be freely redistributed.  See license for details. */
+ 
+ #include "hack.h"
++#include <math.h>
+ 
+ /* "Rand()"s definition is determined by [OS]conf.h */
+ #if defined(LINT) && defined(UNIX) /* rand() is long... */
+ extern int NDECL(rand);
+ #define RND(x) (rand() % x)
++#define RNDRAW() (rand())
+ #else /* LINT */
+ #if defined(UNIX) || defined(RANDOM)
+ #define RND(x) ((int) (Rand() % (long) (x)))
++#define RNDRAW() ((int) Rand())
+ #else
+ /* Good luck: the bottom order bits are cyclic. */
+ #define RND(x) ((int) ((Rand() >> 3) % (x)))
++#define RNDRAW() ((int) RND(RAND_MAX))
+ #endif
+ #endif /* LINT */
+ 
+@@ -159,4 +163,36 @@ int i;
+     return (int) x;
+ }
+ 
++/* rng: generate a gaussian random variable with the given mean and stdev,
++ * using the Marsaglia polar method. */
++float
++rng(mean, stdev)
++float mean;
++float stdev;
++{
++    float x, y, r2;
++    int i, j;
++    do {
++        /* pick two floating-point values from -1 to 1 */
++        do {
++            i = RNDRAW();
++            j = RNDRAW();
++            /* we don't actually want RAND_MAX to be picked, because we need an
++             * odd-sized pool of numbers to pick from for fairness */
++        } while(i == RAND_MAX || j == RAND_MAX);
++        x = (float) (i - (RAND_MAX / 2)) / (RAND_MAX / 2);
++        y = (float) (j - (RAND_MAX / 2)) / (RAND_MAX / 2);
++        /* reject points outside the unit circle */
++        r2 = x*x + y*y;
++    } while (r2 > 1);
++
++    x = x * sqrt((-2 * logf(r2)) / r2);
++    /* this method returns two normally distributed points at once, doing the
++     * same thing for y, but we have to discard the second value because it
++     * probably can't be reliably cached */
++    pline("x = %f", x*stdev + mean);
++
++    return (x*stdev) + mean;
++}
++
+ /*rnd.c*/
+diff --git a/src/rumors.c b/src/rumors.c
+index 18656e5e7..b9900d807 100644
+--- a/src/rumors.c
++++ b/src/rumors.c
+@@ -515,7 +515,7 @@ struct monst *oracl;
+             return 0;
+         Sprintf(qbuf, "\"Then dost thou desire a major one?\" (%d %s)",
+                 major_cost, currency((long) major_cost));
+-        if (yn(qbuf) != 'y')
++        if (ynn(qbuf) != 'y')
+             return 0;
+         u_pay = (umoney < (long) major_cost) ? (int) umoney : major_cost;
+         break;
+diff --git a/src/save.c b/src/save.c
+index 8426a2cee..8c7c9e739 100644
+--- a/src/save.c
++++ b/src/save.c
+@@ -77,7 +77,7 @@ int
+ dosave()
+ {
+     clear_nhwindow(WIN_MESSAGE);
+-    if (yn("Really save?") == 'n') {
++    if (ynn("Really save?") == 'n') {
+         clear_nhwindow(WIN_MESSAGE);
+         if (multi > 0)
+             nomul(0);
+@@ -144,7 +144,7 @@ dosave0()
+             (void) nhclose(fd);
+             clear_nhwindow(WIN_MESSAGE);
+             There("seems to be an old save file.");
+-            if (yn("Overwrite the old file?") == 'n') {
++            if (ynn("Overwrite the old file?") == 'n') {
+                 nh_compress(fq_save);
+                 return 0;
+             }
+diff --git a/src/shk.c b/src/shk.c
+index 62052fbe7..51b9d0cd5 100644
+--- a/src/shk.c
++++ b/src/shk.c
+@@ -1602,7 +1602,7 @@ boolean itemize;
+         (void) safe_qbuf(qbuf, (char *) 0, qsfx, obj,
+                          (quan == 1L) ? Doname2 : doname, ansimpleoname,
+                          (quan == 1L) ? "that" : "those");
+-        if (yn(qbuf) == 'n') {
++        if (ynn(qbuf) == 'n') {
+             buy = PAY_SKIP;                         /* don't want to buy */
+         } else if (quan < bp->bquan && !consumed) { /* partly used goods */
+             obj->quan = bp->bquan - save_quan;      /* used up amount */
+@@ -4000,7 +4000,7 @@ boolean cant_mollify;
+     Sprintf(qbuf, "%sYou did %ld %s worth of damage!%s  Pay?",
+             !animal ? cad(TRUE) : "", cost_of_damage,
+             currency(cost_of_damage), !animal ? "\"" : "");
+-    if (yn(qbuf) != 'n') {
++    if (ynn(qbuf) != 'n') {
+         cost_of_damage = check_credit(cost_of_damage, shkp);
+         money2mon(shkp, cost_of_damage);
+         context.botl = 1;
+diff --git a/src/spell.c b/src/spell.c
+index 0447da70b..8ca947270 100644
+--- a/src/spell.c
++++ b/src/spell.c
+@@ -540,7 +540,7 @@ register struct obj *spellbook;
+                     Sprintf(qbuf,
+                     "This spellbook is %sdifficult to comprehend.  Continue?",
+                             (read_ability < 12 ? "very " : ""));
+-                    if (yn(qbuf) != 'y') {
++                    if (ynn(qbuf) != 'y') {
+                         spellbook->in_use = FALSE;
+                         return 1;
+                     }
+diff --git a/src/steed.c b/src/steed.c
+index f5cd50bc5..166ecf34e 100644
+--- a/src/steed.c
++++ b/src/steed.c
+@@ -175,7 +175,7 @@ doride()
+     if (u.usteed) {
+         dismount_steed(DISMOUNT_BYCHOICE);
+     } else if (getdir((char *) 0) && isok(u.ux + u.dx, u.uy + u.dy)) {
+-        if (wizard && yn("Force the mount to succeed?") == 'y')
++        if (wizard && ynn("Force the mount to succeed?") == 'y')
+             forcemount = TRUE;
+         return (mount_steed(m_at(u.ux + u.dx, u.uy + u.dy), forcemount));
+     } else {
+@@ -220,7 +220,7 @@ boolean force;      /* Quietly force this animal */
+      */
+     if (Wounded_legs) {
+         Your("%s are in no shape for riding.", makeplural(body_part(LEG)));
+-        if (force && wizard && yn("Heal your legs?") == 'y')
++        if (force && wizard && ynn("Heal your legs?") == 'y')
+             HWounded_legs = EWounded_legs = 0;
+         else
+             return (FALSE);
+diff --git a/src/teleport.c b/src/teleport.c
+index 8fb3f8c84..a5f17ba76 100644
+--- a/src/teleport.c
++++ b/src/teleport.c
+@@ -442,7 +442,7 @@ struct obj *scroll;
+ 
+     if ((u.uhave.amulet || On_W_tower_level(&u.uz)) && !rn2(3)) {
+         You_feel("disoriented for a moment.");
+-        if (!wizard || yn("Override?") != 'y')
++        if (!wizard || ynn("Override?") != 'y')
+             return FALSE;
+     }
+     if ((Teleport_control && !Stunned) || wizard) {
+@@ -473,7 +473,7 @@ struct obj *scroll;
+         }
+     } else if (scroll && scroll->blessed) {
+         /* (this used to be handled in seffects()) */
+-        if (yn("Do you wish to teleport?") == 'n')
++        if (ynn("Do you wish to teleport?") == 'n')
+             return TRUE;
+         result = TRUE;
+     }
+@@ -502,7 +502,7 @@ dotele()
+         trap_once = trap->once; /* trap may get deleted, save this */
+         if (trap->once) {
+             pline("This is a vault teleport, usable once only.");
+-            if (yn("Jump in?") == 'n')
++            if (ynn("Jump in?") == 'n')
+                 trap = 0;
+             else {
+                 deltrap(trap);
+diff --git a/src/weapon.c b/src/weapon.c
+index 4a6ebbea3..0a2203a26 100644
+--- a/src/weapon.c
++++ b/src/weapon.c
+@@ -1017,7 +1017,7 @@ enhance_weapon_skill()
+     winid win;
+     boolean speedy = FALSE;
+ 
+-    if (wizard && yn("Advance skills without practice?") == 'y')
++    if (wizard && ynn("Advance skills without practice?") == 'y')
+         speedy = TRUE;
+ 
+     do {
+diff --git a/sys/be/bemain.c b/sys/be/bemain.c
+index b5a26bded..8d7948a69 100644
+--- a/sys/be/bemain.c
++++ b/sys/be/bemain.c
+@@ -85,7 +85,7 @@ attempt_restore:
+             if (discover)
+                 You("are in non-scoring discovery mode.");
+             if (discover || wizard) {
+-                if (yn("Do you want to keep the save file?") == 'n')
++                if (ynn("Do you want to keep the save file?") == 'n')
+                     (void) delete_savefile();
+                 else {
+                     nh_compress(fqname(SAVEF, SAVEPREFIX, 0));
+diff --git a/sys/mac/macmain.c b/sys/mac/macmain.c
+index 8d9756029..6b5f37973 100644
+--- a/sys/mac/macmain.c
++++ b/sys/mac/macmain.c
+@@ -98,7 +98,7 @@ attempt_restore:
+             if (discover)
+                 You("are in non-scoring discovery mode.");
+             if (discover || wizard) {
+-                if (yn("Do you want to keep the save file?") == 'n')
++                if (ynn("Do you want to keep the save file?") == 'n')
+                     (void) delete_savefile();
+                 else {
+                     nh_compress(fqname(SAVEF, SAVEPREFIX, 0));
+diff --git a/sys/share/pcmain.c b/sys/share/pcmain.c
+index a18157639..2f1272c98 100644
+--- a/sys/share/pcmain.c
++++ b/sys/share/pcmain.c
+@@ -620,7 +620,7 @@ attempt_restore:
+             if (discover)
+                 You("are in non-scoring discovery mode.");
+             if (discover || wizard) {
+-                if (yn("Do you want to keep the save file?") == 'n')
++                if (ynn("Do you want to keep the save file?") == 'n')
+                     (void) delete_savefile();
+                 else {
+                     nh_compress(fqname(SAVEF, SAVEPREFIX, 0));
+diff --git a/sys/share/pcunix.c b/sys/share/pcunix.c
+index 5fcc3210b..7f1ce9c38 100644
+--- a/sys/share/pcunix.c
++++ b/sys/share/pcunix.c
+@@ -52,8 +52,8 @@ int fd;
+ 	if(moves > 1) pline("Cannot get status of saved level? ");
+ 	else pline("Cannot get status of saved game.");
+ 	return(0);
+-    } 
+-    if(comp_times(buf.st_mtime)) { 
++    }
++    if(comp_times(buf.st_mtime)) {
+ 	if(moves > 1) pline("Saved level is out of date.");
+ 	else pline("Saved game is out of date. ");
+ 	/* This problem occurs enough times we need to give the player
+@@ -154,13 +154,13 @@ getlock()
+ 
+     if (iflags.window_inited) {
+ #ifdef SELF_RECOVER
+-        c = yn("There are files from a game in progress under your name. "
++        c = ynn("There are files from a game in progress under your name. "
+                "Recover?");
+ #else
+         pline("There is already a game in progress under your name.");
+         pline("You may be able to use \"recover %s\" to get it back.\n",
+               tbuf);
+-        c = yn("Do you want to destroy the old game?");
++        c = ynn("Do you want to destroy the old game?");
+ #endif
+     } else {
+ #if defined(MSDOS) && defined(NO_TERMS)
+diff --git a/sys/unix/Makefile.src b/sys/unix/Makefile.src
+index 60d3055ae..546eee8be 100644
+--- a/sys/unix/Makefile.src
++++ b/sys/unix/Makefile.src
+@@ -317,7 +317,7 @@ WINBELIB = -lbe
+ # If ZLIB_COMP is defined in config.h this is necessary to link with zlib.
+ # LIBS = -lz
+ #
+-LIBS =
++LIBS = -lm
+ 
+ # make NetHack
+ GAME     = xnethack
+diff --git a/sys/unix/unixmain.c b/sys/unix/unixmain.c
+index 2e8f41330..f08a3d3ce 100644
+--- a/sys/unix/unixmain.c
++++ b/sys/unix/unixmain.c
+@@ -286,7 +286,7 @@ attempt_restore:
+             wd_message();
+             if (discover || wizard) {
+                 /* this seems like a candidate for paranoid_confirmation... */
+-                if (yn("Do you want to keep the save file?") == 'n') {
++                if (ynn("Do you want to keep the save file?") == 'n') {
+                     (void) delete_savefile();
+                 } else {
+                     (void) chmod(fq_save, FCMASK); /* back to readable */
+diff --git a/sys/unix/unixunix.c b/sys/unix/unixunix.c
+index 9c4f312b3..f2e555d6d 100644
+--- a/sys/unix/unixunix.c
++++ b/sys/unix/unixunix.c
+@@ -169,7 +169,7 @@ getlock()
+ 
+         if (iflags.window_inited) {
+             /* this is a candidate for paranoid_confirmation */
+-            c = yn(destroy_old_game_prompt);
++            c = ynn(destroy_old_game_prompt);
+         } else {
+             (void) printf("\n%s [yn] ", destroy_old_game_prompt);
+             (void) fflush(stdout);
+diff --git a/sys/vms/vmsmain.c b/sys/vms/vmsmain.c
+index 0189f1ced..fb9336d9d 100644
+--- a/sys/vms/vmsmain.c
++++ b/sys/vms/vmsmain.c
+@@ -191,7 +191,7 @@ attempt_restore:
+             resuming = TRUE; /* not starting new game */
+             wd_message();
+             if (discover || wizard) {
+-                if (yn("Do you want to keep the save file?") == 'n')
++                if (ynn("Do you want to keep the save file?") == 'n')
+                     (void) delete_savefile();
+                 else
+                     (void) chmod(fq_save, FCMASK); /* back to readable */
+-- 
+2.48.1
+

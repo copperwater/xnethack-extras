@@ -1,0 +1,2904 @@
+From 0c6002ff0b5aa4edc3627f93f375dcfa7cbf9a95 Mon Sep 17 00:00:00 2001
+From: copperwater <aosdict@gmail.com>
+Date: Mon, 21 May 2018 12:27:01 -0400
+Subject: [PATCH] Add many new entries for just about every item in the game
+
+Entries are copied from FIQHack's encyclopedia, which should be just
+about the same as NetHack4's. Some key differences:
+
+1. xNetHack has object lookup, meaning that a lot of text-based info
+from NH4 is pointlessly repetitive. Examples include qualifying every
+food item in terms of apples (lookup shows the exact amount of
+nutrition), comparing weapons to other weapons qualitatively and
+speaking in general terms about small and large damage (lookup shows
+this as well), and language such as "protecting against the special
+attacks of monsters" for magic cancellation.
+
+2. Object materials in descriptions are removed wherever possible and
+reasonable, since we don't want to mislead anyone.
+
+3. Descriptions relating to the invocation ritual are somewhat
+changed, mainly because something feels off about the original ones to
+me - perhaps the overuse of the word "special" and general beating
+around the bush. With the current structure they're upfront about the
+existence of an invocation ritual, whose entry describes exactly what is
+needed, but only in the formally identified entries.
+
+4. Entirely new entries: thiefstone, ring of carrying, invocation.
+
+5. Unidentified descriptions for items that don't randomize their
+descriptions are just listed under that item and share an entry with it.
+
+6. Quotations are kept (unlike in NH4); some are moved around as
+necessary.  For instance, *unicorn and unicorn horn were split up, with
+one of each of its two quotes going to each entry.
+
+7. Japanese item names are merged into the regular base item names
+unless they had a good quotation.
+---
+ dat/data.base | 1771 +++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 1633 insertions(+), 138 deletions(-)
+
+diff --git a/dat/data.base b/dat/data.base
+index 6dd001450..807309efb 100644
+--- a/dat/data.base
++++ b/dat/data.base
+@@ -60,7 +60,6 @@ thonged club
+ 	it to be drawn back to the wielder after having been thrown.
+ 	It should not be confused with the atlatl, which is a device
+ 	used to throw spears for longer distances.
+-~agate ring
+ agate*
+ 	Translucent, cryptocrystalline variety of quartz and a subvariety
+ 	of chalcedony.  Agates are identical in chemical structure to
+@@ -71,6 +70,11 @@ agate*
+ 	solution is slowly deposited into cavities and veins in older
+ 	rock.
+ 		[ The Columbia Encyclopedia, Sixth Edition ]
++alchemy smock
++        This sort of enchanted smock is highly valued by alchemists, because
++        it provides its wearer (but not their equipment) with near-perfect
++        immunity to acids and poisons, both of which are occupational hazards
++        for them.
+ aleax
+ 	Said to be a doppelganger sent to inflict divine punishment
+ 	for alignment violations.
+@@ -125,11 +129,45 @@ maud
+ 	May God make me more wretched
+ 	Than ever I have been yet!
+ 		[ Maud, And Other Poems by Alfred, Lord Tennyson ]
+-~amulet of yendor
+-~amulet of restful sleep
++amulet of change
++	Created as a practical joke by some whimsical wizard, it causes its
++	wearer to change from male to female or vice versa; to prevent the
++	victim simply using it again to change back, it disintegrates upon
++	causing such a transformation.
++amulet of esp
++	It allows its wearer to sense nearby minds, giving them an idea of
++	which intelligent creatures are nearby; the range of this telepathy is
++	much greater if the wearer is blindfolded or otherwise protected from
++	visual distractions.
++amulet of life saving
++	It prevents the wearer's death or permanent disablement. For instance,
++	it can heal lethal wounds, cure deadly diseases, or reverse the
++        transformation of its wearer into a statue; but it can avert nearly
++        any other cause of death, too.  If worn, it activates automatically
++        when its wearer would die. However, the strain of saving a life
++        completely destroys the amulet, and recovering from the dead makes
++        most creatures permanently less healthy.
++amulet of magical breathing
++	It acts as an air supply (or a supply of oxygenated water for
++	water-breathing wearers), meaning that the wearer can survive even in
++	environments in which they could not normally breathe.
++amulet of reflection
++	It reflects most visible rays and gaze attacks aimed at its wearer,
++	sending them back towards the creature that created them.
++amulet of restful sleep
++	It sometimes, at random, makes its wearer unexpectedly fall into a
++	peaceful sleep; comfortable, but potentially dangerous if there are
++	monsters around at the time.
++amulet of strangulation
++	It prevents its wearer breathing, usually leading to a rapid death if
++	it is not removed quickly.
++amulet of unchanging
++	It protects the wearer from effects that would change their form into
++        that of a different creature; or, if the wearer is already
++        transformed, prevents them turning back. Note that this also prevents
++        a polymorphed body automatically turning back to survive a lethal
++        injury, so it should be used with caution.
+ *amulet
+-amulet of *
+-amulet versus *
+ 	"The complete Amulet can keep off all the things that make
+ 	people unhappy -- jealousy, bad temper, pride, disagreeableness,
+ 	greediness, selfishness, laziness.  Evil spirits, people called
+@@ -151,6 +189,10 @@ amulet of yendor
+ 	immortality to the adventurer who can deliver it from the
+ 	depths of Moloch's Sanctum and offer it on the appropriate high
+ 	altar on the Astral Plane.
++amulet versus poison
++	It completely protects its wearer from the effects of most poisons,
++	including naturally poisonous food; but it can do nothing against food
++	that has become rotten and tainted through age.
+ angel*
+ 	He answered and said unto them, he that soweth the good seed
+ 	is the Son of man; the field is the world, and the good seed
+@@ -226,12 +268,21 @@ apelike creature
+ 	Earth shake when they walked.  Apes should _rule_ the Earth.
+ 	  [ Battle for the Planet of the Apes, by David Gerrold ]
+ apple
++	A small reddish-green fruit, produced by trees that grow in temperate
++	climates. As well as being enjoyed by people, it makes a great treat
++	for herbivorous creatures like horses.
++
+ 	NEWTONIAN, adj.  Pertaining to a philosophy of the universe
+ 	invented by Newton, who discovered that an apple will fall
+ 	to the ground, but was unable to say why.  His successors
+ 	and disciples have advanced so far as to be able to say
+ 	when.
+ 		[ The Devil's Dictionary, by Ambrose Bierce ]
++apron
++	A simple but heavily reinforced cloth apron, showing marks of
++	discolouration where it has been splashed with all sorts of strange
++	liquids over the years, designed to be worn as a cloak above body
++	armor.
+ archeolog*
+ * archeologist
+ 	Archeology is the search for fact, not truth. [...]
+@@ -265,6 +316,10 @@ arioch
+ 	and many more names besides.
+ 		[ Elric of Melnibone, by Michael Moorcock ]
+ *arrow
++        A projectile with a fledged tail and a pointed tip, designed to be
++        fired from a bow (throwing it by hand will only do minimal damage). It
++        sometimes breaks on impact.
++
+ 	I shot an arrow into the air,
+ 	It fell to earth, I knew not where;
+ 	For, so swiftly it flew, the sight
+@@ -308,17 +363,24 @@ asmodeus
+ 	or unhappiness.
+ 		[ Brewer's Concise Dictionary of Phrase and Fable ]
+ athame
+-	The consecrated ritual knife of a Wiccan initiate (one of
+-	four basic tools, together with the wand, chalice and
+-	pentacle).  Traditionally, the athame is a double-edged,
+-	black-handled, cross-hilted dagger of between six and
+-	eighteen inches length.
++        The consecrated ritual knife of a Wiccan initiate (one of four basic
++        tools, together with the wand, chalice and pentacle).  Traditionally,
++        the athame is a double-edged, black-handled, cross-hilted dagger of
++        between six and eighteen inches length. It is unusually hard, being
++        capable of cutting through stone without issues.
++
+ athen*
+ 	Athene was the offspring of Zeus, and without a mother.  She
+ 	sprang forth from his head completely armed.  Her favourite
+ 	bird was the owl, and the plant sacred to her is the olive.
+ 	    [ Bulfinch's Mythology, by Thomas Bulfinch ]
+-axe
++~pick-axe
++~pick-ax
++*ax
++*axe
++        A melee weapon with a broad blade at an angle to its haft, designed
++        for chopping.
++
+ 	"For ev'ry silver ringing blow,
+ 	Cities and palaces shall grow!"
+ 
+@@ -337,8 +399,9 @@ axe
+ axolotl
+ 	A mundane salamander, harmless.
+ bag
+-bag of *
+-sack
++        A small, light and flexible container made of cloth. Items in bags are
++        protected from many forms of item-destroying attack.
++
+ 	"Now, this third handkerchief," Mein Herr proceeded, "has also
+ 	four edges, which you can trace continuously round and round:
+ 	all you need do is to join its four edges to the four edges of
+@@ -351,10 +414,21 @@ sack
+ 	Purse, Mein Herr?"
+ 	The dear old man beamed upon her, with a jolly smile, looking
+ 	more exactly like the Professor than ever.  "Don't you see,
+-	my child--I should say Miladi?  Whatever is inside that Purse,
++	ould say Miladi?  Whatever is inside that Purse,
+ 	is outside it; and whatever is outside it, is inside it.  So
+ 	you have all the wealth of the world in that leetle Purse!"
+ 		[ Sylvie and Bruno Concluded, by Lewis Carroll ]
++bag of holding
++        A small, light and flexible container made of cloth. Items in bags are
++        protected from many forms of item-destroying attack.  It is possible
++        to store items inside it; this saves backpack space, circumventing the
++        normal maximum number of carried items. In addition, it also magically
++        reduces the weight of items stored inside, meaning that more items can
++        be carried without causing encumbrance issues, although the weight of
++        the items inside will always have some effect.
++bag of tricks
++        It magically generates monsters; it's possible to reach inside and
++        pull one out, although not to put monsters back in the bag.
+ b*lzebub
+ 	The "lord of the flies" is a translation of the Hebrew
+ 	Ba'alzevuv (Beelzebub in Greek).  It has been suggested that
+@@ -385,24 +459,28 @@ titanothere
+ 	of the Oligocene being 8 feet high at the shoulder.
+ 		[ Prehistoric Animals, by Barry Cox ]
+ banana
+-	He took another step and she cocked her right wrist in
+-	viciously.  She heard the spring click.  Weight slapped into
+-	her hand.
+-	"Here!" she shrieked hysterically, and brought her arm up in
+-	a hard sweep, meaning to gut him, leaving him to blunder
+-	around the room with his intestines hanging out in steaming
+-	loops.  Instead he roared laughter, hands on his hips,
+-	flaming face cocked back, squeezing and contorting with great
+-	good humor.
+-	"Oh, my dear!" he cried, and went off into another gale of
+-	laughter.
+-	She looked stupidly down at her hand.  It held a firm yellow
+-	banana with a blue and white Chiquita sticker on it.  She
+-	dropped it, horrified, to the carpet, where it became a
+-	sickly yellow grin, miming Flagg's own.
+-	"You'll tell," he whispered.  "Oh yes indeed you will."
+-	And Dayna knew he was right.
++        A curved yellow fruit that grows on tropical trees; people and
++        herbivorous animals alike, especially primates, enjoy the taste of the
++        insides, although the peel is generally discarded.
++
++        He took another step and she cocked her right wrist in viciously.  She
++        heard the spring click.  Weight slapped into her hand.
++        "Here!" she shrieked hysterically, and brought her arm up in a hard
++        sweep, meaning to gut him, leaving him to blunder around the room with
++        his intestines hanging out in steaming loops.  Instead he roared
++        laughter, hands on his hips, flaming face cocked back, squeezing and
++        contorting with great good humor.
++        "Oh, my dear!" he cried, and went off into another gale of laughter.
++        She looked stupidly down at her hand.  It held a firm yellow banana
++        with a blue and white Chiquita sticker on it.  She dropped it,
++        horrified, to the carpet, where it became a sickly yellow grin, miming
++        Flagg's own.
++        "You'll tell," he whispered.  "Oh yes indeed you will." And Dayna knew
++        he was right.
+ 		[ The Stand, by Stephen King ]
++banded mail
++        A suit of body armor made out of overlapping strips, providing
++        extremely good protection against attack.
+ banshee
+ 	In Irish folklore and that of the Western Highlands of Scotland,
+ 	a female fairy who announces her presence by shrieking and
+@@ -442,6 +520,10 @@ bat or bird
+ 	some kind of a home.
+ 		[ A Pelican at Blandings, by P. G. Wodehouse ]
+ bear*trap
++        A hinged iron device with a powerful spring and sharp teeth. If
++        disarmed and then set correctly, it will trap monsters that step on
++        it, holding them in place for a while.
++
+ 	Probably most commonly associated with trapping, the leghold
+ 	trap is a rather simple mechanical trap.  It is made up of two
+ 	jaws, a spring of some sort, and a trigger in the middle.  When
+@@ -474,7 +556,16 @@ bear*trap
+ 	the shields (the front pair of wings) under which the back
+ 	wings are folded.
+ 		[ Van Dale's Groot Woordenboek der Nederlandse Taal ]
++bell
++        A small brass device with a clapper, that makes a ringing noise when
++        shaken. It alerts nearby monsters to your location, meaning that it
++        can be used to tell your pets where you are; although it makes a poor
++        instrument, as it can only play one note.
+ bell of opening
++        Its magical sound can reveal nearby hidden objects, like secret doors
++        and traps, and even unlock and open nearby doors and containers. Its
++        sound is one of the keys to performing the invocation ritual.
++
+ 	"A bell, book and candle job."
+ 	The Bursar sighed.  "We tried that, Archchancellor."
+ 	The Archchancellor leaned towards him.
+@@ -490,6 +581,10 @@ bell of opening
+ 	bell tower.
+ 		[ Eric, by Terry Pratchett ]
+ blindfold
++        A piece of cloth that can be wrapped around the head, blocking out
++        light and blinding its user; it protects against attacks that rely on
++        the victim being able to see.
++
+ 	The blindfolding was performed by binding a piece of the
+ 	yellowish linen whereof those of the Amahagger who condescended
+ 	to wear anything in particular made their dresses tightly round
+@@ -545,29 +640,23 @@ bone devil
+ 	Bone devils attack with weapons and with a great hooked tail
+ 	which causes a loss of strength to those they sting.
+ book of the dead
+-candelabrum*
+-*candle
+-	Faustus: Come on Mephistopheles.  What shall we do?
+-	Mephistopheles: Nay, I know not.  We shall be cursed with bell,
+-	book, and candle.
+-	Faustus: How?  Bell, book, and candle, candle, book, and bell,
+-	Forward and backward, to curse Faustus to hell.
+-	Anon you shall hear a hog grunt, a calf bleat, and an ass bray,
+-	Because it is Saint Peter's holy day.
+-	(Enter all the Friars to sing the dirge)
+-		[ Doctor Faustus and Other Plays, by Christopher Marlowe ]
++        The words in this dreaded book are one of the keys to the invocation
++        ritual; all that is needed is to read them aloud, but only if the door
++        is bathed in a special magical light, and still ringing with the
++        echoes of a special magical sound. Reading it at other times can open
++        a strange and dangerous connection to undeath.
+ boomerang
+-#: this one is commented out because two from the same source feels a
+-#: bit excessive; if uncommented, it should be first since the punchline
+-#: is about coming back while the other one is disdainful about that, so
+-#: if this one came second, its joke would be weakened
+-#	"It's a boomerang," said Vimes.  "You find something like this
+-#	all over the world.  You have to wave it carefully and suddenly
+-#	your opponent gets it in the back.  I've heard that there's a lad
+-#	in Fourecks who can throw a boomerang with such precision that it
+-#	can get the morning paper and come back with it."
+-#		[ Raising Steam, by Terry Pratchett ]
+-#
++        A curved piece of wood, designed to be thrown by hand as a projectile.
++        It can sometimes return to its user given enough space, but follows a
++        curved path and sometimes breaks on impact.
++
++	"It's a boomerang," said Vimes.  "You find something like this
++	all over the world.  You have to wave it carefully and suddenly
++	your opponent gets it in the back.  I've heard that there's a lad
++	in Fourecks who can throw a boomerang with such precision that it
++	can get the morning paper and come back with it."
++		[ Raising Steam, by Terry Pratchett ]
++
+ 	Rincewind pulled himself up and thought about reaching for his
+ 	stick.  And then he thought again.  The man had a couple of spears
+ 	stuck in the ground, and people here were good at spears, because
+@@ -591,22 +680,12 @@ boomerang
+ 	guarded secret, possibly derived from nonhumans (see Dwarfs,
+ 	Elves, and Gnomes).
+ 	  [ The Tough Guide to Fantasyland, by Diana Wynne Jones ]
+-*booze
+-potion of sleeping
+-	On waking, he found himself on the green knoll whence he had
+-	first seen the old man of the glen.  He rubbed his eyes -- it
+-	was a bright sunny morning.  The birds were hopping and
+-	twittering among the bushes, and the eagle was wheeling aloft,
+-	and breasting the pure mountain breeze.  "Surely," thought Rip,
+-	"I have not slept here all night."  He recalled the occurrences
+-	before he fell asleep.  The strange man with a keg of liquor --
+-	the mountain ravine -- the wild retreat among the rocks -- the
+-	woe-begone party at ninepins -- the flagon -- "Oh! that flagon!
+-	that wicked flagon!" thought Rip -- "what excuse shall I make
+-	to Dame Van Winkle!"
+-		[ Rip Van Winkle, a Posthumous Writing
+-		  of Diedrich Knickerbocker, by Washington Irving ]
+ boulder
++        A huge chunk of rock. It could make for a very powerful weapon, except
++        that it looks very unlikely that a normal-sized person could lift it,
++        or even climb over or around it. Most likely, you'll just have to
++        settle for pushing it out of your way, or squeezing past it.
++
+ 	I worked the lever well under, and stretched my back; the end
+ 	of the stone rose up, and I kicked the fulcrum under.  Then,
+ 	when I was going to bear down, I remembered there was
+@@ -626,6 +705,10 @@ boulder
+ ~*longbow of diana
+ bow
+ * bow
++        A piece of string with both ends connected to a curved piece of wood;
++        wielding a bow allows arrows to be fired rather than thrown. Bashing
++        monsters with a bow does not do much damage.
++
+ 	"Stand to it, my hearts of gold," said the old bowman as he
+ 	passed from knot to knot.  "By my hilt! we are in luck this
+ 	journey.  Bear in mind the old saying of the Company."
+@@ -640,6 +723,12 @@ bow
+ 	"It would not be amiss," said Hordle John, "if under his
+ 	girdle he had four farthings'-worth of wine."
+ 		[ The White Company, by Sir Arthur Conan Doyle ]
++*lantern
++        A brass container with glass panels and a light glowing inside, that
++        can be turned on and off. It is powered by a stored reservoir of
++        electrical energy, which will last approximately three times as long
++        as a wax candle would, but which will run out eventually and which can
++        only be replenished by magical means.
+ brigit
+ 	Brigit (Brigid, Bride, Banfile), which means the Exalted One,
+ 	was the Celtic (continental European and Irish) fertility
+@@ -665,6 +754,11 @@ bugbear
+ 	sometimes kill just for the treasure their victims may be
+ 	carrying.
+ bugle
++        A small horn made of brass, which can be blown into to play music; the
++        note played depends on how hard you blow. Bugles are also used by
++        soldiers to communicate; one blast of a bugle can change an entire
++        army from lazing around waiting to getting ready for battle.
++
+ 	'I read you by your bugle horn
+ 	And by your palfrey good,
+ 	I read you for a Ranger sworn
+@@ -675,10 +769,20 @@ bugle
+ 	And mine at dead of night.'
+ 		[ Brignall Banks, by Sir Walter Scott ]
+ bullwhip
++        A leather whip, which can be used as a melee weapon but which does no
++        damage at all against particularly thick-skinned monsters. If applied,
++        however, it can wrap itself around items on the ground or held by a
++        monster, and maybe even pull them towards you.
++
+ 	"Good," he said and, unbelievably, smiled at me, a smirk like
+ 	a round of rotted cheese.  "What did your keeper use on you?
+ 	A bullwhip?"
+ 		[ Melusine, by Sarah Monette ]
++c-ration
++        The Yendorian army only get to eat two meals a day; when a soldier
++        steps out of line, which happens surprisingly often, they are punished
++        by being given C-rations for that day rather than the more standard
++        K-rations.
+ *camaxtli
+ 	A classical Mesoamerican Aztec god, also known as Mixcoatl-
+ 	Camaxtli (the Cloud Serpent), Camaxtli is the god of war.  He
+@@ -699,7 +803,38 @@ camelot*
+ 	degli Uberti, the Italian poet, claims to have seen the ruins
+ 	in the 14th century.
+ 		[ Encyclopedia Mythica, ed. M.F. Lindemans ]
++can of grease
++        This canister can be used to pour a thick layer of grease onto an
++        item, giving it temporary protection from rust, rotting and corrosion,
++        but in some cases making it harder to hold. It only holds a finite
++        amount of grease, though; the only plausible way to refill it deep in
++        a dungeon is via magical means.
++cand*abrum
++        A decorative gold construction with space to hold up to seven candles,
++        giving off a strong and palpable magical aura.
++cand*abrum of invocation
++        When all seven candles are added to it and lit, it gives off a
++        powerful magical light that is one of the keys to the
++        invocation.
++
++	Faustus: Come on Mephistopheles.  What shall we do?
++	Mephistopheles: Nay, I know not.  We shall be cursed with bell,
++	book, and candle.
++	Faustus: How?  Bell, book, and candle, candle, book, and bell,
++	Forward and backward, to curse Faustus to hell.
++	Anon you shall hear a hog grunt, a calf bleat, and an ass bray,
++	Because it is Saint Peter's holy day.
++	(Enter all the Friars to sing the dirge)
++		[ Doctor Faustus and Other Plays, by Christopher Marlowe ]
++candle
++        A small but stout white stick of burnable material. When lit, it burns
++        slowly, giving off a dim light for a while; lighting a sufficiently
++        large number of candles at once will make the light brighter.
+ candy bar
++        A bar made by forming sugar, milk and other delicious (but not
++        particularly healthy) ingredients into the sort of food that people
++        eat for a treat.
++
+ 	Only once a year, on his birthday, did Charlie Bucket ever
+ 	get to taste a bit of chocolate.  The whole family saved up
+ 	their money for that special occasion, and when the great
+@@ -719,6 +854,11 @@ candy bar
+ 	of birthday chocolate last him for more than a month.
+ 		[ Charlie and the Chocolate Factory, by Roald Dahl ]
+ carrot
++        An orange vegetable that grows a few inches underground; it can be
++        eaten raw, enjoyed by people and herbivorous animals, and particularly
++        loved as a treat by horses. It is rumoured to help with problems with
++        eyesight.
++
+ 	In World War II, Britain's air ministry spread the word that
+ 	a diet of these vegetables helped pilots see Nazi bombers
+ 	attacking at night.  That was a lie intended to cover the real
+@@ -835,6 +975,9 @@ kerberos
+ 	playing bewitching music on his lyre, and the other time when
+ 	Hercules confronted him and took him to the world of the
+ 	living (as his twelfth and last labor).
++chain mail
++        A good-quality flexible armoured shirt made out of a large number of
++        tiny linked rings, providing good protection against attack.
+ chameleon
+ 	A small lizard perched on a brown stone.  Feeling threatened by
+ 	the approach of human beings along the path, it metamorphosed
+@@ -856,8 +999,15 @@ charo*n
+ 	man, advanced in age, was called Charon.  The deceased's next-
+ 	of-kin would place a coin under his tongue, to pay the ferry-
+ 	man.
++cheap plastic imitation*
++        You feel that something is not right with this amulet, though;
++        on closer inspection, it appears to not be the real Amulet of
++        Yendor, but rather a badly manufactured plastic fake.
+ chest
+ large box
++        A heavy reinforced wooden box that can be locked, designed to have
++        items stored inside it.
++
+ 	Dantes rapidly cleared away the earth around the chest.  Soon
+ 	the center lock appeared, then the handles at each end, all
+ 	delicately wrought in the manner of that period when art made
+@@ -900,7 +1050,7 @@ cleaver
+ 		[ The Phoenix on the Sword, by Robert E. Howard ]
+ ~elven cloak
+ ~oilskin cloak
+-*cloak*
++*cloak
+ 	Cloaks are the universal outer garb of everyone who is not a
+ 	Barbarian.  It is hard to see why.  They are open in front
+ 	and require you at most times to use one hand to hold them
+@@ -913,6 +1063,22 @@ cleaver
+ 	around her/his shivering body_.  This seems to suggest they
+ 	are less than practical for anyone on an arduous Tour.
+ 	  [ The Tough Guide to Fantasyland, by Diana Wynne Jones ]
++cloak of displacement
++        A cloak that causes the wearer to appear to be in a different
++        location from where they actually are, causing many enemies to
++        attack in the wrong direction until they figure out where the
++        wearer actually is.
++cloak of invisibility
++        While worn, it makes both the wearer and their carried and worn
++        equipment invisible, making most creatures incapable of seeing them.
++cloak of magic resistance
++        A cloak that provides almost perfect protection from a wide range of
++        magical attacks that do not damage directly, in addition to damage
++        that would be caused directly by magical energy (rather than, say,
++        fire or lightning created by a magical source).
++cloak of protection
++        It has a powerful defensive aura placed on it, providing moderately
++        good protection from attack.
+ cloud*
+ 	I wandered lonely as a cloud
+ 	That floats on high o'er vales and hills,
+@@ -921,6 +1087,8 @@ cloud*
+ 	Beside the lake, beneath the trees,
+ 	Fluttering and dancing in the breeze.
+ 		[ I Wandered Lonely as a Cloud, by William Wordsworth ]
++club
++	A short heavy piece of wood designed for bludgeoning enemies in melee.
+ cobra
+ 	Darzee and his wife only cowered down in the nest without
+ 	answering, for from the thick grass at the foot of the bush
+@@ -966,6 +1134,9 @@ c*ckatrice
+ ~creeping coins
+ *coins
+ zorkmid*
++        The unit of currency in the Yendorian economy. Each gold piece
++        is worth 1 zorkmid.
++
+ 	The coin bears the likeness of Belwit the Flat, along with the
+ 	inscriptions, "One Zorkmid," and "699 GUE [ Great Underground
+ 	Empire ]."  On the other side, the coin depicts Egreth Castle,
+@@ -995,6 +1166,12 @@ cope
+ 	by a clasp.
+ 		[ Wikipedia, the free encyclopedia ]
+ cornuthaum
++        The quintessential wizard hat. It helps focus the mental powers of
++        wizards, making their natural arrogance more effective and occasionally
++        giving them a sense of the surrounding area; but only wizards can pull
++        this feat off, with other adventurers merely looking stupid wearing
++        such a hat.
++
+ 	He was dressed in a flowing gown with fur tippets which had
+ 	the signs of the zodiac embroidered over it, with various
+ 	cabalistic signs, such as triangles with eyes in them, queer
+@@ -1014,12 +1191,22 @@ cornuthaum
+ 	moons all over it.  All in all, it couldn't have been more
+ 	wizardish.
+ 			[ The Elfin Ship, James P. Blaylock ]
++*corpse
++        A dead monster. The bodies of monsters can always be eaten, but eating
++        the wrong sort of monster might be dangerous or even fatal; on the
++        other hand, some corpses are very beneficial to eat. Corpses tend to
++        spoil over time, becoming lethally tainted; thus, bodies of monsters
++        that died a long time ago should not be eaten, whether because they
++        were not freshly killed, or because they were undead and killed a
++        second time.
+ couatl
+ 	A mythical feathered serpent.  The couatl are very rare.
+ coyote
+ 	This carnivore is known for its voracious appetite and
+ 	inflated view of its own intelligence.
+ cram*
++	The standard sort of ration carried by rangers when going on long journeys.
++
+ 	If you want to know what cram is, I can only say that I don't
+ 	know the recipe; but it is biscuitish, keeps good indefinitely,
+ 	is supposed to be sustaining, and is certainly not entertaining,
+@@ -1027,13 +1214,23 @@ cram*
+ 	exercise.  It was made by the Lake-men for long journeys.
+ 		[ The Hobbit, by J.R.R. Tolkien ]
+ cream pie
+-		Gregor stared at the pastry tray, and sighed.  "I suppose
++        A foodstuff used as a projectile by clowns to blind their opponents in
++        an amusing manner.
++
++	Gregor stared at the pastry tray, and sighed.  "I suppose
+ 	it would disturb the guards if I tried to shove a cream torte up
+ 	your nose."
+-		"Deeply.  You should have done it when we were eight and
++	"Deeply.  You should have done it when we were eight and
+ 	twelve, you could have gotten away with it then.  The cream pie
+ 	of justice flies one way," Miles snickered.
+ 		[ The Vor Game, by Lois McMaster Bujold ]
++credit card
++        A small rectangle of plastic, marketed by banks as a method of paying
++        for items without carrying cash. Unfortunately, shops deep in dungeons
++        tend not to be connected to international monetary credit card
++        networks, and wouldn't trust the card to be valid in any case, but
++        maybe the physical properties of the card would come in useful for
++        wedging open locks.
+ *crocodile
+ 	A big animal with the appearance of a lizard, constituting
+ 	an order of the reptiles (_Loricata_ or _Crocodylia_), the
+@@ -1075,12 +1272,32 @@ crom
+ 	    [ Conan the Avenger by Robert E. Howard, Bjorn Nyberg,
+ 		and L. Sprague de Camp ]
+ crossbow*
++        A mechanical contrivance designed to fire crossbow bolts, with a string
++        under tension that can be wound back slowly and then released; wielding
++        a crossbow allows crossbow bolts to be fired rather than thrown.
++        Bashing monsters with a crossbow does not do much damage.
++
+ 	"God save thee, ancient Mariner!
+ 	From the fiends, that plague thee thus! -
+ 	Why look'st thou so?" - With my cross-bow
+ 	I shot the Albatross.
+ 	  [ The Rime of the Ancient Mariner, by Samuel Taylor Coleridge ]
++crossbow bolt
++        A thick quarrel with a sharpened point, designed to be fired from a
++        crossbow (throwing it by hand will only do minimal damage). It
++        sometimes breaks on impact.
++crysknife
++        A tooth taken from a dead worm and then magically enchanted to have a
++        very sharp cutting edge, working like a knife, but an unusually
++        effective one. It needs constant exposure to the body of a living
++        creature to maintain the enchantment, though.
+ crystal ball
++        Staring into a crystal ball for a long period of time might allow its
++        user to pinpoint various features around them, such as the location of
++        traps; but doing so may backfire on less intelligent users. They also
++        eventually run out of magic after enough use, and require magical means
++        to restore it.
++
+ 	You look into one of these and see _vapours swirling like
+ 	clouds_.  These shortly clear away to show a sort of video
+ 	without sound of something that is going to happen to you
+@@ -1142,7 +1359,10 @@ cyclops
+ 		[ The Odyssey, (chapter Epsilon), by Homer ]
+ ~sting
+ *dagger
+-	Is this a dagger which I see before me,
++        A long knife or very short sword, which can be used as a melee weapon,
++        or thrown by hand.
++
++        Is this a dagger which I see before me,
+ 	The handle toward my hand? Come, let me clutch thee.
+ 	I have thee not, and yet I see thee still.
+ 	Art thou not, fatal vision, sensible
+@@ -1163,6 +1383,10 @@ dark one
+ 		[ The Silmarillion, by J.R.R. Tolkien ]
+ # includes "dart trap"
+ dart*
++        A short projectile with a pointed tip and fledged tail, designed to be
++        thrown by hand, although it is not very effective at damaging
++        monsters. It sometimes breaks on impact.
++
+ 	Darts are missile weapons, designed to fly such that a sharp,
+ 	often weighted point will strike first.  They can be
+ 	distinguished from javelins by fletching (i.e., feathers on
+@@ -1200,6 +1424,10 @@ major demon
+ 	them difficult to deal with, even on the rare occasions when
+ 	they are friendly.
+ 	  [ The Tough Guide to Fantasyland, by Diana Wynne Jones ]
++dented pot
++        A light cooking pot, turned upside down and worn on the head; it's
++        worse for wear due to all the damage it's taken over the years.
++        Nowadays, it only provides minimal protection to the head.
+ diamond
+ 	The hardest known mineral (with a hardness of 10 on Mohs' scale).
+ 	It is an allotropic form of pure carbon that has crystallized in
+@@ -1357,7 +1585,13 @@ doppelganger
+ 	make of steel.
+ 		[ The Last Book of Swords: Shieldbreaker's Story,
+ 			by Fred Saberhagen ]
+-*drum*
++*drum
++        A leather device which can be banged on to make a loud noise; it
++        is sometimes used as an accompaniment to an orchestra, but
++        cannot play a tune by itself because its notes do not have any
++        particular pitch.  The loud bangs it produces might scare nearby
++        monsters into running away.
++
+ 	Many travelers have seen the drums of the great apes, and
+ 	some have heard the sounds of their beating and the noise of
+ 	the wild, weird revelry of these first lords of the jungle,
+@@ -1365,7 +1599,19 @@ doppelganger
+ 	being who ever joined in the fierce, mad, intoxicating revel
+ 	of the Dum-Dum.
+ 		[ Tarzan of the Apes, by Edgar Rice Burroughs ]
++drum of earthquake
++        The sound of this drum is magically amplified, causing the
++        entire dungeon to vibrate with the sheer volume of the sound,
++        and maybe causing nearby terrain to collapse. Monsters might
++        become angry or scared as a result. The powerful effect of the
++        drum runs through its magical supplies quickly, being usable
++        only a limited number of times before it needs magical
++        recharging; it can still be banged on in such a state, just
++        without the amplification.
+ dunce*
++        This nasty cap not only provides no protection to the head or
++        anything else, it makes its wearer foolish and stupid.
++
+ 	A dunce cap, also variously known as a dunce hat, dunce's
+ 	cap, or dunce's hat, is a tall conical hat.  In popular
+ 	culture, it is typically made of paper and often marked with
+@@ -1416,6 +1662,37 @@ dwarf*
+ 	they like, and a dwarvish gift is likely to turn to gold in
+ 	the hand.  But on the whole they are a snappish lot.
+ 	    [ The Immortals, by Derek and Julia Parker ]
++*dwarvish boots
++*hard shoes
++	The solid nature of these shoes gives the feet moderate protection from
++	attack.
++dwarvish cloak
++hooded cloak
++        It shows signs of dwarvish manufacture, but is intended for style
++        purposes rather than as armour, giving no additional protection to the
++        body against normal attacks.
++dwarvish iron helm
++hard hat
++        Its high-quality dwarven manufacture provides moderate protection from
++        damage and turns aside many falling objects.
++dwarvish mattock
++broad pick
++        An oversized pick-axe, requiring two hands to hold. However, its shape
++        means that it can be used to attack rock walls as well as enemies,
++        eventually reducing them to a pile of rubble.
++dwarvish roundshield
++large round shield
++        Dwarven shields tend to pack just as much protection as human shields
++        into a smaller physical size, but are no better or worse in combat.
++dwarvish short sword
++broad short sword
++	Dwarvish manufacture is, as always, slightly better than human manufacture
++	when it comes to weapons, although dwarves are not as experienced at
++	swordsmithing as elves are.
++dwarvish spear
++stout spear
++	Its dwarvish manufacture is even higher quality than typical elvish
++	manufacture.
+ earendil
+ elwing
+ 	In after days, when because of the triumph of Morgoth Elves and
+@@ -1445,6 +1722,12 @@ giant eel
+ 	carrion.
+ 	    [ Freshwater Fishes of Canada, by Scott and Crossman ]
+ egg
++        A container designed to contain both food for a baby monster and maybe
++        the baby itself, laid by some female egg-laying monster. Eggs might be
++        nutritious or dangerous to eat, depending on what sort of monster laid
++        them; and over time, will either spoil or hatch, depending on whether
++        they were fertilized or not.
++
+ 	But I asked why not keep it and let the hen sit on it till it
+ 	hatched, and then we could see what would come out of it.
+ 	"Nothing good, I'm certain of that," Mom said.  "It would
+@@ -1508,7 +1791,27 @@ elvenking
+ 	apples like that, I would call myself a gardener.  But it was
+ 	the singing that went to my heart, if you know what I mean."
+ 	   [ The Fellowship of the Ring, by J.R.R. Tolkien ]
++elven arrow
++runed arrow
++        It seems to be of elvish manufacture, designed to avoid the
++        elvish fear of iron, and is of a better quality than a typical
++        human-made arrow; elves are more deadly with it, and have a
++        better rate of fire, when also using an elven bow.
++*elven boots
++        These minimally protective boots are well-crafted by elves to
++        make almost no sound when walking, allowing their wearer to
++        sneak past sleeping monsters without waking them. As with most
++        armour of elven manufacture, they are particularly tolerant of
++        high levels of enchantment.
++elven broadsword
++        This sword was manufactured by some of the best elven swordsmiths.
+ elven cloak
++faded pall
++        This sort of cloak is used by elves to help keep their movements
++        silent, allowing its wearer to slip past sleeping monsters
++        without waking them; its elven construction makes it capable of
++        withstanding high levels of magical enchantment.
++
+ 	The Elves next unwrapped and gave to each of the Company the
+ 	clothes they had brought.  For each they had provided a hood
+ 	and cloak, made according to his size, of the light but warm
+@@ -1519,6 +1822,24 @@ elven cloak
+ 	brown as fallow fields by night, dusk-silver as water under
+ 	the stars.
+ 		[ The Fellowship of the Ring, by J.R.R. Tolkien ]
++elven dagger
++        Its high-quality elven manufacture makes it do slightly more
++        damage than a typical dagger.
++elven helm
++        A hardened hat, reinforced with extra bands of material to work
++        as makeshift armour.
++elven shield
++blue and green shield
++        A large wooden shield dyed in shades of cyan, designed to be
++        held in the offhand. The high-quality elven construction of
++        this shield makes it capable of withstanding a high level of
++        enchantment.
++elven short sword
++        Elves are experts at sword manufacture, outdoing even dwarves
++        when it comes to making short swords.
++elven spear
++        Its high-quality elvish manufacture makes it more effective than
++        a typical spear or short sword.
+ emerald
+ 	'Put off that mask of burning gold
+ 	With emerald eyes.'
+@@ -1538,6 +1859,9 @@ emerald
+ 	What matter, so there is but fire
+ 	In you, in me?'
+ 		[ The Mask, by W.B. Yeats ]
++engraved*bell
++        A small and ridiculously intricate bell made of silver, giving off a
++        strong and palpable magical aura.
+ engrav*
+ A.S*
+ 	Presently we reached a place where the beach narrowed; the sea
+@@ -1578,6 +1902,10 @@ erinyes
+ ettin
+ 	The two-headed giant, or ettin, is a vicious and unpredictable
+ 	hunter that stalks by night and eats any meat it can catch.
++*eucalyptus*
++        The leaf of a eucalyptus plant. It is edible but not particularly
++        filling; but can serve as a natural cure for some types of sickness or
++        illness.
+ excalibur
+ 	At first only its tip was visible, but then it rose, straight,
+ 	proud, all that was noble and great and wondrous.  The tip of
+@@ -1594,6 +1922,15 @@ excalibur
+ 	blue-green color of the ocean.
+ 		[ Knight Life, by Peter David ]
+ expensive camera
++        An expensive plastic device. The manufacturer considers it a way
++        of taking photos to keep a record of your adventure; most
++        adventurers, though, consider it a way of producing a blinding
++        flash of light that both dazzles monsters, and annoys them.
++        Despite the price tag, it is not particularly robust, and is
++        easy to accidentally break with rough handling. Also, it
++        eventually runs out of film; deep in a dungeon, the only way to
++        replace it is via magical means.
++
+ 	There was a time when Rincewind had quite liked the iconoscope.
+ 	He believed, against all experience, that the world was
+ 	fundamentally understandable, and that if he could only equip
+@@ -1622,12 +1959,20 @@ eyes of the overworld
+ 	is also able to look back and see the area around herself,
+ 	much like looking on a map.  Why anyone would want to ...
+ fedora
++        A stylish cloth hat, which may look fancy but which is useless
++        at protecting the head from anything unless magically enchanted.
++
+ 	Some hats can only be worn if you're willing to be jaunty, to set
+ 	them at an angle and to walk beneath them with a spring in your
+ 	stride as if you're only a step away from dancing.  They demand a
+ 	lot of you.
+ 		[ Anansi Boys, by Neil Gaiman ]
+ figurine*
++        When placed on the ground in the correct manner, this tiny
++        magical statue transforms into a full-sized monster. It's not at
++        all obvious whether the newly-created monster will be happy to
++        see you or hostile.
++
+ 	Then it appeared in Paris at just about the time that Paris
+ 	was full of Carlists who had to get out of Spain.  One of
+ 	them must have brought it with him, but, whoever he was, it's
+@@ -1663,6 +2008,15 @@ f* brand
+ 	Is also great
+ 	And would suffice.
+ 		[ Fire and Ice, by Robert Frost ]
++fire horn
++        Blowing this magical horn will shoot a powerful beam of flame in
++        a direction of your choice, dealing huge amounts of damage to
++        monsters that do not resist it. However, this will only work a
++        limited number of times before requiring magical recharging.
++        When out of magic, it acts like an ordinary horn.
++flail
++        A hefty ball attached to a handle by a chain, which can be swung
++        at an enemy.
+ flesh golem
+ 	With an anxiety that almost amounted to agony, I collected
+ 	the instruments of life around me, that I might infuse a spark
+@@ -1686,6 +2040,9 @@ flesh golem
+ 	black lips.
+ 		[ Frankenstein, by Mary Wollstonecraft Shelley ]
+ flint*
++        This ordinary stone made of flint has no magical properties,
++        although it does at least make reasonable sling ammunition.
++
+ 	An emerald is as green as grass;
+ 	A ruby red as blood;
+ 	A sapphire shines as blue as heaven;
+@@ -1705,6 +2062,10 @@ floating eye
+ 	its mystic powers, and then nibbled to death by some other
+ 	creature that lurked around nearby.
+ *flute
++        A tube with holes that can be covered by the fingers; blowing
++        sideways across one end and covering different patterns of holes
++        will play different musical notes.
++
+ 	With this thou canst do mighty deeds
+ 	And change men's passions for thy needs:
+ 	A man's despair with joy allay,
+@@ -1720,6 +2081,13 @@ fog* cloud
+ 	on silent haunches
+ 	and then moves on.
+ 	     [ Fog, by Carl Sandburg ]
++food ration
++        An entire pre-prepared meal packaged so that it keeps well
++        during long journeys, rations are the standard food source used
++        by adventurers, and highly nutritious. They are typically made
++        of sandwiches, cereal bars, and other similar easily-to-hold
++        food made from cereal crops and vegetables; and form a complete
++        meal for the entire day.
+ # includes "food detection" and "detect food", which might not be the best
+ *food*
+ 	The little girl stood on tip-toe and picked one of the nicest
+@@ -1747,18 +2115,33 @@ fountain
+ 	Erotas, bade the Naiad fall,
+ 	And thank the great god Pan for all!
+ 		[ For a Fountain, by Bryan Waller Procter ]
+-fox
+-	One hot summer's day a Fox was strolling through an orchard
+-	till he came to a bunch of Grapes just ripening on a vine
+-	which had been trained over a lofty branch. "Just the thing
+-	to quench my thirst," quoth he. Drawing back a few paces, he
+-	took a run and a jump, and just missed the bunch. Turning
+-	round again with a One, Two, Three, he jumped up, but with
+-	no greater success. Again and again he tried after the
+-	tempting morsel, but at last had to give it up, and walked
+-	away with his nose in the air, saying: "I am sure they are
+-	sour."
+-		[ Aesop's Fables ]
++fortune cookie
++        A hard biscuit with a slip of paper inside, which might contain
++        useful advice but might be useless, or even lying.
++frost horn
++        Blowing this magical horn will shoot a powerful beam of cold in
++        a direction of your choice, dealing huge amounts of damage to
++        monsters that do not resist it. However, this will only work a
++        limited number of times before requiring magical recharging.
++        When out of magic, it acts like an ordinary horn.
++fruit
++        They say this is edible. Some adventurers have strange tastes.
++
++	What was the fruit like?  Unfortunately, no one can describe
++	a taste.  All I can say is that, compared with those fruits,
++	the freshest grapefruit you've ever eaten was dull, and the
++	juiciest orange was dry, and the most melting pear was hard
++	and woody, and the sweetest wild strawberry was sour.  And
++	there were no seeds or stones, and no wasps.  If you had once
++	eaten that fruit, all the nicest things in this world would
++	taste like medicines after it.  But I can't describe it.  You
++	can't find out what it is like unless you can get to that
++	country and taste it for yourself.
++		[ The Last Battle, by C.S. Lewis ]
++*fumble boots
++        These boots have an insidious enchantment, making their wearer
++        occasionally noisily trip, slip, or otherwise fail to walk
++        normally.
+ *fung*
+ 	Fungi, division of simple plants that lack chlorophyll, true
+ 	stems, roots, and leaves.  Unlike algae, fungi cannot
+@@ -1797,6 +2180,9 @@ fox
+ 		[ Excerpt from the opening narration to the movie
+ 		    _Gargoyles_, written by Stephen and Elinor Karpf ]
+ *garlic
++        A herb mostly used for giving flavour to food; vampires are
++        rumoured to be particularly afraid of its scent.
++
+ 	1 November - All day long we have travelled, and at a good
+ 	speed.  The horses seem to know that they are being kindly
+ 	treated, for they go willingly their full stage at best
+@@ -1817,6 +2203,21 @@ fox
+ 	taken care not to take off my hat or veil, and so have
+ 	escaped their suspicions.
+ 		[ Dracula, by Bram Stoker ]
++*gauntlets of dexterity
++        These gloves make their wearer more adept at aiming, archery,
++        accuracy, and similar tasks that need a dexterous or steady
++        hand; however, these benefits are only seen if the gloves are
++        enchanted, with higher enchantments giving larger benefits.
++*gauntlets of fumbling
++        These dubiously enchanted gloves make their wearer tend to drop
++        things and similarly fumble, although they still provide minimal
++        protection for the hands.
++*gauntlets of power
++        Beneath their unassuming exterior, these gloves are actually
++        metallic gauntlets; despite providing only minimal protection to
++        the hands, they are enchanted to provide an enormous boost to
++        strength, making the wearer much stronger than can be achieved
++        without magical aid.
+ # gas spore -- see *spore
+ gehenn*
+ *h?nnom
+@@ -1842,7 +2243,12 @@ gelatinous cube
+ 	metal items.
+ 		[ Wikipedia, the free encyclopedia ]
+ *gem
+-gem or rock
++        An object, possibly cut into facets, looking like a gemstone. In
++        general, magical identification or abilities as a jeweller are
++        needed to determine how valuable apparent gemstones are, or even
++        whether they are real or fake; and proof of a stone's value is
++        needed to be able to sell it for its proper value at a shop.
++
+ 	The difference between false memories and true ones is the
+ 	same as for jewels:  it is always the false ones that look the
+ 	most real, the most brilliant.
+@@ -1909,6 +2315,10 @@ giant humanoid
+ 	boulders as weapons, hurling them over large distances.  All
+ 	types of giants share a love for men - roasted, boiled, or
+ 	fried.  Their table manners are legendary.
++# will break if any other type of gloves get added
++*glove*
++        These are just ordinary gloves, providing minimal protection for
++        the hands.
+ # note: "gnomish wizard" is a monster
+ ~gnome ??m*
+ #~gnom* cave*man
+@@ -1970,6 +2380,9 @@ goddess
+ 	  [ The Tough Guide to Fantasyland, by Diana Wynne Jones ]
+ gold
+ gold piece
++        The major coin used in the Yendorian economy. Each gold piece is
++        worth 1 zorkmid.
++
+ 	A metal of characteristic yellow colour, the most precious
+ 	metal used as a common commercial medium of exchange.  Symbol,
+ 	Au; at. no. 79; at. wt. 197.2.  It is the most malleable
+@@ -2019,6 +2432,9 @@ grave
+ 	Much I talk, more I walk;
+ 	Time I were buried," said the old, old man.
+ 		[ Three Songs to the Same Tune, by W.B. Yeats ]
++gray stone
++        This roughly spherical gray rock is clearly not valuable as a
++        gemstone.
+ grayswandir
+ 	Why had I been wearing Grayswandir?  Would another weapon have
+ 	affected a Logrus-ghost as strongly?  Had it really been my
+@@ -2073,6 +2489,10 @@ hachi
+ 	statue was erected on the station platform in his honor.  It
+ 	is said to bring you luck if you touch his statue.
+ *harp
++        A musical instrument made by stringing many strings onto a
++        rigid frame, each with a slightly different length; plucking a
++        different string allows a different note to be played.
++
+ 	A triangular stringed instrument, often Magic.  Even when not
+ 	Magic, a Harp is surprisingly portable and tough and can be
+ 	carried everywhere on the back of the Bard or Harper in all
+@@ -2096,6 +2516,10 @@ hachi
+ 		[ Jack and the Beanstalk, from English Fairy Tales,
+ 		  by Joseph Jacobs ]
+ hawaiian*shirt
++        A garish and brightly coloured shirt, fitting tightly enough to
++        be worn underneath other sorts of armour, although providing no
++        protection to the body unless magically enchanted.
++
+ 	'One of the things he can't do, he can't ride a horse,' he
+ 	said.  Then he stiffened as if sandbagged by a sudden
+ 	recollection, gave a small yelp of terror and dashed into
+@@ -2269,8 +2693,15 @@ hom*nculus
+ 	and mine to you, across the leagues between at the speed of
+ 	thought.'"
+ 		[ Conan the Rebel, by Poul Anderson ]
+-# also gets 'pruning hook' aka guisarme
+-*hook
++grappling hook
++        It can be used in combat as a makeshift flail, doing minimal
++        damage. Its major purpose, though, is to grab hold of things at
++        a distance, either to pull them towards you, or you towards
++        them; large monsters can be attacked at a distance like this.
++        Users with relative familiarity with flail-type weapons will be
++        better at this, though, with inexperienced users likely to mess
++        up and hurt themselves by mistake.
++
+ 	But as for Queequeg -- why, Queequeg sat there among them --
+ 	at the head of the table, too, it so chanced; as cool as an
+ 	icicle.  To be sure I cannot say much for his breeding.  His
+@@ -2457,8 +2888,24 @@ succubus
+ 	that they were upon the earth unto this day.  And he turned
+ 	himself, and went out from Pharaoh.
+ 		[ Exodus, 10:4-6 ]
++invocation*
++        This is a feared ritual spoken of only in whispers. It is said
++        that it opens the way to the Amulet of Yendor's resting place,
++        and that it requires the fabled bell, book, and candelabrum as
++        materials. Only one other scrap of information has been passed
++        down: that this ritual can only be performed where the ground
++        vibrates.
+ *iron ball
++        This huge ball of iron seems to have been designed to weight
++        something or someone down; forcing someone to struggle with such
++        an object would be quite the punishment. Its weight would make
++        it a surprisingly good bludgeoning weapon, for someone willing
++        to struggle carrying it.
+ *iron chain
++        This length of chain, made of iron, has no obvious beneficial
++        uses to an adventurer. It looks like it was designed for
++        punishing a prisoner.
++
+ 	"You are fettered, " said Scrooge, trembling.  "Tell me why?"
+ 	"I wear the chain I forged in life," replied the Ghost.  "I
+ 	made it link by link, and yard by yard; I girded it on of my
+@@ -2569,6 +3016,9 @@ jackal
+ 	Jackal".
+ 		[ Funk & Wagnalls Standard Dictionary of Folklore ]
+ *jack*boot*
++        Knee-high boots that cover the entire lower leg, and thus offer
++        somewhat more protection than other types of boots.
++
+ 	A large boot extending over the knee, acting as protective
+ 	armour for the leg, worn by troopers in the 17th and 18th
+ 	centuries and later.  It is still the type of boot worn by
+@@ -2576,6 +3026,9 @@ jackal
+ 	before the advent of gum boots.  Figuratively, _to be under the
+ 	jack-boot_ is to be controlled by a brutal military regime.
+ 		[ Brewer's Concise Dictionary of Phrase and Fable ]
++jacket
++        An ordinary jacket, which could be worn as a substitute for body
++        armour but which would only give minimal levels of protection.
+ jade*
+ 	Nothing grew among the ruins of the city.  The streets were
+ 	broken and the walls of the houses had fallen, but there were
+@@ -2587,6 +3040,9 @@ jade*
+ 	that turned sightless eyes toward the north.
+ 	"The eyes!" Duke Avan Astran said.  "They're gone!"
+ 		[ The Jade Man's Eyes, by Michael Moorcock ]
++javelin
++throwing spear
++        A lighter variant of a standard spear designed for throwing.
+ jaguar
+ 	Large, flesh-eating animal of the cat family, of Central and
+ 	South America.  This feline predator (_Panthera onca_) is
+@@ -2606,7 +3062,13 @@ jubilex
+ 	he is a slime-like creature who swallows other creatures
+ 	alive, spits acidic secretions, and causes disease in his
+ 	victims which can be almost instantly fatal.
++*jumping boots
++        These minimally protective boots allow the wearer to jump
++        incredibly far in a burst of energy, letting them cross small
++        streams or jump over pits and similar traps.
+ k?ration
++        The standard-issue food for the Yendorian Army.
++
+ 	The K ration was the [ Quartermaster Subsistence Research
+ 	and Development Laboratory's ] answer to the demand for an
+ 	individual, easy-to-carry ration that could be used in
+@@ -2637,11 +3099,15 @@ kabuto
+ 	downwards into a flange that rested against the forehead.
+ 	   [ Arms & Armour of the Samurai, by Bottomley & Hopson ]
+ katana
++samurai sword
+ 	The katana is a long, single-edged samurai sword with a
+ 	slightly curved blade.  Its long handle is designed to allow
+ 	it to be wielded with either one or two hands.
+ kelp*
+ *frond
++        The leaves of a plant that grows underwater. They are edible,
++        but not particularly nutritious.
++
+ 	I noticed that all the plants were attached to the soil by
+ 	an almost imperceptible bond.  Devoid of roots, they seemed
+ 	not to require any nourishment from sand, soil, or pebble.
+@@ -2655,11 +3121,19 @@ kelp*
+ 	I had studied on the _Nautilus_ -- but the fresh, living
+ 	specimens in their native setting.
+ 		[ 20,000 Leagues Under the Sea, by Jules Verne ]
++*key
++        A small object cut into a specific irregular pattern, designed
++        to be recognised by a lock and open it.
+ ki-rin
+ 	The ki-rin is a strange-looking flying creature.  It has
+ 	scales, a mane like a lion, a tail, hooves, and a horn.  It
+ 	is brightly colored, and can usually be found flying in the
+ 	sky looking for good deeds to reward.
++*kicking boots
++        These boots have a hidden hard lining inside, allowing their
++        wearer to kick things with huge and magically-enhanced force,
++        doing substantial damage to monsters or sending objects flying a
++        surprisingly long distance.
+ king arthur
+ *arthur
+ 	Ector took both his sons to the church before which the
+@@ -2687,6 +3161,11 @@ king arthur
+ 		Emanuel Frynta, and Vackav Cibula ]
+ knife
+ stiletto
++shito
++        A small but sharp single-edged implement, more suited for
++        cutting up food than for combat, although it can be used as a
++        melee weapon or thrown by hand.
++
+ 	Possibly perceiving an expression of dubiosity on their
+ 	faces, the globetrotter went on adhering to his adventures.
+ 
+@@ -2799,7 +3278,12 @@ offler
+ 
+ 	"Come _on_," he said wearily, "Play fair."
+ 		[ The Colour of Magic, by Terry Pratchett ]
++~magic lamp
+ *lamp
++        A small container, often containing flammable liquid.
++        Lighting it causes the liquid inside to burn slowly, giving off
++        a moderately bright light for a while.
++
+ 	When he came to himself he told his mother what had passed,
+ 	and showed her the lamp and the fruits he had gathered in the
+ 	garden, which were in reality precious stones.  He then asked
+@@ -2816,6 +3300,12 @@ offler
+ 	"Fetch me something to eat!"
+ 		[ Aladdin, from The Arabian Nights, by Andrew Lang ]
+ lance
++        A long spear-like pole, designed for use when mounted. Its
++        length prevents it doing more than minimal damage against
++        adjacent enemies, except when riding, although it can always be
++        used to attack enemies slightly further away; when riding, it
++        sometimes shatters on impact.
++
+ 	With this the wind increased, and the mill sails began to turn
+ 	about; which Don Quixote espying, said, 'Although thou movest
+ 	more arms than the giant Briareus thou shalt stoop to me.'
+@@ -2830,6 +3320,10 @@ lance
+ 	evil plight.
+ 	  [ Don Quixote of La Mancha, by Miquel de Cervantes Saavedra ]
+ land mine
++        An explosive iron device. It explodes when stepped on, doing a
++        lot of damage and normally taking out a chunk of the floor it is
++        placed on. It may be disarmed.
++
+ 	Your heart is intact, your brain is not badly damaged, but the rest
+ 	of your injuries are comparable to stepping on a land mine.  You'd
+ 	never walk again, and you'd be in great pain.  You would come to
+@@ -2840,6 +3334,12 @@ land mine
+ 	battery powered.  A discreet little switch is marked "on/off"
+ 	in elaborate lettering.
+ 		[ Adventure 770, by Mike Arnautov ]
++large shield
++        A bulky shield of human manufacture, designed to be held in the
++        offhand.
++leash
++        A small noose designed to be tied around the neck of a tame
++        animal, in order to stop it running off in the wrong direction.
+ lava
+ * lava
+ 	You are on the edge of a breath-taking view.  Far below you
+@@ -2876,6 +3376,13 @@ leash
+ 	putting the Dearlys on the leash to lead them over crossings.
+ 		[ The Hundred and One Dalmatians, by Dodie Smith ]
+ lembas*
++        The elvish take on a food ration, a small but delicious wafer
++        prepared from flour and other plant byproducts, with a
++        surprisingly high energy density; one wafer can serve as a
++        complete meal. Elves prepare them to a secret recipe using
++        organic vegan ingredients. It is considerably lighter than human
++        food rations.
++
+ 	In the morning, as they were beginning to pack their slender
+ 	goods, Elves that could speak their tongue came to them and
+ 	brought them many gifts of food and clothing for their
+@@ -2906,6 +3413,10 @@ larvae
+ 	away by making a lot of noise.  Their counterparts are the
+ 	Lares, friendly and beneficent house spirits.
+ 		[ Encyclopedia Mythica, ed. M.F. Lindemans ]
++*lenses
++        Small pieces of glass designed to cover the eyes, protecting
++        them from direct physical attack and making reading slightly
++        easier.
+ leocrotta
+ leu*otta
+ 	... the leucrocotta, a wild beast of extraordinary swiftness,
+@@ -2934,6 +3445,12 @@ leprechaun
+ 	twinkling of an eye.
+ 		[ A Field Guide to the Little People
+ 		    by Nancy Arrowsmith & George Moorse ]
++*levitation boots
++        These boots are enchanted to, once worn, lift their user into
++        the air until they are removed; although this makes it easy to
++        cross water or pass most pits or holes, it makes it impossible
++        to reach the ground or go down stairs, meaning that this sort of
++        boot is rarely worn for long.
+ *lich
+ 	But on its heels ere the sunset faded, there came a second
+ 	apparition, striding with incredible strides and halting when
+@@ -2968,6 +3485,10 @@ light
+ 	Strange creatures formed from energy rather than matter,
+ 	lights are given to self-destructive behavior when battling
+ 	foes.
++light armor
++        Body armor made from a hardened lightweight material, it only
++        provides moderate protection to the body, less than pretty much
++        any sort of heavier armor.
+ gecko
+ iguana
+ lizard
+@@ -2980,6 +3501,16 @@ lizard
+ 	"wings".  Most are carnivores, feeding on invertebrate and
+ 	small vertebrate prey, but others feed on vegetation.
+ 		[ Macmillan Illustrated Animal Encyclopedia ]
++loadstone
++        This hated magical stone is not only exceedingly heavy, but has
++        a tendency to curse itself, making it impossible to drop until
++        the curse is lifted.
++lock pick
++osaku
++        A small oddly-shaped tool. Those who have some understanding of
++        the workings of a lock can use it to fool the lock into opening
++        or closing by manipulating the individual levers of the lock,
++        although this takes some time.
+ loki
+ 	Loki, or Lopt, is described in Snorri's _Edda_ as being
+ 	"pleasing and handsome in appearance, evil in character, and
+@@ -2998,9 +3529,17 @@ loki
+ *longbow of diana
+ 	This legendary bow grants ESP when carried and can reflect magical
+ 	attacks when wielded.  When invoked it provides a supply of arrows.
++long sword
++        A sword with a very long blade, and one of the best one-handed
++        melee weapons in existence.
+ # long worm -- see "worm"
+ looking glass
+ mirror
++        A sheet of glass with a chemical coating that causes it to
++        reflect an image with great clarity. Some monsters are scared of
++        their own reflections, and it can also be useful against
++        monsters that attack by gazing.
++
+ 	But as Snow White grew, she became more and more beautiful,
+ 	and by the time she was seven years old she was as beautiful
+ 	as the day and more beautiful than the queen herself.  One
+@@ -3037,6 +3576,10 @@ lord surt*
+ 	and harry, and overcome all the gods, and burn all the
+ 	world with fire.
+ 			[ The Prose Edda, by Snorri Sturluson ]
++*low boots
++*walking shoes
++        They are the most basic of footwear, and give only minimal
++        protection for the feet.
+ # if a quote for good luck gets added, make this one exclusively bad luck
+ luck
+ bad luck
+@@ -3057,6 +3600,9 @@ bad luck
+ #		 book's title in all lower case; however, its sequel,
+ #		 "the toyminator", refers to it using conventional
+ #		 capitalization in a couple of early footnotes]
++luckstone
++        This stone is enchanted to provide luck to its wearer. In
++        addition, it prevents natural luck wearing off over time.
+ lug*
+ 	Lugh, or Lug, was the sun god of the Irish Celts.  One of his
+ 	weapons was a rod-sling which worshippers sometimes saw in
+@@ -3101,6 +3647,9 @@ lynx
+ ~*sceptre of might
+ mace
+ sceptre
++        Any weapon with the basic structure of a heavy blunt weight on
++        the end of a shaft.
++
+ 	Originally a club armed with iron, and used in war; now a staff
+ 	of office pertaining to certain dignitaries, as the Speaker of
+ 	the House of Commons, Lord Mayors, Mayors etc.  Both sword and
+@@ -3108,9 +3657,37 @@ sceptre
+ 	about in armour, and sovereigns needed champions to vindicate
+ 	their rights.
+ 		[ Brewer's Concise Dictionary of Phrase and Fable ]
++magic flute
++        The beautiful magical sounds of this flute tend to make monsters
++        fall asleep, although this enchantment will only work a limited
++        number of times before requiring magical recharging. Even when
++        out of magic, it can be used to play music.
++magic harp
++        The beautiful noise of this magical harp might tame nearby
++        monsters into assisting you rather than fighting, although it
++        only has enough magic to do this a limited number of times,
++        before requiring magical recharging. Even when out of magic, it
++        can still be used to play music.
++magic lamp
++        This sort of lamp is powered by the magical aura of a bound
++        djinni, making it capable of burning forever, unless the djinni
++        inside is somehow released. It's hard to tell what its opinion
++        of its imprisonment is, or whether it would be happy to be
++        released.
+ magic marker
++        This short and wide plastic pen can be used to draw magical ink
++        onto paper; this can be one of the fastest and most convenient
++        ways to produce magical scrolls and spellbooks from ordinary
++        paper, although considerable familiarity with a scroll or
++        spellbook is needed to be certain it is written correctly. It
++        only contains a finite amount of ink, though; and cannot survive
++        having its ink supply being magically recharged more than once.
++
+ 	The pen is mightier than the sword.
+ 		[ Richelieu, by Edward Bulwer-Lytton ]
++magic whistle
++        This whistle is magical, teleporting pets next to you when used;
++        this sort of device never runs out of magic.
+ magic mirror of merlin
+ 	  [...] In Dehenbarth (that now South Wales is hight,
+ 	  What time King Ryence reigned, and dealed right)
+@@ -3242,6 +3819,9 @@ mastodon
+ 	Ages of Europe, the mattock served as an improvised shafted
+ 	weapon for the poorer classes.
+ 		[ Wikipedia, the free encyclopedia ]
++~meat ring
++~meat stick
++~meatball
+ meat*
+ huge chunk of meat
+ 	Some hae meat and canna eat,
+@@ -3249,6 +3829,15 @@ huge chunk of meat
+ 	But we hae meat, and we can eat,
+ 	Sae let the Lord be thankit.
+ 		[ Grace Before Meat, by Robert Burns ]
++meat ring
++        A small piece of meat bent into a ring, which can be eaten but
++        has only minimal nutritional content.
++meat stick
++        A very thin piece of meat, which can be eaten but has only
++        minimal nutritional content.
++meatball
++        A tiny ball of meat, delicious as a treat for people or for
++        carnivores, but with only minimal nutritional content.
+ medusa
+ perseus
+ 	Medusa, one of the three Gorgons or Graeae, is the only one
+@@ -3274,6 +3863,9 @@ perseus
+ 	middle of her Aegis.
+ 		[ Bulfinch's Mythology, by Thomas Bulfinch ]
+ melon
++        A large and substantial green fruit with a high water content,
++        which is enjoyed by both people and herbivorous animals.
++
+ 	"What is it, Umbopa, son of a fool?" I shouted in Zulu.
+ 	"It is food and water, Macumazahn," and again he waved the
+ 	green thing.
+@@ -3456,6 +4048,12 @@ monkey
+ 	we do not hunt where they hunt; we do not die where they die...."
+ 		[ The Jungle Book, by Rudyard Kipling ]
+ morning star
++morningstar
++        A club with a large spiked head, designed for use as a melee
++        weapon. It is as effective as a short sword or spear against
++        larger enemies, but even more effective against smaller enemies
++        than it is against larger ones.
++
+ 	The morning star was a medieval weapon resembling a mace, but
+ 	with a large spike on the end and smaller spikes around the
+ 	circumference.  It was also known as the goedendag (from the
+@@ -3682,6 +4280,15 @@ ogre*
+ 	meal.
+ 		[ het Boek van de Regels; Het Oog des Meesters ]
+ oilskin cloak
++slippery cloak
++        It is very waterproof, designed to protect its wearer and his or
++        her possessions from rain and splashes of water; and covers the
++        body completely. However, it is built for dryness rather than
++        for any use as armour, and gives only minimal additional
++        protection from blows. It usually fits so tightly that the
++        wearer's knapsack cannot fit into it, leaving possessions still
++        unprotected.
++
+ 	During our watches below we overhauled our clothes, and made
+ 	and mended everything for bad weather.  Each of us had made
+ 	for himself a suit of oil-cloth or tarpaulin, and these we
+@@ -3692,6 +4299,14 @@ oilskin cloak
+ 	Pacific to prepare for its other face.
+ 		[ Two Years Before the Mast, by Richard Henry Dana ]
+ oilskin sack
++        A small, light and flexible container made of cloth. Items in bags are
++        protected from many forms of item-destroying attack.  It is possible to
++        store items inside it; this saves backpack space, circumventing the
++        normal maximum number of carried items. The weight of the items inside
++        is still relevant, though. In addition, its oiled waterproof
++	surface prevents water leaking into the bag, making items stored inside the
++	bag immune to water damage.
++
+ 	Summer passed all too quickly.  On the last day of camp, Mr.
+ 	Brickle called his counselors together and paid them what he
+ 	owed them.  Louis received one hundred dollars - the first
+@@ -3728,18 +4343,9 @@ p*thia
+ 	a trance before she spoke.
+ 		[ Mythology, by Edith Hamilton ]
+ orange
+-pear
+-	What was the fruit like?  Unfortunately, no one can describe
+-	a taste.  All I can say is that, compared with those fruits,
+-	the freshest grapefruit you've ever eaten was dull, and the
+-	juiciest orange was dry, and the most melting pear was hard
+-	and woody, and the sweetest wild strawberry was sour.  And
+-	there were no seeds or stones, and no wasps.  If you had once
+-	eaten that fruit, all the nicest things in this world would
+-	taste like medicines after it.  But I can't describe it.  You
+-	can't find out what it is like unless you can get to that
+-	country and taste it for yourself.
+-		[ The Last Battle, by C.S. Lewis ]
++        An orange fruit from a tropical tree, with a tough skin and
++        succulent juicy segments inside, enjoyed by people and by
++        herbivorous animals alike.
+ *orb of detection
+ 	This Orb is a crystal ball of exceptional powers.  When
+ 	carried, it grants ESP, limits damage done by spells, and
+@@ -3791,6 +4397,56 @@ uruk*hai
+ 	hunting for them.  There is nothing a horde of orcs cannot
+ 	use.
+ 		[ het Boek van de Regels; Het Oog des Meesters ]
++orcish arrow
++crude arrow
++        The dubious quality of its manufacture betrays the low damage of
++        this arrow. Orcs are used to such arrows, though, and have a
++        better rate of fire with them when also using an orcish bow.
++orcish bow
++crude bow
++        The orcish manufacture of this bow is obvious, but it seems to
++        work just as well as more polished products; and orcish archers
++        are actually more familiar with their own awkwardly made
++        products.
++orcish chain mail
++crude chain mail
++        Its orcish construction makes it lower-quality than human-made
++        chain mail, but it still provides good protection against
++        attack.
++orcish cloak
++coarse mantelet
++        Its poor-quality orcish construction gives no additional
++        protection to the body apart from skin coverage.
++orcish dagger
++crude dagger
++        Its bad construction betrays its orcish manufacture, although it
++        is still as accurate as other daggers.
++orcish helm
++*skull cap
++        Its crude orcish manufacture provides only minimal protection
++        from damage, although it will turn aside many falling objects.
++orcish ring mail
++crude ring mail
++        The orcs who constructed it clearly don't know that much about
++        armour manufacture, and seem to have substituted quantity for
++        quality, leading to body armour that only provides moderate
++        protection.
++orcish shield
++red*eyed shield
++uruk*hai shield
++white*handed shield
++        Orcs use this sort of shield to disconcert their enemies; from a
++        distance, the brightly painted devices are all that can be seen
++        amongst their otherwise entirely blackened equipment.
++orcish short sword
++crude short sword
++        It is made to the same low standard that orcish smiths normally
++        accomplish, being slightly weaker than a human-manufactured
++        short sword.
++orcish spear
++crude spear
++        The poor-quality orcish manufacture of this spear makes it less
++        effective than a typical spear or short sword.
+ orion
+ sirius
+ 	Orion was the son of Neptune. He was a handsome giant and a
+@@ -3812,8 +4468,6 @@ sirius
+ 	club. Sirius, his dog, follows him, and the Pleiads fly
+ 	before him.
+ 		[ Bulfinch's Mythology, by Thomas Bulfinch ]
+-osaku
+-	The osaku is a small tool for picking locks.
+ owlbear
+ 	Owlbears are probably the crossbreed creation of a demented
+ 	wizard; given the lethal nature of this creation, it is quite
+@@ -3834,6 +4488,9 @@ page
+ 	Greeks called themselves _gens palliata,_ and the Romans
+ 	called themselves _gens togata._
+ 		[ Brewer's Concise Dictionary of Phrase and Fable ]
++pancake
++        A thin but tasty food made from eggs and flour, often flavoured
++        using sugar and lemon juice.
+ panther
+ 	And lo! almost where the ascent began,
+ 	A panther light and swift exceedingly,
+@@ -3858,6 +4515,17 @@ panther
+ 	Such players may use Paper to assert their superiority and dignity.
+ 		[ The Official Rock Paper Scissors Strategy Guide,
+ 			by Douglas and Graham Walker ]
++papyrus spellbook
++        A worryingly intricate book made from compressed reeds, giving
++        off a strong and palpable magical aura.
++pea whistle
++	This particular whistle is just an ordinary non-magical one, although it will
++	attract the attention of nearby monsters when used, useful to let nearby pets
++	know where you are.
++pear
++        A light green fruit, where typically both the skin and the flesh
++        is eaten. It is enjoyed as food by both people and herbivorous
++        animals.
+ pelias
+ 	Conan cried out sharply and recoiled, thrusting his companion
+ 	back.  Before them rose the great shimmering white form of Satha,
+@@ -3878,7 +4546,11 @@ pelias
+ 	soul."
+ 	    [ Conan the Usurper, by Robert E. Howard and L. Sprague de Camp ]
+ pick*ax*
+-broad pick
++        An axe whose blade is very thin but very long. Its shape means
++        that it can be used to attack rock walls as well as enemies,
++        eventually reducing them to a pile of rubble; and it is more
++        commonly used for that purpose, than in combat.
++
+ 	The mine is full of holes;
+ 	With the wound of pickaxes.
+ 	But look at the goldsmith's store.
+@@ -3919,6 +4591,14 @@ pit fiend
+ 	attacking twice with weapons as well as grabbing and crushing
+ 	the life out of those unwary enough to enter their
+ 	domains.
++plain cloak
++        A simple cloak made of light materials, designed to be worn
++        above body armour. It provides minimal protection against blows.
++plate mail
++tanko
++        A heavy suit of body armour made out of plates connected by
++        hinges, reinforced to provide incredibly good levels of
++        protection against attack.
+ platinum yendorian express card
+ 	This is an ancient artifact made of an unknown material.  It
+ 	is rectangular in shape, very thin, and inscribed with
+@@ -3944,6 +4624,10 @@ user
+ 	Might just kill you.
+ 		[ It's a Jungle Out There, by Randy Newman ]
+ #			[ theme song from "Monk" ]
++poison cloud
++gas cloud
++        Standing in and breathing the noxious fumes from this cloud is
++        very dangerous. Many monsters fare no better.
+ polearm
+ * polearm
+ partisan
+@@ -3962,6 +4646,11 @@ guisarme
+ bill-guisarme
+ lucern hammer
+ bec de corbin
++        A long pole with a bladed weapon at the end, requiring two hands
++        to hold. Its length prevents it from doing more than minimal
++        damage against adjacent enemies, but it can be used to attack
++        enemies slightly further away.
++
+ 	Many of the weapons of the Middle Ages were poled or long-shafted
+ 	arms.  Unlike the ancient spear or javelin, however, they were not
+ 	intended to be thrown.  Some were devices with simple single- or
+@@ -4019,9 +4708,12 @@ poseido*n
+ 	powerful ruler, every inch a king.
+ 	    [ The Encyclopedia of Myths and Legends of All Nations,
+ 		by Herbert Robinson and Knox Wilson ]
+-~*sleeping
+-~*booze
+-*potion*
++*potion
++        A vial or flask containing some sort of liquid, which can be
++        quaffed to cause some effect to the drinker. Sometimes, splashes
++        of liquid or fumes of vapor from a potion may cause similar
++        effects.
++
+ 	POTABLE, n.  Suitable for drinking.  Water is said to be
+ 	potable; indeed, some declare it our natural beverage,
+ 	although even they find it palatable only when suffering
+@@ -4047,6 +4739,132 @@ poseido*n
+ 		[ Big Trouble in Little China, directed by
+ 		  John Carpenter, written by Gary Goldman &
+ 		  David Z. Weinstein, adaptation by W. D. Richter ]
++potion of acid
++        The bottle contains a powerful acid, dangerous to drink;
++        allowing acids and water to mix is likewise a bad idea.
++potion of blindness
++        This potion makes its drinker unable to see; the effect will
++        wear off eventually but lasts a long time.
++potion of booze
++*sake
++        This potion bottle contains non-magical alcohol, enjoyable but
++        not particularly useful; side-effects of drinking it can include
++        slurred speech, muddled thinking, and inability to walk in a
++        straight line.
++potion of confusion
++        This potion makes its drinker confused, unable to think
++        straight, talk straight, and occasionally even unable to walk
++        straight. The effect wears off eventually, but not for a long
++        time.
++potion of enlightenment
++        Drinking this potion gives its drinker a glimpse of
++        self-knowledge that goes away almost as quickly as it comes,
++        allowing them to know exactly what abilities they have, and
++        exactly what magical effects are operating on them at the time.
++potion of extra healing
++        This potion quickly heals many of its drinker's wounds, leading
++        to a moderate amount of instant healing. Healing potions might
++        sometimes cure status problems too, depending on the problem and
++        the strength of the potion.
++potion of fruit juice
++        The bottle contains the non-magical juice squeezed from a rather
++        interesting foodstuff, marginally nutritious but not
++        particularly useful.
++potion of full healing
++        This potion quickly heals pretty much all its drinker's wounds,
++        leading to a huge amount of instant healing.  Healing potions
++        might sometimes cure status problems too, depending on the
++        problem and the strength of the potion.
++potion of gain ability
++        This magical potion permanently makes its drinker stronger, more
++        dexterous, healthier, more intelligent, wiser, or more
++        attractive.
++potion of gain energy
++        This potion contains magical energy; drinking it slightly
++        increases the amount of magical power its wearer's body can
++        store, as well as partially refilling their reservoir of power.
++potion of gain level
++        This potion contains liquid knowledge, magically and instantly
++        making its drinker more skillful, experienced, and better in
++        combat and at magic.
++potion of hallucination
++        This potion interferes with the mind and senses, giving its
++        drinker a completely warped sense of reality where they cannot
++        distinguish between monsters even as different as a dragon and
++        an ant.
++potion of healing
++        This potion quickly patches up its drinker's minor wounds,
++        leading to a relatively small amount of instant healing. Healing
++        potions might sometimes cure status problems too, depending on
++        the problem and the strength of the potion.
++potion of invisibility
++        This potion turns its drinker invisible; the invisibility field
++        extends out from the body to some extent, making their equipment
++        invisible as well. The effect is usually temporary.
++potion of levitation
++        This potion lifts its drinker into the air, allowing them to
++        float across water and over pits, but leaving them unable to
++        reach the ground or move downstairs. The effect wears off after
++        a while, which can be fatal if it happens over water.
++potion of monster detection
++        This potion alerts its drinker to the locations of monsters; the
++        ability to detect monsters has a long range, but does not work
++        upwards or downwards, only sideways.
++potion of object detection
++        The drinker of this potion gets a sudden insight as to the
++        location of all the treasure on their level, knowing what sort
++        of object is where.
++potion of oil
++        The bottle contains non-magical oil, which can be ignited to act
++        as a makeshift light source, or an even more makeshift thrown
++        weapon.
++potion of paralysis
++        Drinking this dangerous potion leaves its drinker unable to move
++        or react in any way for a while, during which time they are
++        rather vulnerable.
++potion of polymorph
++        This potion causes anyone who drinks it, or any item dipped into
++        it, to instantly change to a new form. Polymorph can be a
++        dangerous effect, often having serious side effects and
++        sometimes being even lethal to inexperienced drinkers.
++potion of restore ability
++        This potion reverses the effects of poisons that weaken the
++        body, and effects that drain its drinker's abilities, restoring
++        attributes up to their previous maximum values.
++potion of see invisible
++        This potion magically enhances its drinker's vision, allowing
++        them to see even invisible monsters. The effect is usually
++        temporary.
++potion of sickness
++        This contaminated potion is poisonous; drinking it is a bad
++        idea, although it can be used to coat some types of small
++        projectiles for use poisoning enemies.
++potion of sleeping
++        This potion instantly causes its drinker to fall asleep. They
++        wake naturally after a while, or might wake due to noise,
++        injury, or other similar reasons.
++
++	On waking, he found himself on the green knoll whence he had
++	first seen the old man of the glen.  He rubbed his eyes -- it
++	was a bright sunny morning.  The birds were hopping and
++	twittering among the bushes, and the eagle was wheeling aloft,
++	and breasting the pure mountain breeze.  "Surely," thought Rip,
++	"I have not slept here all night."  He recalled the occurrences
++	before he fell asleep.  The strange man with a keg of liquor --
++	the mountain ravine -- the wild retreat among the rocks -- the
++	woe-begone party at ninepins -- the flagon -- "Oh! that flagon!
++	that wicked flagon!" thought Rip -- "what excuse shall I make
++	to Dame Van Winkle!"
++		[ Rip Van Winkle, a Posthumous Writing
++		  of Diedrich Knickerbocker, by Washington Irving ]
++potion of speed
++        This potion temporarily makes its drinker move and act
++        considerably faster than a normal person would; it is as good as
++        or better than all other sources of magically fast movement.
++potion of water
++        The water it contains is mostly only useful for getting things
++        wet, but a holy or unholy aura can be transferred from water
++        onto objects dipped into it.
+ pray*
+ 	Whatever a man prays for, he prays for a miracle.  Every
+ 	prayer reduces itself to this:  Great God, grant that twice
+@@ -4245,10 +5063,7 @@ raven
+ 	On the morrow *he* will leave me, as my hopes have flown before.'
+ 		Then the bird said, 'Nevermore.'
+ 				[ The Raven, by Edgar Allan Poe ]
+-~*invisibility
+-ring
+-* ring
+-ring of *
++*ring
+ 	Three Rings for the Elven-kings under the sky,
+ 	Seven for the Dwarf-lords in their halls of stone,
+ 	Nine for Mortal Men doomed to die,
+@@ -4258,7 +5073,53 @@ ring of *
+ 	One Ring to bring them all and in the darkness bind them
+ 	In the Land of Mordor where the Shadows lie.
+ 		[ The Fellowship of the Ring, by J.R.R. Tolkien ]
++ring of adornment
++        It adjusts its wearer's status in the eyes of others, making
++        them more charismatic the more highly enchanted it is.
++ring of aggravate monster
++        It annoys nearby monsters, making hostile monsters more likely
++        to notice the wearer's presence, and even tame monsters less
++        willing to forgive maltreatment.
++ring of carrying
++        It causes the wearer's pack to feel lighter, allowing them to
++        carry more weight before feeling encumbered; the amount of extra
++        support it provides increases the more highly enchanted it is.
++ring of cold resistance
++        It protects its wearer (and their equipment) almost perfectly
++        from the effects of cold and low temperatures.
++ring of conflict
++        It angers creatures near one who wears it, making them attack
++        anything and everything in a furious rage, even creatures that
++        they would normally never dream of attacking; thus, it might be
++        a useful distraction, but might also cause otherwise peaceful
++        monsters to turn on its wearer. Some monsters may resist the
++        effect, at least some of the time.
++ring of fire resistance
++        It protects its wearer (and their equipment) almost perfectly
++        from the effects of fire and flame.
++ring of free action
++        It protects its wearer almost perfectly from effects that would
++        paralyse them and prevent them acting.
++ring of gain constitution
++        It adjusts its wearer's constitution, making them healthier the
++        more highly enchanted it is.
++ring of gain strength
++        It adjusts its wearer's strength, making them beefier the more
++        highly enchanted it is.
++ring of hunger
++        It is flawed in its manufacture, taking a large amount of
++        nutrition from its wearer's body to power itself, but failing to
++        give any benefit.
++ring of increase accuracy
++        It adjusts its wearer's aim, making them more accurate the more
++        highly enchanted it is.
++ring of increase damage
++        It adjusts its wearer's force in combat, making their attacks
++        more deadly the more highly enchanted it is.
+ ring of invisibility
++        While worn, it hides its wearer and their equipment from view,
++        making them impossible to see without magical aid.
++
+ 	"When time came for the shepherds to hold their customary
+ 	assembly in order to prepare their monthly report to the king
+ 	about the state of the flocks, he came too, wearing this ring.
+@@ -4277,7 +5138,88 @@ ring of invisibility
+ 	he laid a hand on the king, murdered him and took hold of the
+ 	leadership."
+ 		[ The Republic, by Plato, translated by James Adam ]
++ring of levitation
++        It lifts its wearer high into the air, making them capable of
++        floating over pits and water, but unable to reach the ground to
++        pick up items or to go down stairs.
++ring of poison resistance
++        It completely protects its wearer from the effects of most
++        poisons, including poisonous food, but not food mouldy with age;
++        food poisoning is actually a sort of illness.
++ring of polymorph
++        It is powered by uncontrolled wild magic, occasionally randomly
++        turning the wearer into a different type of creature, which
++        could be very similar or very different. Radical changes will
++        wear off over time, or automatically change back if the new form
++        is fatally injured; slight changes (to a different member of the
++        same race), though, will be permanent. The shock of the repeated
++        changes can sometimes kill inexperienced wearers, so this ring
++        can be risky to use.
++ring of polymorph control
++        It allows its wearer some degree of control over effects that
++        would change their form, allowing them to select what sort of
++        new form to change into with a very good chance of success.
++ring of protection
++        It adjusts its wearer's resistance to blows, making it harder to
++        injure them the more highly enchanted it is.
++ring of protection from shape changers
++        While worn, it forces nearby shape-changing monsters into their
++        natural form, making them incapable of shifting into more
++        dangerous forms or hiding from the wearer disguised as something
++        else.
++ring of regeneration
++        It causes its wearer to heal more quickly, although it takes
++        more than the usual amount of food energy from its wearer to
++        power it.
++ring of searching
++        It sometimes warns the wearer about nearby traps or secret
++        doors, working as well as if the wearer were stopping every turn
++        to search the surrounding area, but without the need for the
++        wearer to actually stop and search.
++ring of shock resistance
++        It protects its wearer (and their equipment) almost perfectly
++        from the effects of electricity and lightning.
++ring of slow digestion
++        It provides its wearer with enough energy that they need
++        metabolise no food themselves, although the wearer's food
++        supplies are still needed to power the rings and amulets they
++        wear, and even this ring itself takes a bit of food to power its
++        own effect, so occasional eating is still necessary.
++ring of stealth
++        It reduces the noise made by its wearer's movements, allowing
++        them to slip past sleeping monsters without waking them up.
++ring of sustain ability
++        It protects its wearer's abilities from changes, making them
++        basically impossible to change; although useful to prevent
++        abilities being drained, it unfortunately also prevents them
++        improving naturally.
++ring of teleport control
++        It allows the wearer to control where otherwise random
++        teleportation effects would cause them to land, or choose to
++        avoid teleporting entirely, although it grants no ability by
++        itself to cause teleports to happen.
++ring of teleportation
++        It randomly teleports its wearer every now and then; some
++        particularly experienced, and maybe magically gifted, wearers
++        will be able to control when it teleports, but other wearers
++        will just have to live with the whims of the uncontrolled wild
++        magic that powers the ring. Additional magic is required to be
++        able to choose the targets of the teleports.
++ring of warning
++        It warns the wearer of the existence of potentially dangerous
++        enemies nearby that they cannot otherwise sense, giving a rough
++        estimate of how dangerous a threat each one is.
++ring mail
++        A flexible shirt made by linking together many hard rings, in
++        a similar way as is used to make chain mail, but with larger
++        rings and thus lower quality. It provides moderately good
++        protection to the body, almost as good as scale mail.
+ robe
++        A heavy robe, designed to be worn as a cloak above body armour.
++        It helps its wearer focus on spellcasting, making spells less
++        likely to go wrong; and even provides a moderate amount of
++        protection to the body.
++
+ 	Robes are the only garments, apart from Shirts, ever to have
+ 	sleeves.  They have three uses:
+ 	1.  As the official uniform of Priests, Priestesses, Monks,
+@@ -4290,6 +5232,12 @@ robe
+ 	3.  As the garb of Desert Nomads.  [...]
+ 	    [ The Tough Guide to Fantasyland, by Diana Wynne Jones ]
+ rock
++rock stone
++        This common brownish stone is just a lump of rock, and not
++        particularly useful; it might serve as sling ammunition or as a
++        projectile in emergencies, although would not be particularly
++        effective for either purpose.
++
+ 	Bilbo saw that the moment had come when he must do something.
+ 	He could not get up at the brutes and he had nothing to shoot
+ 	with; but looking about he saw that in this place there were
+@@ -4350,6 +5298,10 @@ rothe
+ 	an aversion to light.  It prefers to live underground near
+ 	lichen and moss.
+ *royal jelly
++        Food produced by bees to feed baby bee princesses, designed to
++        make them grow up into a queen bee. Eating it helps its eater
++        grow stronger and even provides some small degree of healing.
++
+ 	"'Royal Jelly,'" he read aloud, "'must be a substance of
+ 	tremendous nourishing power, for on this diet alone, the
+ 	honey-bee larva increases in weight fifteen hundred times in
+@@ -4364,6 +5316,10 @@ rothe
+ 	seven and a half pounds to start off with would increase in
+ 	weight to five tons!"
+ 		[ Royal Jelly, by Roald Dahl ]
++rubber hose
++        This moderate length of plastic can be used as a makeshift whip
++        for bludgeoning enemies in melee, though it is quite a poor
++        weapon.
+ ruby
+ sapphire
+ 	_Corundum._  Mineral, aluminum oxide, Al2O3.  The clear
+@@ -4373,6 +5329,8 @@ sapphire
+ 	adamantine luster. ... The chief corundum gems are the ruby
+ 	(red) and the sapphire (blue).
+ 		[ The Columbia Encyclopedia, Sixth Edition ]
++runesword
++        This sword has an alien appearance.
+ rust monster
+ 	These strange creatures live on a diet of metals.  They can
+ 	turn a suit of armour into so much useless rusted scrap in no
+@@ -4383,7 +5341,10 @@ rust monster or disenchanter
+ 	work out of degrading adventurers' combat equipment.
+ *saber
+ *sabre
+-	Flashed all their sabres bare,
++        A melee weapon with a moderately long curved slashing blade,
++        similar to a short sword but with a different weight balance.
++
++        Flashed all their sabres bare,
+ 	Flashed as they turned in air,
+ 	Sab'ring the gunners there,
+ 	Charging an army, while
+@@ -4397,7 +5358,17 @@ rust monster or disenchanter
+ 	Not the six hundred.
+ 		[ The Charge of the Light Brigade,
+ 		  by Alfred, Lord Tennyson ]
++sack
++        A small, light and flexible container made of cloth. Items in bags are
++        protected from many forms of item-destroying attack.  It is possible to
++        store items inside it; this saves backpack space, circumventing the
++        normal maximum number of carried items. The weight of the items inside
++        is still relevant, though.
+ saddle
++        A leather seat designed to fit on the back of a horse, or
++        similarly-shaped animal. Sufficiently friendly horses may let
++        you ride them if first saddled.
++
+ 	The horseman serves the horse,
+ 	The neat-herd serves the neat,
+ 	The merchant serves the purse,
+@@ -4407,8 +5378,6 @@ saddle
+ 	Things are in the saddle,
+ 	And ride mankind.
+ 		[ Ode, by Ralph Waldo Emerson ]
+-sake
+-	Japanese rice wine.
+ salamander
+ 	For hundreds of years, many people believed that salamanders
+ 	were magical.  In England in the Middle Ages, people thought
+@@ -4481,12 +5450,22 @@ sasquatch
+ 	a Sasquatch -- not Burns's giant Indian, but the hairy apelike
+ 	creature that we have all come to know.
+ 		[ The Encyclopedia of Monsters, by Daniel Cohen ]
++scale mail
++        Armour made from many small scales, overlapping to form
++        a flexible pattern, and providing good protection against
++        attack; this alternative construction to a chain-based
++        construction is slightly weaker than high-quality chain mail but
++        better than ring mail.
+ scalpel
+ 	A scalpel is a very sharp knife used for surgery ... Merely
+ 	touching a medical scalpel with bare hands to test it will
+ 	cut through the skin. ... Medical scalpel blades are gradually
+ 	curved for greater precision when cutting through tissue.
+ 		[ Wikipedia, the free encyclopedia ]
++scimitar
++curved sword
++        It is slightly better than a typical short sword, and is a
++        favored weapon of orcish creatures.
+ *sceptre of might
+ 	This mace was created aeons ago in some unknown cave,
+ 	and has been passed down from generation to generation of
+@@ -4514,7 +5493,10 @@ scorpius
+ 	As Scorpius rises in the east, Orion sets in the west.
+ 		[ 365 Starry Nights, by Chet Raymo ]
+ *scroll
+-scroll *
++scroll labeled *
++        A rolled up piece of paper with magical writing on it; the only
++        clue to its purpose is the label written on one side.
++
+ 	And I was gazing on the surges prone,
+ 	With many a scalding tear and many a groan,
+ 	When at my feet emerg'd an old man's hand,
+@@ -4533,6 +5515,102 @@ scroll *
+ 	I read these words, and read again, and tried
+ 	My eyes against the heavens, and read again.
+ 		[ Endymion, by John Keats ]
++scroll of blank paper
++unlabeled scroll
++        Its complete lack of enchantment makes it relatively useless,
++        except for writing on.
++scroll of charging
++        When read, it refills an item of its user's choice, with either
++        fuel or magical energy (depending on what that item requires to
++        function). Repeatedly charging and discharging an item tends to
++        put quite a strain on it; some items that are charged too many
++        times may break or explode.
++scroll of confuse monster
++        When read, it makes its reader's hands glow; subsequently
++        touching a monster with the glowing hands causes it to become
++        confused.
++scroll of create monster
++        When read, it magically creates a monster (or possibly several
++        monsters) from nothing. The resulting monsters may not be
++        friendly.
++scroll of destroy armor
++        When read, it destroys a piece of armor worn by its reader. It's
++        not entirely clear why this scroll was invented in the first
++        place; the leading theory is that some wizard used it as an
++        ingenious practical joke.
++scroll of earth
++        When read, it causes boulders to fall from the ceiling, around
++        and/or above its reader.
++scroll of enchant armor
++        When read, it magically enhances a random piece of armor worn by
++        its reader to become more protective. Beware; enchanting armor
++        too far may destroy it.
++scroll of enchant weapon
++        It magically enhances weapons held in its reader's hands to be
++        more accurate and more damaging. Note that there is a limit to
++        how much enchantment weapons will stand; enchanting weapons too
++        far may destroy them.
++scroll of fire
++        This rather dangerous scroll explodes in a ball of fire when
++        read; as its reader tends to be at the center of the blast,
++        reading it can be rather unwise. In certain circumstances, the
++        fireball can instead be targeted a short distance away.
++scroll of food detection
++        When read, this scroll informs its reader of the locations of
++        everything edible on the current level. Note that just because
++        it is possible to eat something, that does not necessarily mean
++        that it is safe to eat.
++scroll of genocide
++        When read, this feared and dreaded scroll permanently and
++        irreversibly erases a chosen type of monster from existence,
++        such that from then on it exists only as a memory. Many powerful
++        species of monster are under divine protection, and thus unable
++        to be chosen.
++scroll of gold detection
++        Loved by the greedy, this scroll pinpoints the location of all
++        the gold on the current level when read.
++scroll of identify
++        When read, this highly useful scroll informs its reader as to
++        the exact purpose and enchantment of a chosen item (or possibly
++        more than one item) in their inventory.
++scroll of light
++        Reading it causes the nearby area to permanently glow with
++        magical light.
++scroll of magic mapping
++        Reading the words on this scroll gives their reader a mental
++        image of a map of the current level; some levels are either
++        magically protected from mapping, or too bizarre to successfully
++        map, but in most cases the scroll will work correctly.
++scroll of mail
++stamped scroll
++	It contains a message from beyond the dungeon.
++scroll of punishment
++        Reading it attracts punishments from the gods; an incautious
++        reader can end up chained to a heavy iron ball.
++scroll of remove curse
++        It lifts curses from its reader's equipment, or maybe even all
++        of their belongings if it is first empowered with a holy aura.
++scroll of scare monster
++        Most monsters cannot bear to hear the words on this scroll
++        spoken aloud, nor bear to read such a scroll lying on the
++        ground, and will flee from it. Such scrolls tend to be fragile
++        and will not survive being repeatedly lifted and dropped.
++scroll of stinking cloud
++        When read, it creates a large cloud of poison gas nearby; its
++        reader can choose where it is located, and although it must be
++        relatively near, it can be placed so that its reader is not
++        caught in the blast.
++scroll of taming
++        The words on this scroll try to magically influence the minds of
++        nearby monsters when read out loud, trying to make them change
++        sides and cooperate with their reader. The success rate is far
++        from perfect, though.
++scroll of teleportation
++        Reading it instantly transports the wearer to a different
++        location. Often the teleportation will be to somewhere random,
++        but it might be possible to influence the destination with
++        independent magic, or by having the scroll empowered with a holy
++        aura.
+ set
+ seth
+ 	The ancient Egyptian god of chaos (Set), the embodiment of
+@@ -4579,8 +5657,11 @@ shark
+ 	that no other creature in nature could make -- a bomb from
+ 	the depths.
+ 		[ Close to Shore, by Michael Capuzzo ]
+-shito
+-	A Japanese stabbing knife.
++shield of reflection
++polished shield
++        Its highly polished surface makes it work as a mirror,
++        reflecting most visible ray and gaze attacks back at the monster
++        that used them.
+ shopkeeper
+ 	There have been three general theories put forward to explain
+ 	the phenomenon of the wandering shops or, as they are
+@@ -4614,8 +5695,11 @@ shrieker
+ 	its fetid bulk looming overhead... The monster was some kind of
+ 	great dark worm, but that was about all they were sure of.
+ 		[ The Adventurers, Epic IV, by Thomas A. Miller ]
+-throwing star
+ shuriken
++throwing star
++        This weapon, manufactured by dishonourable samurai and ninja,
++        can be deadly. It sometimes breaks on impact.
++
+ 	You know, that's what I hate most about fighting against magic:
+ 	you never know what they're trying to do to you until it hits.
+ 	The sorceress knew what hit her, however.  Two of the shuriken
+@@ -4653,6 +5737,9 @@ slasher
+ 	On my grave, as now my bed.
+ 		[ Religio Medici, by Sir Thomas Browne ]
+ slime mold
++        A strange but surprisingly tasty foodstuff. It is also
++        surprisingly nutritious.
++
+ 	Science fiction did not invent the slime molds, but it has
+ 	borrowed from them in using the idea of sheets of liquid, flowing
+ 	cytoplasm engulfing and dissolving every living thing they touch.
+@@ -4662,6 +5749,14 @@ slime mold
+ 	enough.
+ 		[ Encyclopaedia Britannica, 1977 ]
+ sling
++        A folded piece of cloth, which can be whirled around the head
++        and then released in order to shoot a rock, stone or gemstone
++        with great force; bashing monsters with a sling does not do much
++        damage. The best stones to use with a sling are flint stones,
++        which do as much damage as a short sword (but without a bonus
++        against larger monsters); other rocks and gems will do slightly
++        less damage than a dagger would.
++
+ 	And it came to pass, when the Philistine arose, and came and
+ 	drew nigh to meet David, that David hasted, and ran toward
+ 	the army to meet the Philistine.
+@@ -4673,6 +5768,9 @@ sling
+ 	a stone, and smote the Philistine, and slew him; but there
+ 	was no sword in the hand of David.
+ 		[ 1 Samuel 17:48-50 ]
++small shield
++        A small wooden shield, designed to be held in the offhand; it
++        sometimes deflects attacks.
+ *snake
+ serpent
+ water moccasin
+@@ -4735,6 +5833,9 @@ captain
+ 	so is considered a wise thing.
+ *spear
+ javelin
++        A moderately long pointed piece of iron, which can be thrown by
++        hand or used as a melee weapon.
++
+ 	- they come together with great random, and a spear is brast,
+ 	and one party brake his shield and the other one goes down,
+ 	horse and man, over his horse-tail and brake his neck, and
+@@ -4753,7 +5854,13 @@ javelin
+ 	fireman brake his neck!'  Why, that ain't a picture!
+ 		[ A Connecticut Yankee in King Arthur's Court,
+ 		    by Mark Twain ]
+-*spellbook*
++*speed boots
++        Whilst wearing these boots, the wearer thinks, acts, and moves
++        much faster, allowing them to attempt more attacks in the same
++        space of time, or outrun many enemies; the boots even benefit
++        wearers who are naturally quick on their feet, although not by
++        as much as they would benefit slower wearers.
++*spellbook
+ 	The Book of Three lay closed on the table.  Taran had never
+ 	been allowed to read the volume for himself; now he was sure
+ 	it held more than Dallben chose to tell him.  In the sun-
+@@ -4770,9 +5877,200 @@ javelin
+ 	hands," he advised.  "Otherwise, I shouldn't be surprised if
+ 	they blistered."
+ 		[ The Book of Three, by Lloyd Alexander ]
++spellbook*blank paper
++plain spellbook
++        Reading it is not particularly useful; the only sensible use for
++        such a book is to write something on its blank pages.
++spell*cancellation
++        This powerful spell completely removes magical effects or
++        abilities from items or monsters in a chosen direction. Many
++        monsters are capable of resisting such effects, though, at least
++        some of the time.
++spell*cause fear
++        This spell causes monsters to want to run away rather than
++        fight. It is not infallible, though.
++spell*charm monster
++        This spell makes nearby monsters friendly to the caster,
++        although not with a perfect chance of success. It is more likely
++        to work with more powerful casters and with less magic-resistant
++        monsters. If it does work, the effect is permanent unless
++        something is done to abuse the affected monsters.
++spell*clairvoyance
++        This spell maps a small area around the caster, showing what the
++        local terrain is like.
++spell*cone of cold
++        This spell shoots a ray of frost in a chosen direction; more
++        skilled casters will instead create a freezing explosion at a
++        certain nearby location.
++spell*confuse monster
++        This spell causes its caster's hands to glow red, imbuing them
++        with an energy that will confuse the next (or next several)
++        monsters they touch with the glowing hands.
++spell*create familiar
++        This powerful spell, developed by the same mages who originally
++        developed "create monster", creates a tame monster to serve as
++        the caster's pet. For some reason, it often creates common
++        domestic animals, although more often than not it will create a
++        monster common in the local environment instead.
++spell*create monster
++        This spell creates a monster, or possibly several monsters,
++        nearby; unfortunately, the research behind the spell is
++        incomplete, meaning that the resulting monsters are typically
++        hostile, and attack the caster who created them, although
++        peaceful creatures are created on occasion.
++spell*cure blindness
++        This spell instantly cures all forms of blindness that might be
++        affecting its caster, although it cannot remove a blindfold or
++        similar piece of equipment that might prevent sight.
++spell*cure sickness
++        This spell instantly cures all forms of sickness and illness
++        affecting its caster.
++spell*detect food
++        This spell alerts its caster to the locations and identities of
++        nearby items of food.
++spell*detect monsters
++        This spell alerts its caster to the locations and identities of
++        monsters on the current level. Although for most casters such an
++        insight only lasts an instant, skilled casters can prolong the
++        spell to last considerably longer.
++spell*detect treasure
++        This spell reveals the locations of items on the current level,
++        and even some clues as to their identities.
++spell*detect unseen
++        This spell reveals the existence of secret, hidden or invisible
++        monsters or terrain nearby.
++spell*dig
++        This spell fires a magical ray that is harmless to creatures,
++        but which destroys walls easily, leaving behind a tunnel large
++        enough to walk in.
++spell*drain life
++        The dark energy of this spell (which can be aimed in a chosen
++        direction) drains away some of the life energy of a creature it
++        hits, or maybe some of the magical energy of an object,
++        weakening it. However, it can be resisted, and does not affect
++        creatures that are not alive.
++spell*extra healing
++        This extra-powerful healing spell, about twice as powerful as a
++        basic healing spell, cures wounds suffered by the caster, or by
++        a monster in a chosen direction.
++spell*finger of death
++        This dreaded spell shoots a ray of pure radiative energy that
++        instantly kills anything it hits; the only protections against
++        it are dodging the ray, absorbing it with certain types of
++        magical protection, and being dead already (or at least
++        non-alive). If an unwise caster aims this spell at him or
++        herself, not even magical protection will help.
++spell*fireball
++        This spell shoots a ray of flame in a chosen direction; more
++        skilled casters will instead create a fiery explosion at a
++        chosen nearby location.
++spell*force bolt
++        This basic attack spell shoots a small discontinuity of force in
++        a chosen direction; it is moderately good at attacking
++        creatures, but particularly
++	destructive against many sorts of inanimate objects.
++spell*haste self
++        This spell invigorates its caster's movements, making them move
++        and act much more quickly than normal for a while.
++spell*healing
++        This is a simple healing spell, which can cure small wounds to
++        some extent.  Its caster can either use it to heal him or
++        herself, or shoot it in a chosen direction to heal another
++        creature.
++spell*invisibility
++        This spell turns its caster temporarily invisible, meaning that
++        they can be seen only by monsters with some other method of
++        detecting their location. The effect wears off after a while.
++spell*jumping
++        This spell allows its caster to immediately once make a
++        surprisingly long jump, landing a long distance away; it can
++        lead to very fast movement, as the jumps take a comparable
++        length of time to ordinary movement.
++spell*knock
++        This spell magically and instantly unlocks locks, fastenings and
++        similar restraints in a chosen direction, allowing a person (or
++        maybe just gravity) to easily open whatever was being locked or
++        fastened.
++spell*levitation
++        This spell causes its caster to float in midair, unable to reach
++        the ground, which can be useful for avoiding ground-based
++        hazards. Unfortunately, it takes substantial skill to
++        subsequently be able to determine how long the spell lasts, with
++        only skilled casters being able to guarantee it lasts more than
++        a few turns, and end it when they want; less skilled casters are
++        stuck in midair until the effect ends, which might be almost
++        immediately or not for a long time.
++spell*light
++        This spell causes the surrounding area to permanently shine with
++        magical light, revealing anything that might be trying to hide
++        under the cover of darkness.
++spell*magic mapping
++        This spell gives its caster a mental image of a map of the
++        current level; note that some areas may be either magically
++        warded against mapping, or just too bizarre to be able to map
++        like that.
++spell*magic missile
++        This spell shoots a ray made out of bullets of magical energy in
++        a chosen direction. More experienced casters will do
++        substantially more damage with this spell.
++spell*polymorph
++        This spell, which can be cast to affect the caster or objects or
++        monsters in a chosen direction, causes random changes to their
++        form; neither objects nor creatures always survive such changes,
++        and anything might resist this rather unpredictable spell.
++spell*protection
++        This spell summons a golden haze around its caster, which can
++        sometimes turn aside attacks, making them harder to hit in
++        combat. The effect wears off relatively quickly, though.
++spell*remove curse
++        This spell lifts the effects of curses from its caster's
++        equipment; for more skilled casters, it can even affect the rest
++        of their inventory.
++spell*restore ability
++        This spell recovers damage to its caster's abilities, that may
++        have been suffered due to things like poison. Less skilled
++        casters may need to cast it multiple times to fully restore all
++        such damage.
++spell*sleep
++        This spell shoots a ray of sleep energy in a chosen direction,
++        making monsters hit by it tend to fall asleep. Many monsters may
++        resist, though, and some (especially those which do not sleep
++        naturally) are immune to it.
++spell*slow monster
++        This spell slows, or permanently dispels effects which speed, a
++        monster in a chosen direction. It cannot affect items that speed
++        creatures up, though.
++spell*stone to flesh
++        This spell turns rock in a chosen direction into meat; it can be
++        used to reverse the effects of being turned to stone, or just as
++        a way to make random rocks edible. Walls are too large to be
++        affected by such a spell, and must be chopped into smaller
++        pieces first.
++spell*teleport away
++        This spell causes the caster, or a monster or object in a chosen
++        direction, to be randomly moved elsewhere on the same level;
++        although this spell itself has no way to control which location,
++        other magic may be able to control such random teleportation.
++spell*turn undead
++        This spell, developed for combating the walking dead, scares and
++        damages such monsters in a chosen direction using an imposing
++        beam of life energy. This sort of magic has been known to have
++        side effects on certain objects which were once living.
++spell*wizard lock
++        This spell ensures that a chest, large box or doorway in a
++        chosen direction is closed and locked; it will repair or create
++        a door and/or a lock, if necessary, to achieve this.
++splint mail
++        A suit of body armour made out of vertical strips riveted
++        together, providing extremely good protection against attack,
++        almost as good as plate mail.
++sprig of wolfsbane
++        A magical herb that is used for defence against werecreatures;
++        eating wolfsbane is one of the few known cures for lycanthropy.
++        It is a vegetable, and can be eaten as food, but it is not
++        particularly nutritious.
+ *spider
+ 	Eight legged creature capable of spinning webs to trap prey.
+-		[]
+ 
+ 	"You mean you eat flies?" gasped Wilbur.
+ 	"Certainly.  Flies, bugs, grasshoppers, choice beetles,
+@@ -4863,6 +6161,13 @@ statue*
+ 	the lion's back and the top of its head were covered with
+ 	snow.  Of course it must be only a statue!
+ 		[ The Lion, the Witch and the Wardrobe by C.S. Lewis ]
++stethoscope
++        A device that amplifies sounds coming from a particular area; it
++        is very quick to use (being usable at the same time as any other
++        action without taking more time than the other action would take
++        by itself), and can be used to gain an idea of the health of a
++        monster, or to try to ascertain whether or not terrain is not
++        what it seems.
+ sting
+ 	There was the usual dim grey light of the forest-day about
+ 	him when he came to his senses.  The spider lay dead beside
+@@ -4912,6 +6217,10 @@ straw golem
+ 	figure was raised above the stalks of corn by means of the
+ 	pole stuck up its back.
+ 		[ The Wonderful Wizard of Oz, by L. Frank Baum ]
++studded armor
++        Armour made from a hardened lightweight material, with a huge
++        number of small studs embedded in it to turn aside weapons. It
++        provides moderately good protection to the body.
+ sunsword
+ 	What you seek is a blade of light,
+ 	a weapon for vengeance.
+@@ -4924,8 +6233,15 @@ susano*o
+ 	material world.  He has been expelled from heaven and taken
+ 	up residence on earth.
+ 		[ Encyclopedia of Gods, by Michael Jordan ]
+-tanko
+-	Samurai plate armor of the Yamato period (AD 300 - 710).
++t-shirt
++        A cloth shirt with an allegedly witty slogan written on it,
++        fitting tightly enough to be worn underneath other sorts of
++        armour, although providing no protection to the body unless
++        magically enchanted.
++tallow candle
++        It is of rather low quality, made from congealed grease, and
++        thus will not be able to burn for a very long time, about half
++        as long as a higher-quality wax candle would.
+ tengu
+ 	The tengu was the most troublesome creature of Japanese
+ 	legend.  Part bird and part man, with red beak for a nose
+@@ -4934,6 +6250,16 @@ tengu
+ 	belligerent tengu were supposed to have been man's first
+ 	instructors in the use of arms.
+ 	  [ Mythical Beasts, by Deirdre Headon (The Leprechaun Library) ]
++thiefstone
++        This capricious stone appears to be a plain gray rock at first
++        glance, but it carries a curse that makes it steal magical items
++        away from anyone who might try to reach for or carry it. The
++        items are magically teleported, from anywhere in the dungeon, to
++        the thiefstone's secret stash.  Finding a storage container in
++        an unusual location might indicate that a nearby thiefstone has
++        made its stash there. It is rumored that if one can break the
++        curse on the thiefstone, it will become much more docile, and
++        will only teleport what its owner wants it to.
+ thoth
+ 	The Egyptian god of the moon and wisdom, Thoth is the patron
+ 	deity of scribes and of knowledge, including scientific,
+@@ -5002,7 +6328,13 @@ tiger
+ 		[ The Tyger, by William Blake ]
+ tin
+ tin of *
+-tinning kit
++        A metal container designed to stop the food inside it spoiling.
++        Unfortunately, there's no obvious way to open it, except bashing
++        it with a weapon until it breaks. Some bladed weapons can open
++        tins more easily.  Many tins have labels, but the label is not
++        always correct, so the only way to be sure is to open the tin to
++        determine its contents (after which it spoils immediately).
++
+ 	"You know salmon, Sarge," said Nobby.
+ 	"It is a fish of which I am aware, yes."
+ 	"You know they sell kind of slices of it in tins..."
+@@ -5032,6 +6364,12 @@ tin opener
+ 	And the rock opened.
+ 	And inside the rock was Alphabetti spaghetti in tomato sauce.
+ 		[ Red Dwarf, by Rob Grant and Doug Naylor ]
++tinning kit
++        This device allows pieces of corpses to be placed into tins,
++        preventing them rotting or spoiling and preserving them for
++        later use. It comes with material for a large but finite number
++        of tins; deep in a dungeon, the only plausible way to restore it
++        is via magic.
+ titan
+ 	Gaea, mother earth, arose from the Chaos and gave birth to
+ 	Uranus, heaven, who became her consort.  Uranus hated all
+@@ -5044,6 +6382,9 @@ titan
+ 	son, Zeus, and he and his fellow titans were ousted from
+ 	Mount Olympus.
+ 		[ Greek Mythology, by Richard Patrick ]
++tooled horn
++        Although this horn is non-magical, its dramatic noise might
++        sometimes scare nearby monsters into running away.
+ topaz
+ 	Aluminum silicate mineral with either hydroxyl radicals or
+ 	fluorine, Al2SiO4(F,OH)2, used as a gem.  It is commonly
+@@ -5056,6 +6397,12 @@ topaz
+ 	metamorphic rocks, e.g., gneisses and schists.
+ 		[ The Columbia Encyclopedia, Sixth Edition ]
+ touch*stone
++        This rock is useful in identifying gems, reacting differently
++        according to what is rubbed on it. Gnomes and archaeologists are
++        skilled with the use of these devices, and can determine a lot
++        about the gem in question; but even an amateur will be able to
++        distinguish fakes from genuine gemstones.
++
+ 	"Gold is tried by a touchstone, men by gold."
+ 		[ Chilon (c. 560 BC) ]
+ tourist
+@@ -5081,6 +6428,11 @@ tourist
+ towel
+ wet towel
+ moist towel
++        This useful piece of cloth is designed to wipe water off wet
++        objects, but has numerous other uses; for instance, it can be
++        used to clean dirty hands and faces, or wrapped around the head
++        to block out light.
++
+ 	The Hitchhiker's Guide to the Galaxy has a few things to say
+ 	on the subject of towels.
+ 	A towel, it says, is about the most massively useful thing
+@@ -5140,8 +6492,17 @@ tree
+ 	Poems are made by fools like me,
+ 	But only God can make a tree.
+ 		[ Trees, by Joyce Kilmer ]
++trident
++        A spear modified to have three points rather than the usual one,
++        making it more effective than a normal spear, and especially so
++        against monsters that live in water.  It can be thrown by hand
++        or used as a melee weapon.
+ tripe
+ tripe ration
++        The stomach of an animal, still full of undigested food.
++        Although humans and other civilized races find this disgusting,
++        meat-eating pets consider this one of the best treats available.
++
+ 	If you start from scratch, cooking tripe is a long-drawn-out
+ 	affair.  Fresh whole tripe calls for a minimum of 12 hours of
+ 	cooking, some time-honored recipes demanding as much as 24.
+@@ -5176,6 +6537,7 @@ tripe ration
+ 	creature it is wielded against, instantly killing them.
+ ~*muramasa
+ tsurugi
++long samurai sword
+ 	The tsurugi, also known as the long samurai sword, is an
+ 	extremely sharp, two-handed blade favored by the samurai.
+ 	It is made of hardened steel, and is manufactured using a
+@@ -5194,6 +6556,10 @@ turquoise*
+ 	turquoise; I had it of Leah when I was a bachelor; I would
+ 	not have given it for a wilderness of monkeys.
+ 		[ The Merchant of Venice, by William Shakespeare ]
++two-handed sword
++greatsword
++        A huge sword that requires two hands even to lift. It deals
++        devastating amounts of damage.
+ twoflower
+ guide
+ 	"Rincewind!"
+@@ -5241,7 +6607,6 @@ tyr
+ 	beneath their thick, scaly hides and their powerful arms and
+ 	legs all end in great claws.
+ *unicorn
+-unicorn horn
+ 	Men have always sought the elusive unicorn, for the single
+ 	twisted horn which projected from its forehead was thought to
+ 	be a powerful talisman.  It was said that the unicorn had
+@@ -5260,6 +6625,11 @@ unicorn horn
+ 	virgin, the unicorn can be lured to lay its head in her lap, and
+ 	in this docile mood, the maiden may secure it with a golden rope.
+ 	  [ Mythical Beasts, by Deirdre Headon (The Leprechaun Library) ]
++unicorn horn
++        This horn was taken from the body of a dead unicorn, and is an
++        amazing cure for most ailments, rapidly curing all types of
++        illnesses and many other status problems, though it cannot heal
++        injuries.
+ 
+ 	Martin took a small sip of beer.  "Almost ready," he said.
+ 	"You hold your beer awfully well."
+@@ -5340,9 +6710,11 @@ wakizashi
+ 	in place of a wakizashi.
+ 		[ Wikipedia, the free encyclopedia ]
+ # takes "wand or a wall" when specifying '/'
+-~*sleep
+-wand *
+ *wand
++        A rod, cylinder, prism, or stick that can be zapped to release a
++        specific magical effect, although only a limited number of
++        times.
++
+ 	'Saruman!' he cried, and his voice grew in power and authority.
+ 	'Behold, I am not Gandalf the Grey, whom you betrayed.  I am
+ 	Gandalf the White, who has returned from death.  You have no
+@@ -5353,6 +6725,109 @@ wand *
+ 	fell down at Gandalf's feet.  'Go!' said Gandalf.  With a cry
+ 	Saruman fell back and crawled away.
+ 		[ The Two Towers, by J.R.R. Tolkien ]
++wand of cancellation
++        Zapping it at a monster or item removes its magical abilities,
++        although some items and monsters may completely or partially
++        resist. It also removes some other sorts of lingering magical
++        effects, such as enchantments and curses.
++wand of create monster
++        Zapping it creates one, or occasionally more, monsters.
++        Unfortunately, they are quite likely to be hostile, and so the
++        wand is mostly only good if you're looking for a fight.
++wand of cold
++        Zapping it produces a ray of cold that freezes all it touches.
++        The ray is capable of bouncing off walls, but has only a limited
++        range.
++wand of death
++        This dreaded wand's zaps produce rays that kill all they touch,
++        although they have no effect on monsters that are dead already.
++        The ray is capable of bouncing off walls, but has only a limited
++        range.
++wand of digging
++        Zapping it at a wall or floor creates a tunnel big enough to
++        walk through. If you take out the ground beneath your feet,
++        you'd better expect to fall.
++wand of enlightenment
++        Zapping it informs the one who zapped it of their own magical
++        powers, and of their god's opinion of them.
++wand of fire
++        Zapping it produces a ray of fire that burns all it touches. The
++        ray is capable of bouncing off walls, but has only a limited
++        range.
++wand of light
++        Zapping it permanently lights up the area near where it was
++        zapped.
++wand of lightning
++        Zapping it produces a ray of lightning, that bounces off walls,
++        but has only a limited range. In addition to electrifying things
++        it hits, the ray is bright enough to cause temporary blindness.
++wand of magic missile
++        Zapping it at a monster barrages it with magically produced
++        bullets. The damage output is somewhat underwhelming, though.
++        The ray produced by this wand is capable of bouncing off walls,
++        although it has only a limited range.
++wand of make invisible
++        Zapping it at a person or monster causes it to turn invisible,
++        permanently. You can use it on yourself, but you might have some
++        trouble being seen.
++wand of nothing
++        Although zapping it seems to have a magical effect, it isn't one
++        that accomplishes anything.
++wand of opening
++        Zapping it at a lock causes it to unlock instantly, whether the
++        lock is on a door, a container, or something else. It might be
++        able to open other things, too.
++wand of polymorph
++        Zapping it at a monster or item causes it to change into a
++        different type of monster or item, although items tend to change
++        into similar sorts of item.  This sort of magic is relatively
++        uncontrolled, and sometimes works in unintended ways, perhaps
++        damaging or destroying its target, or accidentally making an
++        item into a monster.
++wand of probing
++        Zapping it at a monster reveals some information about it, such
++        as its current hitpoint count and inventory. It can determine
++        the inventory of containers, too.
++wand of secret door detection
++        Zapping it alerts the one who zapped it to the location of
++        concealed dungeon features, such as secret doors, traps, and
++        portals, nearby.
++wand of sleep
++        Zapping it produces a soporific ray that causes monsters it hits
++        to fall asleep. The ray can bounce off walls, but has only a
++        limited range.
++wand of slow monster
++        Zapping it at a monster causes it to slow down, acting in slow
++        motion, and thus make it easier to run from and perform fewer
++        attacks. Many monsters can resist the effects, though, with
++        varying chances of doing so.
++wand of speed monster
++        Zapping it causes its target to become temporarily much faster.
++wand of striking
++        Zapping it creates a force bolt that may hit everything in a
++        chosen direction, doing moderate damage to creatures and huge
++        damage to many sorts of inanimate object.
++wand of teleportation
++        Anything it is zapped at is instantly teleported to a different
++        square on the same level. Although you can aim this wand at
++        yourself, some unusual environments make it impossible for a
++        person to teleport deliberately. The square on which the
++        teleport ends will be random, unless separate magic is used to
++        be able to control it.
++wand of undead turning
++        Zapping it causes undead monsters in a chosen direction to
++        either flee in fear, or possibly even be destroyed completely.
++        This sort of magic often has unintended side effects on things
++        other than undead that were once alive.
++wand of wishing
++        This incredibly valuable wand, which can only be recharged once
++        and which can hold at most three charges at a time, grants
++        anyone who zaps it the ability to wish for an item, or stack of
++        similar items, of their choice. Almost anything can be
++        requested, although the wand may find it difficult or impossible
++        to make certain artifacts. Other properties of the items, such
++        as enchantments, may also be specified, but might not be
++        received.
+ warg
+ 	Suddenly Aragorn leapt to his feet.  "How the wind howls!"
+ 	he cried.  "It is howling with wolf-voices.  The Wargs have
+@@ -5373,6 +6848,9 @@ warg
+ 		[ The Fellowship of the Ring, by J.R.R. Tolkien ]
+ ~mjollnir
+ war*hammer
++        A heavy hammer designed specifically for use as a two-handed
++        weapon, either wielded in melee or thrown by hand.
++
+ 	They had come together at the ford of the Trident while the
+ 	battle crashed around them, Robert with his warhammer and his
+ 	great antlered helm, the Targaryen prince armored all in
+@@ -5397,6 +6875,9 @@ water
+ 	Water, water, everywhere
+ 	Nor any drop to drink.
+ 	  [ The Rime of the Ancient Mariner, by Samuel Taylor Coleridge ]
++*water walking boots
++	These minimally protective boots can walk on water as if it were dry
++	land, and so are very useful for crossing lakes and rivers.
+ water demon
+ 	[ The monkey king ] walked along the bank, around the pond.
+ 	He examined the footprints of the animals that had gone into
+@@ -5420,6 +6901,9 @@ water demon
+ 	and drink, I will enjoy eating you, the biggest monkey, most
+ 	of all!"  He grinned, and saliva dripped down his hairy chin.
+ 		[ Buddhist Tales for Young and Old, Vol. 1 ]
++wax candle
++        It is made from high-quality beeswax, allowing it to burn for
++        about twice as long as a typical tallow candle.
+ weapon
+ 	A weapon is a device for making your enemy change his mind.
+ 		[ The Vor Game, by Lois McMaster Bujold ]
+@@ -5428,17 +6912,21 @@ web
+ 	When first we practise to deceive!
+ 		[ Marmion, by Sir Walter Scott ]
+ whistle
+-	There were legends both on the front and on the back of the 
++        A small tin device that makes a loud noise when blown through.
++        It does not work well for playing music, though, as it can only
++        play one note.
++
++	There were legends both on the front and on the back of the
+ 	whistle. The one read thus:
+ 
+-	FLA FUR BIS FLE The other: QUIS EST ISTE QUI VENIT 
+-	'I ought to be able to make it out,' he thought; 
+-	'but I suppose I am a little rusty in my Latin. 
+-	When I come to think of it, I don't believe I even 
+-	know the word for a whistle. The long one does seem 
+-	simple enough. It ought to mean, "Who is this who is coming?" 
++	FLA FUR BIS FLE The other: QUIS EST ISTE QUI VENIT
++	'I ought to be able to make it out,' he thought;
++	'but I suppose I am a little rusty in my Latin.
++	When I come to think of it, I don't believe I even
++	know the word for a whistle. The long one does seem
++	simple enough. It ought to mean, "Who is this who is coming?"
+ 
+-	Well, the best way to find out is evidently to whistle 
++	Well, the best way to find out is evidently to whistle
+ 	for him.'
+ 
+ 		[Ghost Stories of an Antiquary, by Montague Rhodes James
+@@ -5541,6 +7029,9 @@ crysknife
+ 	electrical field to prevent disintegration.  Fixed knives
+ 	are treated for storage.  All are about 20 centimeters long.
+ 		[ Dune, by Frank Herbert ]
++worthless * glass
++        This appears to be a fake, a piece of glass that looks like it
++        might be a gemstone, but in fact completely valueless.
+ wraith
+ nazgul
+ 	Immediately, though everything else remained as before, dim
+@@ -5548,7 +7039,7 @@ nazgul
+ 	see beneath their black wrappings.  There were five tall
+ 	figures:  two standing on the lip of the dell, three advancing.
+ 	In their white faces burned keen and merciless eyes; under
+-	their mantles were long grey robes; upon their grey hairs
++stheir mantles were long grey robes; upon their grey hairs
+ 	were helms of silver; in their haggard hands were swords of
+ 	steel.  Their eyes fell on him and pierced him, as they
+ 	rushed towards him.  Desperate, he drew his own sword, and
+@@ -5591,9 +7082,11 @@ xorn
+ 	that it becomes porous to inert material.  This gives it the
+ 	ability to pass through any obstacle that might be between it
+ 	and its next meal.
++bamboo arrow
+ ya
+-	The arrow of choice of the samurai, ya are made of very
+-	straight bamboo, and are tipped with hardened steel.
++        The arrow of choice of the samurai, ya are made of very straight
++        bamboo, and are tipped with hardened steel. It sometimes breaks on
++        impact.
+ yeenoghu
+ 	Yeenoghu, the demon lord of gnolls, still exists although
+ 	all his followers have been wiped off the face of the earth.
+@@ -5621,9 +7114,11 @@ yeti
+ 	practicing had thumbs reinforced with horn.  Those worn into
+ 	battle had thumbs reinforced with a double layer of leather.
+ yumi
++long bow
+ 	The samurai is highly trained with a special type of bow,
+-	the yumi.  Like the ya, the yumi is made of bamboo.  With
+-	the yumi-ya, the bow and arrow, the samurai is an extremely
++        the yumi.  Like the ya, the yumi is made of bamboo, and is
++        exceptionally long, often taller than the archer who wields it.
++        With the yumi-ya, the bow and arrow, the samurai is an extremely
+ 	accurate and deadly warrior.
+ *zombi*
+ 	The zombi... is a soulless human corpse, still dead, but
+-- 
+2.48.1
+
