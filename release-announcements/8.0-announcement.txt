@@ -1,0 +1,48 @@
+I'm pleased to announce the release of [xNetHack](https://nethackwiki.com/wiki/XNetHack) version 8.0. I'm MORE pleased that I was able to get it out the door prior to Junethack.
+
+The recommended way to play 8.0 is on [hardfought.org](https://hardfought.org/nethack), via an SSH client of your choice, or in-browser with tiles using the web hterm. If you would like to play locally, Windows binaries are available at the [GitHub page for this release](https://github.com/copperwater/xNetHack/releases/tag/xnh8.0). Make sure to follow the [DevTeam instructions](https://nethack.org/v366/ports/download-win.html) on Windows. If you're on FreeBSD, FUZxxl is also maintaining a port of xNetHack in its package list. And as always, you can compile a local copy yourself on Windows, Mac or Linux by getting the source from [GitHub](https://github.com/copperwater/xnethack).
+
+New to xNetHack? Read the [wiki page](https://nethackwiki.com/wiki/XNetHack).
+
+Been following along? Read this version's [changelog](https://github.com/copperwater/xNetHack/blob/master/doc/xnh-changelog-8.0.md).
+
+Want to contribute, report a bug, or suggest an idea? Check out the [contributing guidelines](https://github.com/copperwater/xNetHack/blob/master/CONTRIBUTING.md). In particular, I have taken to listing some bug fixes and planned features on the [Github issues page](https://github.com/copperwater/xNetHack/issues) with the "Help Wanted" tag to make it easy for people to know what they could do to really help out!
+
+This version is not save and bones compatible with previous versions. If you had an in-progress game on Hardfought, you will be able to complete that game before starting a new 8.0 game. Non-savebreaking bug fixes will be added to the hardfought build.
+
+## Notable changes in version 8.0
+
+The big feature of 8.0 is the **Gehennom overhaul.** The intent of this was to address many complaints about the vanilla Gehennom experience - overly long, too much filler, too many mazes, the same from game to game, giving the feeling of just going through the motions to win. No more of this in xNetHack. Gehennom has been shortened but broadened, adding a bunch of sub-branches and a lair for every archfiend. Nearly every demon has received a buff of some sort, especially the lords and princes. The Wizard's Tower has also been redesigned from scratch.
+
+Another big change if you're coming from 7.0 is the **new Valkyrie quest**, which has been around since before last Junethack as xNetHack 7.1, but I never did a release announcement for it. The story of the Valkyrie quest has not changed greatly - defeat Lord Surtur to prevent Ragnarok - but all the levels are new, as is the quest artifact.
+
+Other features in 8.0 include:
+* Disenchanter meat can reliably be used to cure hallucination.
+* Rangers at or above XL 10 automatically identify the enchantments on ammo they pick up, if they have Basic skill with its launcher.
+* Exploding yellow and black lights affect all adjacent monsters, not just a single target.
+* New Big Room variant themed around defending a bridge.
+* Identification of several items (jumping boots, wands of probing and secret door detection) is easier or automatic.
+* Several Minetowns have been changed to promote a more distinct identity for each town.
+* One new non-quest artifact, the Apple of Discord, a chaotic golden apple that can cause conflict and greatly increase the effectiveness of conflict if you're a crowned chaotic character.
+* Gold items have an additional use: they will always be targeted first when your inventory gets cursed. They cannot be dropped when cursed, similar to how loadstones work, but uncursed and unskilled remove curse castings will now automatically lift the curse on every gold item in your inventory.
+* If you have never gained a level by the time you speak to your quest leader (i.e. playing pacifist), they will not consider your inexperience a barrier to entering the quest.
+* Spheres explode upon death, in addition to an explosion being their active attack.
+* Cursed potions of gain level can be used to skip Sokoban floors besides the topmost one, though this incurs a penalty for cheating.
+* Some nasty new monster spells are added which can only be cast by various archfiends in Gehennom. Dark Speech inflicts a variety of punishments, Blight causes you to wither, Disenchant strips enchantment and charges from your items, and Entomb encases you in walls and boulders.
+* Archfiends that you decide not to kill or bribe to look the other way inflict various debuffs on you during the ascension run. Gehennom strategy consequently involves deciding which of them you want to take on and which of the debuffs you can live with enough not to.
+* Three random archfiends guard a wand of wishing containing a single wish in their lair, which adds another dimension to the strategy of proceeding through Gehennom.
+* None of the archfiends can covetously warp anymore, so you don't have to put up with the typical tedium of following them to the nearest stairs and figuring out how to camp on it before you can actually battle them. They also use a more diverse, individualized array of tactics in battle.
+* Engravings are properly supported in the default tileset, having different tiles for the various types of engravings. Note that xNetHack uses the S_engraving symbol, which is ~ by default; the S_engroom and S_engrcorr symbols from vanilla exist, but aren't used in the game.
+* Farlooking a monster shows whether they are fleeing, wearing armor, and/or wielding a weapon.
+* #terrain has a new option that highlights all the spaces on the level that you have visited.
+* If you have paranoid throw turned on, you will be prompted to confirm before throwing a weapon that isn't designed to be thrown, like a whip or polearm.
+
+## Future plans
+
+In the 7.0 release announcement I noted a new plan to choose 50 features for the next version and stick to those to inhibit scope creep. Well, this didn't really work, because I only counted "Gehennom overhaul" as one of those 50 features, and I kept slotting new ideas under it. In the end, I had to cut a number of 8.0 planned features from it.
+
+I intend to continue the practice of doing one quest overhaul per major version. The next one up is likely to be Monk, but it could be Ranger instead. Since the chosen quest to be overhauled is almost definitely going to grow in scope when it comes time to implement it, I may pursue a model of "1 quest overhaul + 30 unrelated features".
+
+If NetHack 3.7 happens to get formally released this year, most likely xNetHack will merge it in and follow suit by releasing a minor version that contains everything from vanilla up through the 3.7 release.
+
+The xNetHack roadmap has moved away from its previous home in an etherpad on hardfought - for now, I am storing the long lists of features in the [xNetHack github wiki](https://github.com/copperwater/xNetHack/wiki). The feature checklist for the next version will be tracked either through that, or in a GitHub project. Haven't decided yet.

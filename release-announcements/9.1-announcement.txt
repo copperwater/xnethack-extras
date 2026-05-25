@@ -1,0 +1,25 @@
+As of yesterday, [xNetHack](https://nethackwiki.com/wiki/XNetHack) version 9.1 is out!
+
+The recommended way to play this version is on [hardfought.org](https://hardfought.org/nethack), via an SSH client of your choice, or in-browser with tiles using the web hterm. If you're on FreeBSD, FUZxxl is also maintaining a port of xNetHack in its package list. And as always, you can compile a local copy yourself on Windows, Mac or Linux by getting the source from [GitHub](https://github.com/copperwater/xnethack). I have provided Windows binaries of xNetHack on the GitHub releases page; however, the Windows build of xNetHack is now officially untested and might not work at all for all I know. It will remain like this going forward unless someone can step up and provide testing on Windows for future versions.
+
+New to xNetHack? Read the [wiki page](https://nethackwiki.com/wiki/XNetHack).
+
+Been following along? Read this version's [changelog](https://github.com/copperwater/xNetHack/blob/master/doc/xnh-changelog-9.1.md).
+
+Want to contribute, report a bug, or suggest an idea? Check out the [contributing guidelines](https://github.com/copperwater/xNetHack/blob/master/CONTRIBUTING.md). Some bug fixes and planned features on the [Github issues page](https://github.com/copperwater/xNetHack/issues) are tagged with "help wanted" to make it easy for people to know what they could do to really help out!
+
+This version is not save and bones compatible with previous versions. If you had an in-progress game on Hardfought, you will be able to complete that game before starting a new 9.1 game. Non-savebreaking bug fixes will be added to the hardfought build.
+
+## Notable changes in version 9.1
+
+xNetHack 9.1 is a minor version; it's primarily a merge of xNetHack 9.0 with the last year or so of development on NetHack 3.7. As such, it doesn't contain any big headline features of its own, but has several notable features introduced in 3.7, such as the reroll option.
+
+The most significant new feature on the xNetHack side in 9.1 is probably the many buffs to the potion of restore ability. Dipping items in it will restore negative enchantment, charges, and spellbook ink. Quaffing it will cure most status ailments (including illness if it's blessed), recover all lost experience levels even if you already quaffed some full healing and reduced your level max, and even restore lost maximum HP and energy!
+
+## Future plans
+
+Most plans for 10.0 are still on track. 9.1 doesn't contain a Quest overhaul, but the Ranger quest is still planned for 10.0.
+
+NetHack 3.7.0 remains stubbornly unreleased, but if we do get a surprise release I will merge it in to make a new minor version of xNetHack.
+
+Happy hacking!

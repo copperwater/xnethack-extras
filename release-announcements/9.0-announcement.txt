@@ -1,0 +1,56 @@
+I'm pleased to announce the release of [xNetHack](https://nethackwiki.com/wiki/XNetHack) version 9.0, after a gap of almost two years.
+
+The recommended way to play 9.0 is on [hardfought.org](https://hardfought.org/nethack), via an SSH client of your choice, or in-browser with tiles using the web hterm. If you're on FreeBSD, FUZxxl is also maintaining a port of xNetHack in its package list. And as always, you can compile a local copy yourself on Windows, Mac or Linux by getting the source from [GitHub](https://github.com/copperwater/xnethack).
+
+New to xNetHack? Read the [wiki page](https://nethackwiki.com/wiki/XNetHack).
+
+Been following along? Read this version's [changelog](https://github.com/copperwater/xNetHack/blob/master/doc/xnh-changelog-9.0.md).
+
+Want to contribute, report a bug, or suggest an idea? Check out the [contributing guidelines](https://github.com/copperwater/xNetHack/blob/master/CONTRIBUTING.md). In particular, I have taken to listing some bug fixes and planned features on the [Github issues page](https://github.com/copperwater/xNetHack/issues) with the "help wanted" tag to make it easy for people to know what they could do to really help out!
+
+This version is not save and bones compatible with previous versions. If you had an in-progress game on Hardfought, you will be able to complete that game before starting a new 9.0 game. Non-savebreaking bug fixes will be added to the hardfought build.
+
+## Notable changes in version 9.0
+
+The big feature of 9.0 is the Monk quest overhaul. Certain levels and dialogue for this quest were overhauled a while ago so it wouldn't be a carbon copy of the Priest quest, but it never got the full treatment until now. Be warned, though: Master Kaen is still very tough! He can phase through walls and summons elementals instead of insects. In addition to the quest, there are a few other Monk-related buffs: at high martial arts skill, critical hits can disarm enemies and you get an AC bonus when not wearing body armor or a shield.
+
+9.0 is also based on a recent version of NetHack 3.7.0's development version, so many things added to NetHack 3.7 in the last two years, such as pauper conduct, saving grace, erinyes that get more powerful the more you transgress against your alignment, and the new sacrifice gift algorithm, are present in it.
+
+Also in the last two years, a lot of xNetHack features were added to NetHack 3.7.0! In most of those cases, xNetHack uses the implementation/behavior from upstream if they differed.
+
+Other highlights in 9.0 include:
+* You can get a "healing spring" effect from quaffing magic fountains.
+* Cockatrice nests contain cockatrice eggs.
+* Gain energy potions have minimum percentages of your maximum energy they will restore, so they remain useful for spellcasters in the late game. They can also be alchemized from combining full healing with gain ability.
+* Zombies cannot be scared.
+* A bunch of new themed rooms and room fills to keep the dungeon full of variety.
+* All Quests block downward levelport until the nemesis is killed.
+* Giants are properly elemental in combat. Stone giants can tear boulders out of the floor. Fire and frost giants have an additional fire and frost attack respectively. Storm giants can cast a lightning spell.
+* Luck, good or bad, doesn't affect your to-hit rate as much.
+* A new artifact, the Amulet of Storms: provides flying, shock resistance, and the ability to pacify hostile vortices, air elementals, and storm giants.
+* Ammo that monsters fire doesn't mulch as often as it does in 3.7.0.
+* Glass weapons and armor use the 3-stages-of-cracking system introduced upstream for helms of brilliance. Instead of outright shattering on an unlucky dice roll, they will now crack bit by bit until the 4th instance of damage shatters them.
+* You can play as a dwarvish Barbarian (and a lawful human Barbarian), a gnomish Tourist, or an elven Rogue.
+* If there is only one observable monster next to you, #chat will chat to them automatically without prompting you for a direction.
+* You get a warning when you're temporarily invisible and the effect is about to end.
+* Accidentally escaping out of a controlled polymorph prompt just asks you again instead of turning you into something random.
+* Enlightenment gives a clue as to how much you have abused your alignment over the course of the game.
+* Iron doors now have their own defsyms, glyphs, and tiles, enabling tileset players to distinguish them from wooden doors.
+
+## xNetHack on Microsoft Windows
+
+I have made Windows binaries available on the [GitHub page for this release](https://github.com/copperwater/xNetHack/releases/tag/xnh9.0). The [DevTeam instructions for Windows](https://nethack.org/v367/ports/download-win.html) still apply.
+
+However, I have been struggling to keep xNetHack for Windows playable. Thanks to github workflows, I can confirm that the Windows nmake build successfully compiles the game with no errors, but that's the limit of it. I don't have access to a Windows machine on which I can build and test it actually running. One of the consequences of this in version 8.0 was a number of bug reports that the game crashed upon startup, which I had no way of debugging and thus no way of fixing. For all I know, the same will happen in this new version. If you're willing to step forward and help debug and fix Windows bugs, I would greatly appreciate it. Otherwise I may have to declare the Windows port unsupported for the same reason the DevTeam occasionally drops support for a system no one maintains anymore.
+
+## Reflections and future plans
+
+Like in the past two versions, I made an effort to inhibit scope creep by selecting 50 features for the next version, including only one "large" one (the Monk quest overhaul), and sticking to them. The good news is this largely worked and there are few unplanned features in this version, but it didn't solve the period in the second half of 2023 and most of 2024 where there was just very little xNetHack development happening at all. It probably would have been even longer if not for the contributions of renowned patch author Nephi, who contributed implementations for a whole lot of issues I posted as "help wanted" on GitHub. A big thanks to Nephi!
+
+I also observed that picking 50 features that seem fun and useful at the start of the version cycle risks them not seeming fun and useful anymore when it's time to actually do them, leading to drudgery. This time, I might pick a smaller list of required features and allow myself to spontaneously pick random things out of my substantial [backlog](https://github.com/copperwater/xNetHack/wiki).
+
+I anticipate continuing with one quest overhaul per verion, and version 10.0's is probably going to be the Ranger quest.
+
+I had been hoping that NetHack 3.7.0 would be released in 2024, so I could cleanly base xNetHack on it. Since that didn't happen, the plans for if it does get released remain the same: xNetHack will merge it in and follow suit by releasing a minor version that contains everything up through the 3.7 release, with future xNetHack versions continuing to merge in updates from the development branch.
+
+Enjoy the new release, and happy hacking!
